@@ -26,4 +26,8 @@
 10、predis/predis 使用 redis
 
 11、laravel/horizon 可视化队列监控面板
+
+12、intervention/image 图片处理
 ```
+
+> 通用 helpers

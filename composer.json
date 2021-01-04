@@ -14,12 +14,13 @@
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
+        "intervention/image": "^2.5",
         "laravel/framework": "^7.0",
+        "laravel/horizon": "~4.3",
         "laravel/tinker": "^2.0",
         "overtrue/wechat": "~5.0",
         "predis/predis": "^1.1",
         "tymon/jwt-auth": "^1.0",
-        "laravel/horizon": "~4.3",
         "yansongda/pay": "^2.10"
     },
     "require-dev": {
