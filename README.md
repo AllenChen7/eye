@@ -22,4 +22,6 @@
 8、overtrue/wechat 微信开发相关
 
 9、yansongda/pay 支付宝、微信支付
+
+10、predis/predis 使用 redis
 ```
