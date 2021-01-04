@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+$api = app('Dingo\Api\Routing\Router');
+
+$api->version('v1', function ($api) {
+    // 无需登录接口组
+    $api->group(['namespace' => 'App\Http\Controllers\Api'], function ($api) {
+        $api->get('test', 'TestController@test');
+    });
+
+    $api->group([
+        'namespace'  => 'App\Http\Controllers\Api',
+        'middleware' => 'jwt.auth',
+    ], function ($api) {
+        $api->get('auth-test', 'TestController@authTest');
+    });
 });
