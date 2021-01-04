@@ -27,7 +27,7 @@
 
 11、laravel/horizon 可视化队列监控面板
 
-12、intervention/image 图片处理
+12、intervention/image 图片处理、如果将要开发的项目需要较专业的图片，请考虑 ImageMagic
 ```
 
 > 通用 helpers
