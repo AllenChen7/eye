@@ -19,6 +19,7 @@
         "overtrue/wechat": "~5.0",
         "predis/predis": "^1.1",
         "tymon/jwt-auth": "^1.0",
+        "laravel/horizon": "~4.3",
         "yansongda/pay": "^2.10"
     },
     "require-dev": {

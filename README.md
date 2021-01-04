@@ -24,4 +24,6 @@
 9、yansongda/pay 支付宝、微信支付
 
 10、predis/predis 使用 redis
+
+11、laravel/horizon 可视化队列监控面板
 ```
