@@ -20,6 +20,7 @@ $api->version('v1', function ($api) {
     // 无需登录接口组
     $api->group(['namespace' => 'App\Http\Controllers\Api'], function ($api) {
         $api->get('test', 'TestController@test');
+        $api->get('wx/mini-login', 'WxController@wxMiniLogin');
     });
 
     $api->group([
