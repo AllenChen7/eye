@@ -31,3 +31,15 @@
 ```
 
 > 通用 helpers
+
+### 示例
+
+```
+重置所有数据库迁移
+> php artisan migrate:refresh
+
+重置所有数据库迁移并创建模拟数据：tips 正式环境还是不要执行这个了
+> php artisan migrate:refresh --seed
+
+创建模拟数据
+> php artisan make:seeder UsersTableSeeder
