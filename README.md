@@ -28,6 +28,8 @@
 11、laravel/horizon 可视化队列监控面板
 
 12、intervention/image 图片处理、如果将要开发的项目需要较专业的图片，请考虑 ImageMagic
+
+13、dcat/laravel-admin 后台管理
 ```
 
 > 通用 helpers
@@ -41,6 +43,9 @@
 重置所有数据库迁移并创建模拟数据：tips 正式环境还是不要执行这个了
 > php artisan migrate:refresh --seed
 
+重置数据迁移后可能会没有 admin 的初始化数据，可以再次执行
+> php artisan admin:install
+
 创建模拟数据
 1. 创建模拟数据工厂
 > php artisan make:factory PostFactory
@@ -49,3 +54,9 @@
 
 migrate 时外键约束 合理谨慎使用
 > $table->foreignId('admin_user_id')->index()->comment('作者ID')->constrained();
+
+生成 model 并创建迁移文件
+> php artisan make:model Models/Post -m
+
+dcat 配置资源访问地址
+> $router->resource('posts', 'PostController');
