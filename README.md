@@ -42,4 +42,10 @@
 > php artisan migrate:refresh --seed
 
 创建模拟数据
-> php artisan make:seeder UsersTableSeeder
+1. 创建模拟数据工厂
+> php artisan make:factory PostFactory
+2. 批量数据生成
+> php artisan make:seeder PostsTableSeeder
+
+migrate 时外键约束 合理谨慎使用
+> $table->foreignId('admin_user_id')->index()->comment('作者ID')->constrained();
