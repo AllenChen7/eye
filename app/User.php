@@ -38,6 +38,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStatus($value)
  * @property string|null $remark 备注
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRemark($value)
+ * @property int $type 用户类型,权限等级
+ * @property int $create_user_id 创建人
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreateUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereType($value)
  */
 class User extends Authenticatable implements JWTSubject
 {

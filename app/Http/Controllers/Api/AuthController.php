@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\ModelsData\UsersData;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -81,6 +82,8 @@ class AuthController extends ApiController
         $model->phone       = $request->input('phone');
         $model->password    = \Hash::make($request->input('password'));
         $model->remark      = $request->input('remark');
+        $model->type        = $request->input('type');
+        $model->create_user_id = \auth()->id();
 
         if ($model->save()) {
             return $this->successResponse();

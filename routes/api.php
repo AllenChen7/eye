@@ -45,6 +45,15 @@ $api->version('v1', function ($api) {
     $api->group([
         'namespace'  => 'App\Http\Controllers\Api',
         'middleware' => 'jwt.auth',
+        'prefix'     => 'user'
+    ], function ($api) {
+        // 用户列表
+        $api->get('list', 'UserController@list');
+    });
+
+    $api->group([
+        'namespace'  => 'App\Http\Controllers\Api',
+        'middleware' => 'jwt.auth',
     ], function ($api) {
         $api->get('auth-test', 'TestController@authTest');
     });
