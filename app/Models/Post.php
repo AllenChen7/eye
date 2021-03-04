@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereViewNums($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\AdminUser $adminUser
  */
 class Post extends Model
 {

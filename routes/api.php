@@ -38,6 +38,8 @@ $api->version('v1', function ($api) {
         $api->get('refresh', 'AuthController@refresh');
         // 获取用户信息
         $api->get('me', 'AuthController@me');
+        // 创建用户
+        $api->post('create', 'AuthController@create');
     });
 
     $api->group([

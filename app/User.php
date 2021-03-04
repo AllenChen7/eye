@@ -36,6 +36,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
  * @property int $status 用户状态，1有效，0无效
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStatus($value)
+ * @property string|null $remark 备注
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRemark($value)
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -47,7 +49,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'phone', 'status'
+        'name', 'email', 'password', 'phone', 'status', 'remark'
     ];
 
     /**
@@ -56,7 +58,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'email_verified_at', 'updated_at'
+        'password', 'remember_token', 'email_verified_at', 'updated_at', 'email'
     ];
 
     /**

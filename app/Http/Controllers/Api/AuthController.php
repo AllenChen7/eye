@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -59,6 +60,33 @@ class AuthController extends ApiController
         }
 
         return $this->errorResponse();
+    }
+
+    public function create(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'                  => 'required|max:50',
+            'phone'                 => 'required|unique:users|max:20',
+            'password'              => 'required|confirmed|max:50',
+            'password_confirmation' => 'required|same:password|max:50',
+            'remark'                => 'nullable|max:200'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $model              = new User();
+        $model->name        = $request->input('name');
+        $model->phone       = $request->input('phone');
+        $model->password    = \Hash::make($request->input('password'));
+        $model->remark      = $request->input('remark');
+
+        if ($model->save()) {
+            return $this->successResponse();
+        } else {
+            return $this->errorResponse();
+        }
     }
 
     /**
