@@ -33,7 +33,7 @@ $api->version('v1', function ($api) {
         'middleware' => 'jwt.auth',
         'prefix'     => 'auth'
     ], function ($api) {
-        $api->post('logout', 'AuthController@logout');
+        $api->get('logout', 'AuthController@logout');
         // 用户重置 token
         $api->get('refresh', 'AuthController@refresh');
         // 获取用户信息
