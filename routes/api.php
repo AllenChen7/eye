@@ -55,7 +55,7 @@ $api->version('v1', function ($api) {
 
     $api->group([
         'namespace'  => 'App\Http\Controllers\Api',
-//        'middleware' => 'jwt.auth',
+        'middleware' => 'jwt.auth',
         'prefix'     => 'address'
     ], function ($api) {
         // 地址
