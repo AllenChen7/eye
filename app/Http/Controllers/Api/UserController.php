@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\ModelsData\UsersData;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends ApiController
 {
@@ -31,5 +32,18 @@ class UserController extends ApiController
             'count' => $count,
             'rows' => $rows
         ]);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'                    => 'required|exists:users',
+            'password'              => 'required|confirmed|max:50',
+            'password_confirmation' => 'required|same:password|max:50'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
     }
 }

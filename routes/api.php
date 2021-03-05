@@ -49,6 +49,8 @@ $api->version('v1', function ($api) {
     ], function ($api) {
         // 用户列表
         $api->get('list', 'UserController@list');
+        // 更新密码
+        $api->post('update-password', 'UserController@updatePassword');
     });
 
     $api->group([

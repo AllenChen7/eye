@@ -113,8 +113,6 @@ class UsersData extends User
             $query->where('name', 'like', '%' . $this->name . '%');
         }
 
-        $this->status = intval($this->status);
-
         if ($this->status === 0 || $this->status === 1) {
             $query->where([
                 'status' => $this->status
