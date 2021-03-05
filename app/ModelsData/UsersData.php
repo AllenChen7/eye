@@ -71,6 +71,7 @@ class UsersData extends User
     {
         $rows = $this->baseQuery()->get()->groupBy('type');
         $data = [];
+        $this->type = intval($this->type) ? $this->type : 1;
 
         foreach (self::typeArr() as $key => $type) {
             $data[] = [
@@ -111,6 +112,8 @@ class UsersData extends User
         if ($this->name) {
             $query->where('name', 'like', '%' . $this->name . '%');
         }
+
+        $this->status = intval($this->status);
 
         if ($this->status === 0 || $this->status === 1) {
             $query->where([
