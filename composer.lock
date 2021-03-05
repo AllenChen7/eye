@@ -4,8 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e96cef4d307e02be55d3876ed9d2179",
+    "content-hash": "eed25284f48eb44e137624312b568f38",
     "packages": [
+        {
+            "name": "aoxiang/province-city-area",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aoxiang594/laravel-province-city-area.git",
+                "reference": "480c38dc392f8dfa1bd866f0cc7eccd3e7b006d4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aoxiang594/laravel-province-city-area/zipball/480c38dc392f8dfa1bd866f0cc7eccd3e7b006d4",
+                "reference": "480c38dc392f8dfa1bd866f0cc7eccd3e7b006d4",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~6.0",
+                "php": "^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Aoxiang\\Pca\\ProvinceCityAreaServiceProvider"
+                    ],
+                    "alias": {
+                        "ProvinceCityArea": "Aoxiang\\Pca\\Facades\\ProvinceCityAreaFacades"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aoxiang\\Pca\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aoxiang",
+                    "email": "mail@aoxiang.me"
+                }
+            ],
+            "description": "China Province City Area From JD.COM",
+            "support": {
+                "issues": "https://github.com/aoxiang594/laravel-province-city-area/issues",
+                "source": "https://github.com/aoxiang594/laravel-province-city-area/tree/master"
+            },
+            "time": "2020-05-26T03:27:10+00:00"
+        },
         {
             "name": "arcanedev/log-viewer",
             "version": "7.0.0",

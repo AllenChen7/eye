@@ -55,6 +55,19 @@ $api->version('v1', function ($api) {
 
     $api->group([
         'namespace'  => 'App\Http\Controllers\Api',
+//        'middleware' => 'jwt.auth',
+        'prefix'     => 'address'
+    ], function ($api) {
+        // 地址
+        $api->get('areas', 'AddressController@areas');
+        // 省份
+        $api->get('province', 'AddressController@province');
+        // 市
+        $api->get('city', 'AddressController@city');
+    });
+
+    $api->group([
+        'namespace'  => 'App\Http\Controllers\Api',
         'middleware' => 'jwt.auth',
     ], function ($api) {
         $api->get('auth-test', 'TestController@authTest');

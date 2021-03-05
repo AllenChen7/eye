@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Aoxiang\Pca\ProvinceCityAreaServiceProvider::class,
 
         /*
          * Application Service Providers...
