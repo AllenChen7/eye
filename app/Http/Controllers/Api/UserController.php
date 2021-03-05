@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
 use App\ModelsData\UsersData;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends ApiController
@@ -45,5 +47,14 @@ class UserController extends ApiController
         if ($validator->fails()) {
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
+
+        $res = User::find($request->input('id'));
+        $res->password = Hash::make($request->input('password'));
+
+        if ($res->save()) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
     }
 }
