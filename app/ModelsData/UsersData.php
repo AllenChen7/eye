@@ -42,19 +42,58 @@ use App\User;
  */
 class UsersData extends User
 {
-
     public $table = 'users';
     public $phone;
     public $name;
     public $status;
     public $start_time;
     public $end_time;
+    public $limit = 20;
+    public $page = 1;
+    public $type = 1;
+
+    const TYPE_XM = 1;
+    const TYPE_PROV = 2;
+    const TYPE_CITY = 3;
+    const TYPE_SCH = 4;
+
+    public static function typeArr()
+    {
+        return [
+            self::TYPE_XM => '希铭公司',
+            self::TYPE_PROV => '省级管理员',
+            self::TYPE_CITY => '县市级管理员',
+            self::TYPE_SCH => '学校级管理员'
+        ];
+    }
 
     public function rowCount()
     {
-        $rows = $this->baseQuery()->get();
+        $rows = $this->baseQuery()->get()->groupBy('type');
+        $data = [];
 
-        ddax($rows);
+        foreach (self::typeArr() as $key => $type) {
+            $data[] = [
+                'name' => $type,
+                'value' => $key,
+                'is_default' => $this->type == $key ? 1 : 0,
+                'count' => isset($rows[$key]) ? count($rows[$key]) : 0
+            ];
+        }
+
+        return $data;
+    }
+
+    public function rowsData()
+    {
+        $offset = $this->page <= 1 ? 0 : ($this->page - 1) * $this->limit;
+
+        return $this->baseQuery()
+            ->limit($this->limit)
+            ->offset($offset)
+            ->where([
+                'type' => $this->type
+            ])->get();
     }
 
     public function baseQuery()
@@ -81,13 +120,13 @@ class UsersData extends User
 
         if ($this->start_time) {
             $query->where([
-                '>', 'created_at', $this->start_time
+                'created_at', '>' ,$this->start_time
             ]);
         }
 
         if ($this->end_time) {
             $query->where([
-                '<', 'created_at', $this->end_time
+                'created_at', '<', $this->end_time
             ]);
         }
 

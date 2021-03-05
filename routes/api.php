@@ -37,7 +37,7 @@ $api->version('v1', function ($api) {
         // 用户重置 token
         $api->get('refresh', 'AuthController@refresh');
         // 获取用户信息
-        $api->get('me', 'AuthController@me');
+        $api->get('me', 'AuthController@me')->name('me');
         // 创建用户
         $api->post('create', 'AuthController@create');
     });
