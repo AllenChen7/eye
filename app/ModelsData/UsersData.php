@@ -2,6 +2,7 @@
 
 namespace App\ModelsData;
 
+use App\Models\Common;
 use App\User;
 
 /**
@@ -39,6 +40,12 @@ use App\User;
  * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $class_data_id 学校ID
+ * @property int $city_id 市ID
+ * @property int $province_id 省ID
+ * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereClassDataId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereProvinceId($value)
  */
 class UsersData extends User
 {
@@ -52,28 +59,13 @@ class UsersData extends User
     public $page = 1;
     public $type = 1;
 
-    const TYPE_XM = 1;
-    const TYPE_PROV = 2;
-    const TYPE_CITY = 3;
-    const TYPE_SCH = 4;
-
-    public static function typeArr()
-    {
-        return [
-            self::TYPE_XM => '希铭公司',
-            self::TYPE_PROV => '省级管理员',
-            self::TYPE_CITY => '县市级管理员',
-            self::TYPE_SCH => '学校级管理员'
-        ];
-    }
-
     public function rowCount()
     {
         $rows = $this->baseQuery()->get()->groupBy('type');
         $data = [];
         $this->type = intval($this->type) ? $this->type : 1;
 
-        foreach (self::typeArr() as $key => $type) {
+        foreach (Common::typeArr() as $key => $type) {
             $data[] = [
                 'name' => $type,
                 'value' => $key,

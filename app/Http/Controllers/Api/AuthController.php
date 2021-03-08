@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\ClassData;
+use App\Models\Common;
+use App\ModelsData\Areas;
 use App\ModelsData\UsersData;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AuthController extends ApiController
 {
@@ -70,8 +74,29 @@ class AuthController extends ApiController
             'phone'                 => 'required|unique:users|max:20',
             'password'              => 'required|confirmed|max:50',
             'password_confirmation' => 'required|same:password|max:50',
-            'remark'                => 'nullable|max:200'
+            'remark'                => 'nullable|max:200',
+            'type'                  => [
+                'required', Rule::in(Common::typeArrKeys()),
+            ]
         ]);
+
+        $validator->sometimes('province_id', 'required|exists:province_city_area,id', function ($input) {
+            return in_array($input->type, [
+                Common::TYPE_PROV, Common::TYPE_CITY, Common::TYPE_SCH
+            ]);
+        });
+
+        $validator->sometimes('city_id', 'required|exists:province_city_area,id', function ($input) {
+            return in_array($input->type, [
+                Common::TYPE_CITY, Common::TYPE_SCH
+            ]);
+        });
+
+        $validator->sometimes('school_name', 'required', function ($input) {
+            return in_array($input->type, [
+                Common::TYPE_SCH
+            ]);
+        });
 
         if ($validator->fails()) {
             return $this->errorResponse('验证错误', $validator->errors(), 422);
@@ -84,6 +109,45 @@ class AuthController extends ApiController
         $model->remark      = $request->input('remark');
         $model->type        = $request->input('type');
         $model->create_user_id = \auth()->id();
+
+        switch ($request->input('type')) {
+            case Common::TYPE_PROV:
+                $model->province_id = $request->input('province_id');
+                break;
+            case Common::TYPE_CITY:
+            case Common::TYPE_SCH:
+                $model->province_id = $request->input('province_id');
+                $model->city_id     = $request->input('city_id');
+
+                $res = Areas::areasDataByCityIdAndProvinceId($request->input('city_id'), $request->input('province_id'));
+
+                if (!$res) {
+                    $data = [
+                        'city_id' => [
+                            '省市数据不匹配'
+                        ]
+                    ];
+
+                    return $this->errorResponse('验证错误', $data, 422);
+                }
+
+                if (Common::TYPE_SCH) {
+                    // 先处理学校数据
+                    $classData = ClassData::firstOrCreate([
+                        'province_id'   => $request->input('province_id'),
+                        'city_id'       => $request->input('city_id'),
+                        'name'          => $request->input('school_name')
+                    ], [
+                        'province_id'   => $request->input('province_id'),
+                        'city_id'       => $request->input('city_id'),
+                        'name'          => $request->input('school_name'),
+                        'create_user_id'=> \auth()->id()
+                    ]);
+
+                    $model->class_data_id = $classData->id;
+                }
+                break;
+        }
 
         if ($model->save()) {
             return $this->successResponse();

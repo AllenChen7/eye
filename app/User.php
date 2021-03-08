@@ -42,18 +42,24 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property int $create_user_id 创建人
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreateUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereType($value)
+ * @property int $class_data_id 学校ID
+ * @property int $city_id 市ID
+ * @property int $province_id 省ID
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereClassDataId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereProvinceId($value)
  */
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
-    
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'phone', 'status', 'remark'
+        'name', 'email', 'password', 'phone', 'status', 'remark', 'province_id', 'city_id', 'class_data_id'
     ];
 
     /**
