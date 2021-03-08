@@ -73,6 +73,8 @@ $api->version('v1', function ($api) {
     ], function ($api) {
         // 创建年级班级
         $api->post('create', 'SchoolController@create');
+        // 添加班级
+        $api->post('add-class', 'SchoolController@addClass');
     });
 
     $api->group([

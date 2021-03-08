@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\Models\Grade;
 use App\Models\YearClass;
+use App\ModelsData\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -66,6 +67,64 @@ class SchoolController extends ApiController
             if ($res) {
                 return $this->successResponse();
             }
+        }
+
+        return $this->errorResponse();
+    }
+
+    public function addClass(Request $request)
+    {
+        if (!auth()->user()->class_data_id) {
+            return $this->errorResponse('没有权限', [], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required|exists:grades',
+            'class' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        if (count($request->input('class')) != count(array_unique($request->input('class')))) {
+            $data = [
+                'class' => [
+                    '班级名称不能重复'
+                ]
+            ];
+
+            return $this->errorResponse('验证错误', $data, 422);
+        }
+
+        $exists = School::yearClassByName($request->input('class'));
+
+        if ($exists->isNotEmpty()) {
+            $data = [
+                'class' => [
+                    '班级名称不能重复'
+                ]
+            ];
+
+            return $this->errorResponse('验证错误', $data, 422);
+        }
+
+        $insertData = [];
+
+        foreach ($request->input('class') as $class) {
+            $class = trim($class);
+            $insertData[] = [
+                'grade_id' => $request->input('id'),
+                'name' => $class,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ];
+        }
+
+        $res = \DB::table('year_classes')->insert($insertData);
+
+        if ($res) {
+            return $this->successResponse();
         }
 
         return $this->errorResponse();
