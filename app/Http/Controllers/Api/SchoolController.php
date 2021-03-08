@@ -129,4 +129,9 @@ class SchoolController extends ApiController
 
         return $this->errorResponse();
     }
+
+    public function list(Request $request)
+    {
+
+    }
 }
