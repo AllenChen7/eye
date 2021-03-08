@@ -14,6 +14,10 @@ class SchoolController extends ApiController
 {
     public function create(Request $request)
     {
+        if (!auth()->user()->class_data_id) {
+            return $this->errorResponse('没有权限', [], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'grade' => [
                 'required', Rule::unique('grades', 'name')->where(function ($query) {
