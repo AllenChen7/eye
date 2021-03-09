@@ -80,6 +80,15 @@ $api->version('v1', function ($api) {
     $api->group([
         'namespace'  => 'App\Http\Controllers\Api',
         'middleware' => 'jwt.auth',
+        'prefix'     => 'student'
+    ], function ($api) {
+        // 创建年级班级
+        $api->post('create', 'StudentController@create');
+    });
+
+    $api->group([
+        'namespace'  => 'App\Http\Controllers\Api',
+        'middleware' => 'jwt.auth',
     ], function ($api) {
         $api->get('auth-test', 'TestController@authTest');
     });

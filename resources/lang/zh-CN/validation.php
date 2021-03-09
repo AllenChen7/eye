@@ -175,5 +175,12 @@ return [
         'time'                  => '时间',
         'available'             => '可用的',
         'size'                  => '大小',
+        'birthday'              => '出生年月',
+        'student_code'          => '学号',
+        'id_card'               => '身份证号',
+        'grade_id'              => '年级',
+        'class_id'              => '班级',
+        'is_myopia'             => '是否近视',
+        'is_glasses'            => '是否佩戴眼镜'
     ],
 ];

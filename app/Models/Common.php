@@ -15,6 +15,15 @@ class Common
     const STATUS_ACTIVE = 1;
     const STATUS_DISABLED = 0;
 
+    // 性别
+    const SEX_MEN = 1;
+    const SEX_WOMEN = 2;
+    const SEX_UNKNOWN = 0;
+
+    // 是否
+    const YES = 1;
+    const NO = 0;
+
     /**
      * 层级类型
      * @return string[]
@@ -40,6 +49,29 @@ class Common
             self::TYPE_PROV,
             self::TYPE_CITY,
             self::TYPE_SCH,
+        ];
+    }
+
+    /**
+     * @return int[]
+     */
+    public static function sexArrKeys()
+    {
+        return [
+            self::SEX_UNKNOWN,
+            self::SEX_MEN,
+            self::SEX_WOMEN
+        ];
+    }
+
+    /**
+     * @return int[]
+     */
+    public static function isKeys()
+    {
+        return [
+            self::YES,
+            self::NO
         ];
     }
 
