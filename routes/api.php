@@ -75,6 +75,10 @@ $api->version('v1', function ($api) {
         $api->post('create', 'SchoolController@create');
         // 添加班级
         $api->post('add-class', 'SchoolController@addClass');
+        // 获取学校下的年级
+        $api->get('grade', 'SchoolController@grade');
+        // 获取年级下班级
+        $api->get('class-data', 'SchoolController@classData');
     });
 
     $api->group([

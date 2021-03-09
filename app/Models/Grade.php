@@ -30,5 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Grade extends Model
 {
-    //
+    protected $hidden = [
+        'created_at', 'updated_at', 'status', 'class_data_id', 'province_id', 'city_id'
+    ];
 }

@@ -134,4 +134,31 @@ class SchoolController extends ApiController
     {
 
     }
+
+    public function gradeAndClass()
+    {
+
+    }
+
+    public function grade()
+    {
+        $data = School::gradeListByClassDataId(auth()->user()->class_data_id);
+
+        return $this->successResponse($data);
+    }
+
+    public function classData(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required|exists:grades'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $data = School::classListByGradeId($request->input('id'));
+
+        return $this->successResponse($data);
+    }
 }

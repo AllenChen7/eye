@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\Models\Common;
 use App\Models\Student;
+use App\ModelsData\School;
 use App\ModelsData\StudentData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
