@@ -52,7 +52,28 @@ class StudentController extends ApiController
         $oldData = StudentData::studentByIdCard($request->input('id_card'));
 
         if ($oldData) {
+            // 如果 学校、年级、班级一致的话则提示已存在
+            if ($oldData['class_data_id'] == auth()->user()->class_data_id &&
+                $oldData['grader_id'] == $request->input('grader_id') &&
+                $oldData['year_class_id'] == $request->input('class_id')) {
+                return $this->errorResponse('数据已存在，不能再次添加');
+            } else {
+                $oldData->class_data_id = auth()->user()->class_data_id;
+                $oldData->grader_id = $request->input('grade_id');
+                $oldData->year_class_id = $request->input('class_id');
+                $oldData->is_myopia = $request->input('is_myopia');
+                $oldData->is_glasses = $request->input('is_glasses');
+                $oldData->glasses_type = $request->input('glasses_type');
+                $oldData->l_degree = $request->input('l_degree');
+                $oldData->r_degree = $request->input('r_degree');
 
+                if ($oldData->save()) {
+                    return $this->successResponse();
+                } else {
+                    return $this->errorResponse();
+                }
+            }
+            // 否则进行更新到本次提交数据
         } else {
             $model = new Student($request->input());
             $model->create_user_id = auth()->id();

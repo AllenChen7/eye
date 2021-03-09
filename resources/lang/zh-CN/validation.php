@@ -181,6 +181,9 @@ return [
         'grade_id'              => '年级',
         'class_id'              => '班级',
         'is_myopia'             => '是否近视',
-        'is_glasses'            => '是否佩戴眼镜'
+        'is_glasses'            => '是否佩戴眼镜',
+        'glasses_type'          => '眼镜类型',
+        'l_degree'              => '左眼度数',
+        'r_degree'              => '右眼度数'
     ],
 ];
