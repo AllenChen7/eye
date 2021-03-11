@@ -59,6 +59,8 @@ $api->version('v1', function ($api) {
         $api->post('update-password', 'UserController@updatePassword');
         // 用户信息
         $api->get('view', 'UserController@view');
+        // 重置密码
+        $api->get('reset-password', 'UserController@resetPassword');
     });
 
     $api->group([

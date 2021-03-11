@@ -65,6 +65,31 @@ class UserController extends ApiController
         return $this->errorResponse();
     }
 
+    /**
+     * 重置密码
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'                    => 'required|exists:users'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = User::find($request->input('id'));
+        $res->password = Hash::make(123456);
+
+        if ($res->save()) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
+
     public function view(Request $request)
     {
         $validator = Validator::make($request->all(), [
