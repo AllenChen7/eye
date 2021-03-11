@@ -52,6 +52,8 @@ use App\User;
  * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereAreaId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UsersData wherePowerType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UsersData wherePowerUserId($value)
+ * @property int $is_del
+ * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereIsDel($value)
  */
 class UsersData extends User
 {
@@ -130,5 +132,10 @@ class UsersData extends User
         }
 
         return $query;
+    }
+
+    public static function lists()
+    {
+
     }
 }

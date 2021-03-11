@@ -10,6 +10,16 @@ class PermissionController extends ApiController
 {
     public function permissionList()
     {
-        return $this->successResponse(Common::typeArr());
+        $type = Common::typeArr();
+        $res = [];
+
+        foreach ($type as $key => $value) {
+            $res[] = [
+                'id' => $key,
+                'name' => $value
+            ];
+        }
+
+        return $this->successResponse($res);
     }
 }

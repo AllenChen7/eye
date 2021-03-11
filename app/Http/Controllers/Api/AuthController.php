@@ -212,4 +212,64 @@ class AuthController extends ApiController
     {
         return Auth::guard('api');
     }
+
+    /**
+     * 省用户信息
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function province()
+    {
+        $res = User::where([
+            'is_del' => Common::NO,
+            'type'   => Common::TYPE_PROV
+        ])->select(['id', 'name'])->get()->toArray();
+
+        return $this->successResponse($res);
+    }
+
+    /**
+     * 市用户信息
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function city(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required|exists:users'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = User::where([
+            'type' => Common::TYPE_CITY,
+            'province_id' => $request->input('id')
+        ])->select(['id', 'name'])->get()->toArray();
+
+        return $this->successResponse($res);
+    }
+
+    /**
+     * 县级用户
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function area(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required|exists:users'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = User::where([
+            'type' => Common::TYPE_AREA,
+            'city_id' => $request->input('id')
+        ])->select(['id', 'name'])->get()->toArray();
+
+        return $this->successResponse($res);
+    }
 }

@@ -40,6 +40,12 @@ $api->version('v1', function ($api) {
         $api->get('me', 'AuthController@me')->name('me');
         // 创建用户
         $api->post('create', 'AuthController@create');
+        // 省级用户
+        $api->get('province', 'AuthController@province');
+        // 市级用户
+        $api->get('city', 'AuthController@city');
+        // 县级用户
+        $api->get('area', 'AuthController@area');
     });
 
     $api->group([

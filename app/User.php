@@ -54,6 +54,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAreaId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePowerType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePowerUserId($value)
+ * @property int $is_del
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsDel($value)
  */
 class User extends Authenticatable implements JWTSubject
 {
