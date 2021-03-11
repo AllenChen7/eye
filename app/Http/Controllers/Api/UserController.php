@@ -90,6 +90,11 @@ class UserController extends ApiController
         return $this->errorResponse();
     }
 
+    /**
+     * 需要修改一下 兼容编辑时所需数据
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function view(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -176,5 +181,30 @@ class UserController extends ApiController
         unset($res['power_type']);
 
         return $this->successResponse($res);
+    }
+
+    /**
+     * 用户删除 - 确认下不可删除情况
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'                    => 'required|exists:users'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = User::find($request->input('id'));
+        $res->is_del =Common::YES;
+
+        if ($res->save()) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
     }
 }

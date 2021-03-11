@@ -61,6 +61,8 @@ $api->version('v1', function ($api) {
         $api->get('view', 'UserController@view');
         // 重置密码
         $api->get('reset-password', 'UserController@resetPassword');
+        // 用户删除
+        $api->get('delete', 'UserController@delete');
     });
 
     $api->group([
