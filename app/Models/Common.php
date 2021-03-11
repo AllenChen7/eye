@@ -6,6 +6,7 @@ namespace App\Models;
 class Common
 {
     // 类型
+    const TYPE_ZONE = 0;
     const TYPE_XM = 10;
     const TYPE_PROV = 20;
     const TYPE_CITY = 30;

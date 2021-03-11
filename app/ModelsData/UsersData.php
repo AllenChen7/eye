@@ -66,41 +66,76 @@ class UsersData extends User
     public $limit = 20;
     public $page = 1;
     public $type = 1;
+    public $is_super = 1; // 是否是管理员用户数据
 
     public function rowCount()
     {
-        $rows = $this->baseQuery()->get()->groupBy('type');
-        $data = [];
-        $this->type = intval($this->type) ? $this->type : 1;
-
-        foreach (Common::typeArr() as $key => $type) {
-            $data[] = [
-                'name' => $type,
-                'value' => $key,
-                'is_default' => $this->type == $key ? 1 : 0,
-                'count' => isset($rows[$key]) ? count($rows[$key]) : 0
-            ];
-        }
-
-        return $data;
+        return $this->baseQuery()->count();
     }
 
     public function rowsData()
     {
         $offset = $this->page <= 1 ? 0 : ($this->page - 1) * $this->limit;
-
-        return $this->baseQuery()
+        $res = $this->baseQuery()
             ->limit($this->limit)
             ->offset($offset)
-            ->where([
-                'type' => $this->type
-            ])->get();
+            ->get();
+
+        foreach ($res as &$re) {
+            $user = User::whereId($re['create_user_id'])->first();
+            $re['create_user_name'] = $user['name'] ?? '-';
+            $re['remark'] = $re['remark'] ?? '-';
+
+            switch ($re['type']) {
+                case Common::TYPE_CITY:
+                    $powerData = User::whereId($re['province_id'])->first();
+                    if ($powerData) {
+                        $re['power_name'] = $powerData['name'];
+                    }
+                    break;
+
+                case Common::TYPE_AREA:
+                    $powerData = User::whereId($re['city_id'])->first();
+                    if ($powerData) {
+                        $re['power_name'] = $powerData['name'];
+                    }
+                    break;
+
+                case Common::TYPE_SCH:
+                    $powerData = User::whereId($re['area_id'])->first();
+                    if ($powerData) {
+                        $re['power_name'] = $powerData['name'];
+                    }
+                    break;
+
+                default:
+                    $re['power_name'] = '-';
+                    break;
+            }
+
+            $re['type'] = Common::typeArr()[$re['type']];
+            $re['roles'] = [
+                '超级管理员', '程序员'
+            ];
+
+            unset($re['create_user_id']);
+            unset($re['power_user_id']);
+            unset($re['power_type']);
+            unset($re['area_id']);
+            unset($re['province_id']);
+            unset($re['city_id']);
+            unset($re['is_del']);
+            unset($re['class_data_id']);
+        }
+
+        return $res;
     }
 
     public function baseQuery()
     {
-        $query = User::orderByDesc('id');
-
+        $query = User::orderByDesc('id')->where([
+            'is_del' => Common::NO
+        ])->where('type', '<>', Common::TYPE_XM);
         $this->phone = trim($this->phone);
 
         if ($this->phone) {
@@ -119,16 +154,20 @@ class UsersData extends User
             ]);
         }
 
-        if ($this->start_time) {
+        if ($this->is_super) {
+            $query->where('type', '>', Common::TYPE_ZONE);
+        } else {
             $query->where([
-                'created_at', '>' ,$this->start_time
+                'type' => Common::TYPE_ZONE
             ]);
         }
 
+        if ($this->start_time) {
+            $query->where('created_at', '>' ,$this->start_time);
+        }
+
         if ($this->end_time) {
-            $query->where([
-                'created_at', '<', $this->end_time
-            ]);
+            $query->where('created_at', '<', $this->end_time);
         }
 
         return $query;
