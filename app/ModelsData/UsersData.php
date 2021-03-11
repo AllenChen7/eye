@@ -124,7 +124,6 @@ class UsersData extends User
             unset($re['area_id']);
             unset($re['province_id']);
             unset($re['city_id']);
-            unset($re['is_del']);
             unset($re['class_data_id']);
         }
 

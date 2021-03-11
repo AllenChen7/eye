@@ -28,16 +28,29 @@ class Common
 
     /**
      * 层级类型
+     * @param int $type
      * @return string[]
      */
-    public static function typeArr()
+    public static function typeArr($type = 0)
     {
-        return [
+        $arr = [
             self::TYPE_PROV => '省级',
             self::TYPE_CITY => '市级',
             self::TYPE_AREA => '县级',
             self::TYPE_SCH  => '校级'
         ];
+
+        if ($type === 1) {
+            $arr = [
+                self::TYPE_XM => '希铭',
+                self::TYPE_PROV => '省级',
+                self::TYPE_CITY => '市级',
+                self::TYPE_AREA => '县级',
+                self::TYPE_SCH  => '校级'
+            ];
+        }
+
+        return $arr;
     }
 
     /**

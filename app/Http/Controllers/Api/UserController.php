@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\Common;
 use App\ModelsData\UsersData;
 use App\User;
 use Illuminate\Http\Request;
@@ -37,6 +38,11 @@ class UserController extends ApiController
         ]);
     }
 
+    /**
+     * 更新密码
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updatePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -57,5 +63,93 @@ class UserController extends ApiController
         }
 
         return $this->errorResponse();
+    }
+
+    public function view(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'                    => 'required|exists:users'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = User::whereId($request->input('id'))->first()->toArray();
+        $arr = Common::typeArr(1);
+
+        $res['power_list'] = [];
+        switch ($res['type']) {
+            case Common::TYPE_SCH:
+                $prov = User::whereId($res['province_id'])->first();
+
+                if ($prov) {
+                    $res['power_list'][] = [
+                        'id' => $arr[$prov['type']],
+                        'name' => $prov['name']
+                    ];
+                }
+
+                $city = User::whereId($res['city_id'])->first();
+
+                if ($city) {
+                    $res['power_list'][] = [
+                        'id' => $arr[$city['type']],
+                        'name' => $city['name']
+                    ];
+                }
+
+                $area = User::whereId($res['area_id'])->first();
+
+                if ($area) {
+                    $res['power_list'][] = [
+                        'id' => $arr[$area['type']],
+                        'name' => $city['name']
+                    ];
+                }
+
+                break;
+
+            case Common::TYPE_AREA:
+                $prov = User::whereId($res['province_id'])->first();
+
+                if ($prov) {
+                    $res['power_list'][] = [
+                        'id' => $arr[$prov['type']],
+                        'name' => $prov['name']
+                    ];
+                }
+
+                $city = User::whereId($res['city_id'])->first();
+
+                if ($city) {
+                    $res['power_list'][] = [
+                        'id' => $arr[$city['type']],
+                        'name' => $city['name']
+                    ];
+                }
+                break;
+
+            case Common::TYPE_CITY:
+                $prov = User::whereId($res['province_id'])->first();
+
+                if ($prov) {
+                    $res['power_list'][] = [
+                        'id' => $arr[$prov['type']],
+                        'name' => $prov['name']
+                    ];
+                }
+                break;
+        }
+
+        $res['type'] = $arr[$res['type']];
+        unset($res['class_data_id']);
+        unset($res['city_id']);
+        unset($res['province_id']);
+        unset($res['area_id']);
+        unset($res['power_user_id']);
+        unset($res['power_type']);
+
+        return $this->successResponse($res);
     }
 }
