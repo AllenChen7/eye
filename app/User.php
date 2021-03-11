@@ -48,6 +48,12 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereClassDataId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereProvinceId($value)
+ * @property int $area_id 县级用户ID
+ * @property int $power_type 继承type
+ * @property int $power_user_id 继承用户id
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAreaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePowerType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePowerUserId($value)
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -59,7 +65,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'phone', 'status', 'remark', 'province_id', 'city_id', 'class_data_id'
+        'name', 'email', 'password', 'phone', 'status', 'remark', 'province_id', 'city_id', 'class_data_id', 'user_id',
+        'power_user_id', 'power_type'
     ];
 
     /**

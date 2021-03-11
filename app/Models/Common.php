@@ -6,10 +6,11 @@ namespace App\Models;
 class Common
 {
     // 类型
-    const TYPE_XM = 1;
-    const TYPE_PROV = 2;
-    const TYPE_CITY = 3;
-    const TYPE_SCH = 4;
+    const TYPE_XM = 10;
+    const TYPE_PROV = 20;
+    const TYPE_CITY = 30;
+    const TYPE_AREA = 40;
+    const TYPE_SCH = 50;
 
     // 状态
     const STATUS_ACTIVE = 1;
@@ -31,10 +32,10 @@ class Common
     public static function typeArr()
     {
         return [
-            self::TYPE_XM   => '希铭公司',
-            self::TYPE_PROV => '省级管理员',
-            self::TYPE_CITY => '县市级管理员',
-            self::TYPE_SCH  => '学校级管理员'
+            self::TYPE_PROV => '省级',
+            self::TYPE_CITY => '市级',
+            self::TYPE_AREA => '县级',
+            self::TYPE_SCH  => '校级'
         ];
     }
 
@@ -48,6 +49,7 @@ class Common
             self::TYPE_XM,
             self::TYPE_PROV,
             self::TYPE_CITY,
+            self::TYPE_AREA,
             self::TYPE_SCH,
         ];
     }

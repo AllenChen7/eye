@@ -93,6 +93,15 @@ $api->version('v1', function ($api) {
     $api->group([
         'namespace'  => 'App\Http\Controllers\Api',
         'middleware' => 'jwt.auth',
+        'prefix'     => 'permission'
+    ], function ($api) {
+        // 获取权限等级
+        $api->get('permission-list', 'PermissionController@permissionList');
+    });
+
+    $api->group([
+        'namespace'  => 'App\Http\Controllers\Api',
+        'middleware' => 'jwt.auth',
     ], function ($api) {
         $api->get('auth-test', 'TestController@authTest');
     });

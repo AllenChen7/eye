@@ -27,10 +27,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ClassData whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ClassData whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $area_id 县级用户ID
+ * @method static \Illuminate\Database\Eloquent\Builder|ClassData whereAreaId($value)
  */
 class ClassData extends Model
 {
     protected $fillable = [
-        'province_id', 'city_id', 'create_user_id', 'name', 'status'
+        'province_id', 'city_id', 'create_user_id', 'name', 'status', 'area_id'
     ];
 }

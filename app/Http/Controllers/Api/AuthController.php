@@ -70,8 +70,8 @@ class AuthController extends ApiController
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'                  => 'required|max:50',
-            'phone'                 => 'required|unique:users|max:20',
+            'name'                  => 'required|max:64|unique:users',
+            'phone'                 => 'required|unique:users|max:32',
             'password'              => 'required|confirmed|max:50',
             'password_confirmation' => 'required|same:password|max:50',
             'remark'                => 'nullable|max:200',
@@ -79,20 +79,21 @@ class AuthController extends ApiController
                 'required', Rule::in(Common::typeArrKeys()),
             ]
         ]);
+        // 如果是校级的话需要指定省级-市级-县级并创建学校数据
 
-        $validator->sometimes('province_id', 'required|exists:province_city_area,id', function ($input) {
+        $validator->sometimes('province_id', 'required|exists:users,id', function ($input) {
             return in_array($input->type, [
-                Common::TYPE_PROV, Common::TYPE_CITY, Common::TYPE_SCH
+                Common::TYPE_CITY, Common::TYPE_SCH, Common::TYPE_AREA
             ]);
         });
 
-        $validator->sometimes('city_id', 'required|exists:province_city_area,id', function ($input) {
+        $validator->sometimes('city_id', 'required|exists:users,id', function ($input) {
             return in_array($input->type, [
-                Common::TYPE_CITY, Common::TYPE_SCH
+                Common::TYPE_SCH, Common::TYPE_AREA
             ]);
         });
 
-        $validator->sometimes('school_name', 'required', function ($input) {
+        $validator->sometimes('area_id', 'required|exists:users,id', function ($input) {
             return in_array($input->type, [
                 Common::TYPE_SCH
             ]);
@@ -109,38 +110,35 @@ class AuthController extends ApiController
         $model->remark      = $request->input('remark');
         $model->type        = $request->input('type');
         $model->create_user_id = \auth()->id();
+        $model->power_user_id = \auth()->id(); // todo 结合用户管理综合处理一下
+        $model->power_type  = \auth()->user()->type;
 
         switch ($request->input('type')) {
-            case Common::TYPE_PROV:
+            case Common::TYPE_CITY:
                 $model->province_id = $request->input('province_id');
                 break;
-            case Common::TYPE_CITY:
+            case Common::TYPE_AREA:
+                $model->province_id = $request->input('province_id');
+                $model->city_id     = $request->input('city_id');
+                // todo 可以进一步验证
+                break;
             case Common::TYPE_SCH:
                 $model->province_id = $request->input('province_id');
                 $model->city_id     = $request->input('city_id');
-
-                $res = Areas::areasDataByCityIdAndProvinceId($request->input('city_id'), $request->input('province_id'));
-
-                if (!$res) {
-                    $data = [
-                        'city_id' => [
-                            '省市数据不匹配'
-                        ]
-                    ];
-
-                    return $this->errorResponse('验证错误', $data, 422);
-                }
+                $model->area_id     = $request->input('area_id');
 
                 if (Common::TYPE_SCH) {
                     // 先处理学校数据
                     $classData = ClassData::firstOrCreate([
                         'province_id'   => $request->input('province_id'),
                         'city_id'       => $request->input('city_id'),
-                        'name'          => $request->input('school_name')
+                        'area_id'       => $request->input('area_id'),
+                        'name'          => $request->input('name')
                     ], [
                         'province_id'   => $request->input('province_id'),
                         'city_id'       => $request->input('city_id'),
-                        'name'          => $request->input('school_name'),
+                        'area_id'       => $request->input('area_id'),
+                        'name'          => $request->input('name'),
                         'create_user_id'=> \auth()->id()
                     ]);
 

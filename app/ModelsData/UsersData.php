@@ -46,6 +46,12 @@ use App\User;
  * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereCityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereClassDataId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereProvinceId($value)
+ * @property int $area_id 县级用户ID
+ * @property int $power_type 继承type
+ * @property int $power_user_id 继承用户id
+ * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereAreaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UsersData wherePowerType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UsersData wherePowerUserId($value)
  */
 class UsersData extends User
 {
