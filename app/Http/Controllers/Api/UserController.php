@@ -172,11 +172,8 @@ class UserController extends ApiController
                 break;
         }
 
-        $res['type'] = $arr[$res['type']];
+        $res['type_name'] = $arr[$res['type']];
         unset($res['class_data_id']);
-        unset($res['city_id']);
-        unset($res['province_id']);
-        unset($res['area_id']);
         unset($res['power_user_id']);
         unset($res['power_type']);
 
