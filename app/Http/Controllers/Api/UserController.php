@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\ClassData;
 use App\Models\Common;
 use App\ModelsData\UsersData;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserController extends ApiController
 {
@@ -203,5 +205,87 @@ class UserController extends ApiController
         }
 
         return $this->errorResponse();
+    }
+
+    public function update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'                  => 'required|max:64|unique:users',
+            'phone'                 => 'required|unique:users|max:32',
+            'remark'                => 'nullable|max:200',
+            'id'                    => 'required|exists:users',
+            'type'                  => [
+                'required', Rule::in(Common::typeArrKeys()),
+            ]
+        ]);
+        // 如果是校级的话需要指定省级-市级-县级并创建学校数据
+
+        $validator->sometimes('province_id', 'required|exists:users,id', function ($input) {
+            return in_array($input->type, [
+                Common::TYPE_CITY, Common::TYPE_SCH, Common::TYPE_AREA
+            ]);
+        });
+
+        $validator->sometimes('city_id', 'required|exists:users,id', function ($input) {
+            return in_array($input->type, [
+                Common::TYPE_SCH, Common::TYPE_AREA
+            ]);
+        });
+
+        $validator->sometimes('area_id', 'required|exists:users,id', function ($input) {
+            return in_array($input->type, [
+                Common::TYPE_SCH
+            ]);
+        });
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $model              = User::whereId($request->input('id'))->first();
+        $model->name        = $request->input('name');
+        $model->phone       = $request->input('phone');
+        $model->remark      = $request->input('remark');
+        $model->type        = $request->input('type');
+
+        switch ($request->input('type')) {
+            case Common::TYPE_CITY:
+                $model->province_id = $request->input('province_id');
+                break;
+            case Common::TYPE_AREA:
+                $model->province_id = $request->input('province_id');
+                $model->city_id     = $request->input('city_id');
+                // todo 可以进一步验证
+                break;
+            case Common::TYPE_SCH:
+                $model->province_id = $request->input('province_id');
+                $model->city_id     = $request->input('city_id');
+                $model->area_id     = $request->input('area_id');
+
+                if (Common::TYPE_SCH) {
+                    // 先处理学校数据
+                    $classData = ClassData::firstOrCreate([
+                        'province_id'   => $request->input('province_id'),
+                        'city_id'       => $request->input('city_id'),
+                        'area_id'       => $request->input('area_id'),
+                        'name'          => $request->input('name')
+                    ], [
+                        'province_id'   => $request->input('province_id'),
+                        'city_id'       => $request->input('city_id'),
+                        'area_id'       => $request->input('area_id'),
+                        'name'          => $request->input('name'),
+                        'create_user_id'=> \auth()->id()
+                    ]);
+
+                    $model->class_data_id = $classData->id;
+                }
+                break;
+        }
+
+        if ($model->save()) {
+            return $this->successResponse();
+        } else {
+            return $this->errorResponse();
+        }
     }
 }

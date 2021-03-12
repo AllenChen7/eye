@@ -63,6 +63,8 @@ $api->version('v1', function ($api) {
         $api->post('reset-password', 'UserController@resetPassword');
         // 用户删除
         $api->post('delete', 'UserController@delete');
+        // 用户更新
+        $api->post('update', 'UserController@update');
     });
 
     $api->group([
