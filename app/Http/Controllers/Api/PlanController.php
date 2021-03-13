@@ -132,6 +132,53 @@ class PlanController extends ApiController
         ]);
     }
 
+    public function update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required|exists:plans',
+            'name'    => 'required|max:100',
+            'plan_date' => 'required',
+            'plan_user' => 'nullable|max:64',
+            'remark' => 'nullable|max:200',
+            'grade_id'  => 'required|exists:grades,id',
+            'class_id' => 'required|exists:year_classes,id'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $classInfo = YearClass::where([
+            'id' => $request->input('class_id')
+        ])->first();
+
+        if ($classInfo['grade_id'] != $request->input('grade_id')) {
+            return $this->errorResponse('验证错误', [
+                'grade_id' => [
+                    '班级不属于该年级'
+                ]
+            ], 422);
+        }
+
+        $res = Plan::where([
+            'id' => $request->input('id')
+        ])->update([
+            'name' => $request->input('name'),
+            'plan_date' => $request->input('plan_date'),
+            'plan_user' => $request->input('plan_user'),
+            'remark' => $request->input('remark'),
+            'grade_id' => $request->input('grade_id'),
+            'year_class_id' => $request->input('class_id'),
+            'class_data_id' => $classInfo['class_data_id']
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
+
     public function delete(Request $request)
     {
         $validator = Validator::make($request->all(), [
