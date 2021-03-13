@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\ClassData;
+use App\Models\Common;
 use App\Models\Grade;
 use App\Models\YearClass;
 use App\ModelsData\School;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -132,12 +135,78 @@ class SchoolController extends ApiController
 
     public function list(Request $request)
     {
+        $user = auth()->user();
+        $type = $user['type'];
+        $limit = $request->input('limit', 20);
+        $page = $request->input('page', 1);
 
-    }
+        if (!$type) {
+            $type = $user['power_type'];
+        }
 
-    public function gradeAndClass()
-    {
+        $query = ClassData::orderByDesc('id');
 
+        switch ($type) {
+            case Common::TYPE_CITY:
+                $query->where([
+                    'city_id' => $user['city_id']
+                ]);
+                break;
+            case Common::TYPE_AREA:
+                $query->where([
+                    'area_id' => $user['area_id']
+                ]);
+                break;
+            case Common::TYPE_PROV:
+                $query->where([
+                    'province_id' => $user['province']
+                ]);
+                break;
+            case Common::TYPE_XM:
+                break;
+            case Common::TYPE_SCH:
+                $query->where([
+                    'id' => $user['class_data_id']
+                ]);
+                break;
+            default:
+                $query->where([
+                    'id' => 0
+                ]);
+                break;
+        }
+
+        $name = trim($request->input('name'));
+        if ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        }
+
+        $count = $query->count();
+        $offset = $page <= 1 ? 0 : ($page - 1) * $limit;
+        $rows = $query->limit($limit)->offset($offset)->get();
+
+        foreach ($rows as &$row) {
+            $row['grades'] = Grade::where([
+                'class_data_id' => $row['id']
+            ])->count();
+            $row['classes'] = YearClass::where([
+                'class_data_id' => $row['id']
+            ])->count();
+            $row['province'] = User::where([
+                'id' => $row['province_id']
+            ])->first()->name;
+            $row['city'] = User::where([
+                'id' => $row['city_id']
+            ])->first()->name;
+            $row['area'] = User::where([
+                'id' => $row['area_id']
+            ])->first()->name;
+        }
+
+        return $this->successResponse([
+            'count' => $count,
+            'rows' => $rows
+        ]);
     }
 
     public function grade()

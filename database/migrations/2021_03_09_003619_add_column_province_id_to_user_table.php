@@ -30,7 +30,6 @@ class AddColumnProvinceIdToUserTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('province_id');
             $table->dropColumn('city_id');
-            $table->dropColumn('create_user_id');
             $table->dropColumn('class_data_id');
         });
     }

@@ -29,10 +29,31 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property int $area_id 县级用户ID
  * @method static \Illuminate\Database\Eloquent\Builder|ClassData whereAreaId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Grade[] $grade
+ * @property-read int|null $grade_count
  */
 class ClassData extends Model
 {
     protected $fillable = [
         'province_id', 'city_id', 'create_user_id', 'name', 'status', 'area_id'
     ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'updated_at'
+    ];
+
+    public function grade()
+    {
+        return $this->hasMany('App\Models\Grade');
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return date('Y-m-d', strtotime($value));
+    }
 }

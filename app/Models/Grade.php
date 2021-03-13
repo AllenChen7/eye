@@ -27,10 +27,17 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Grade whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Grade whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\YearClass[] $yearClass
+ * @property-read int|null $year_class_count
  */
 class Grade extends Model
 {
     protected $hidden = [
         'created_at', 'updated_at', 'status', 'class_data_id', 'province_id', 'city_id'
     ];
+
+    public function yearClass()
+    {
+        return $this->hasMany('App\Models\YearClass');
+    }
 }

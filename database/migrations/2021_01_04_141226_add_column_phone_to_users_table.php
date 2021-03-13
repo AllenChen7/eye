@@ -15,7 +15,7 @@ class AddColumnPhoneToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('email')->nullable()->comment('邮箱')->change();
-            $table->string('phone', 20)->nullable()->unique()->comment('手机号')->after('name');
+            $table->string('phone', 64)->nullable()->unique()->comment('手机号')->after('name');
             $table->tinyInteger('status')->default(1)->comment('用户状态，1有效，0无效')->after('password');
             $table->string('password')->nullable()->comment('密码')->change();
             $table->string('name')->nullable()->comment('用户名')->change();

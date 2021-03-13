@@ -113,7 +113,7 @@ class UsersData extends User
                     break;
             }
 
-            $re['type'] = Common::typeArr()[$re['type']];
+            $re['type'] = Common::typeArr(1)[$re['type']];
             $re['roles'] = [
                 '超级管理员', '程序员'
             ];
@@ -134,7 +134,7 @@ class UsersData extends User
     {
         $query = User::orderByDesc('id')->where([
             'is_del' => Common::NO
-        ])->where('type', '<>', Common::TYPE_XM);
+        ]);
         $this->phone = trim($this->phone);
 
         if ($this->phone) {

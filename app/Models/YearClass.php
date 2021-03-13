@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|YearClass whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|YearClass whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $class_data_id 班级数据ID
+ * @method static \Illuminate\Database\Eloquent\Builder|YearClass whereClassDataId($value)
  */
 class YearClass extends Model
 {

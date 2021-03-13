@@ -93,6 +93,8 @@ $api->version('v1', function ($api) {
         $api->get('grade', 'SchoolController@grade');
         // 获取年级下班级
         $api->get('class-data', 'SchoolController@classData');
+        // 学校列表
+        $api->get('list', 'SchoolController@list');
     });
 
     $api->group([
