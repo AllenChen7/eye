@@ -14,8 +14,8 @@ class AddStatusColumnToPlanTable extends Migration
     public function up()
     {
         Schema::table('plans', function (Blueprint $table) {
-            $table->unsignedTinyInteger('status')->default(1)->index()->comment('状态：1、进行中，2完成');
-            $table->unsignedTinyInteger('is_del')->default(0)->index(0)->comment('是否删除');
+            $table->unsignedTinyInteger('status')->default(1)->index()->after('remark')->comment('状态：1、进行中，2完成');
+            $table->unsignedTinyInteger('is_del')->default(0)->index(0)->after('remark')->comment('是否删除');
         });
     }
 

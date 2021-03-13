@@ -128,6 +128,8 @@ $api->version('v1', function ($api) {
         $api->post('create', 'PlanController@create');
         // 验光计划列表
         $api->get('list', 'PlanController@list');
+        // 删除
+        $api->post('delete', 'PlanController@delete');
     });
 
     $api->group([

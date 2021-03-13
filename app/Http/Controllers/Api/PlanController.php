@@ -131,4 +131,27 @@ class PlanController extends ApiController
             'rows' => $rows
         ]);
     }
+
+    public function delete(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:plans,id'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = Plan::where([
+            'id' => $request->input('id')
+        ])->update([
+            'is_del' => Common::YES
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
 }
