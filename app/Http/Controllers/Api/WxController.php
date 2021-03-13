@@ -75,4 +75,44 @@ class WxController extends ApiController
     {
         return Auth::guard('wx');
     }
+
+    public function decryptData(Request $request)
+    {
+        $config = config('wxmini');
+        $app = Factory::miniProgram($config);
+        $validator = Validator::make($request->all(), [
+            'encryptedData'                    => 'required',
+            'iv'    => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $user = \auth('wx')->user();
+        $decryptedData = $app->encryptor->decryptData(
+            $user['session_key'], $request->input('iv'), $request->input('encryptedData')
+        );
+
+        if (isset($decryptedData['openId'])) {
+            $res = WxUser::where([
+                'openid' => $decryptedData['openId']
+            ])->update([
+                'nickname' => $decryptedData['nickName'],
+                'gender' => $decryptedData['gender'],
+                'language' => $decryptedData['language'],
+                'city'  => $decryptedData['city'],
+                'province' => $decryptedData['province'],
+                'country' => $decryptedData['country'],
+                'avatar' => $decryptedData['avatarUrl']
+            ]);
+
+            if ($res) {
+                unset($decryptedData['watermark']);
+                return $this->successResponse($decryptedData);
+            }
+        }
+
+        return $this->errorResponse();
+    }
 }

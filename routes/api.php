@@ -31,6 +31,15 @@ $api->version('v1', function ($api) {
     $api->group([
         'namespace'  => 'App\Http\Controllers\Api',
         'middleware' => 'jwt.auth',
+        'prefix'     => 'wx'
+    ], function ($api) {
+        // 解密
+        $api->post('decrypt-data', 'WxController@decryptData');
+    });
+
+    $api->group([
+        'namespace'  => 'App\Http\Controllers\Api',
+        'middleware' => 'jwt.auth',
         'prefix'     => 'auth'
     ], function ($api) {
         $api->get('logout', 'AuthController@logout');
