@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\WxUser;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class WxController extends ApiController
 {
@@ -18,16 +21,58 @@ class WxController extends ApiController
     {
         $config = config('wxmini');
         $app = Factory::miniProgram($config);
-        $code = $request->get('code');
 
-        if (!$code) {
-            return $this->errorResponse('缺少参数');
+        $validator = Validator::make($request->all(), [
+            'code'                    => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $session = $app->auth->session($code);
+        $session = $app->auth->session($request->input('code'));
 
-        // do something
+        if (isset($session['errcode'])) {
+            return $this->errorResponse();
+        }
 
-        return $this->jsonResponse($session);
+        $user = WxUser::firstOrCreate([
+            'openid' => $session['openid']
+        ], [
+            'openid' => $session['openid'],
+            'session_key' => $session['session_key']
+        ]);
+
+        if ($user) {
+            $user->session_key = $session['session_key'];
+
+            if ($user->save()) {
+                $token = $this->guard()->attempt([
+                    'openid' => $session['openid'],
+                    'password'  => 'password'
+                ]);
+
+                if ($token) {
+                    return $this->successResponse([
+                        'access_token' => $token,
+                        'token_type' => 'bearer',
+                        'expires_in' => $this->guard()->factory()->getTTL() * 60,
+                        'user' => $this->guard()->user()
+                    ]);
+                }
+            }
+        }
+
+        return $this->errorResponse();
+    }
+
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\Guard
+     */
+    public function guard()
+    {
+        return Auth::guard('wx');
     }
 }

@@ -46,6 +46,12 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'wx' => [
+            'driver' => 'jwt',
+            'provider' => 'wx',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -69,6 +75,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+        'wx' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\WxUser::class,
         ],
 
         // 'users' => [
