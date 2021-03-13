@@ -126,6 +126,8 @@ $api->version('v1', function ($api) {
     ], function ($api) {
         // 创建验光计划
         $api->post('create', 'PlanController@create');
+        // 验光计划列表
+        $api->get('list', 'PlanController@list');
     });
 
     $api->group([

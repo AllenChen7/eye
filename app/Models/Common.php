@@ -31,6 +31,11 @@ class Common
     const STU_STATUS_STOP = 2;
     const STU_STATUS_DEL = 0;
 
+    // 计划状态
+    const PLAN_STATUS_ACTIVE = 1;
+    const PLAN_STATUS_DONE = 2;
+    const PLAN_STATUS_PASS = 0; // 超时了
+
     /**
      * 层级类型
      * @param int $type
@@ -127,6 +132,18 @@ class Common
             self::STU_STATUS_DEL => '删除',
             self::STU_STATUS_ACTIVE => '正常',
             self::STU_STATUS_STOP => '休学中'
+        ];
+    }
+
+    /**
+     * 验光计划状态
+     * @return string[]
+     */
+    public static function planStatusArr()
+    {
+        return [
+            self::PLAN_STATUS_ACTIVE => '待执行',
+            self::PLAN_STATUS_DONE => '已完成'
         ];
     }
 

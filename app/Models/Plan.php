@@ -33,8 +33,14 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Plan whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plan whereYearClassId($value)
  * @mixin \Eloquent
+ * @property int $status 状态：1、进行中，2完成
+ * @property int $is_del 是否删除
+ * @method static \Illuminate\Database\Eloquent\Builder|Plan whereIsDel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Plan whereStatus($value)
  */
 class Plan extends Model
 {
-    //
+    protected $hidden = [
+        'created_at', 'updated_at', 'is_del', 'create_user_id'
+    ];
 }
