@@ -108,6 +108,10 @@ $api->version('v1', function ($api) {
         $api->post('create', 'StudentController@create');
         // 列表
         $api->get('list', 'StudentController@list');
+        // 详情
+        $api->post('view', 'StudentController@view');
+        // 更新度数
+        $api->post('update-degree', 'StudentController@updateDegree');
     });
 
     $api->group([

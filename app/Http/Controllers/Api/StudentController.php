@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
 use App\Models\Common;
+use App\Models\Grade;
 use App\Models\Student;
+use App\Models\YearClass;
 use App\ModelsData\School;
 use App\ModelsData\StudentData;
 use Illuminate\Http\Request;
@@ -109,5 +111,81 @@ class StudentController extends ApiController
             'count' => $count,
             'rows' => $rows
         ]);
+    }
+
+    public function view(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:students,id'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $data = Student::where([
+            'id' => $request->input('id')
+        ])->first();
+
+        $data['image'] = Common::transPhoto($data['sex']);
+        $data['grade'] = Grade::where([
+            'id' => $data['grade_id']
+        ])->first()->name ?? '-';
+        $data['class'] = YearClass::where([
+            'id' => $data['year_class_id']
+        ])->first()->name ?? '--';
+        $data['sex_name'] = Common::sexArr()[$data['sex']];
+        $data['is_myopia_name'] = Common::isArr()[$data['is_myopia']];
+        $data['is_glasses_name'] = Common::isArr()[$data['is_glasses']];
+        $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
+
+        return $this->successResponse($data);
+    }
+
+    /**
+     * 度数更新
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateDegree(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:students,id',
+            'left' => 'required',
+            'right' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $left = $request->input('left');
+        $right = $request->input('right');
+
+        $res = Student::where([
+            'id' => $request->input('id')
+        ])->update([
+            'l_degree' => $left['sph'] ?? 0,
+            'l_sph' => $left['sph'] ?? 0,
+            'l_cyl' => $left['cyl'] ?? 0,
+            'l_axi' => $left['axi'] ?? 0,
+            'l_roc1' => $left['roc1'] ?? 0,
+            'l_roc2' => $left['roc2'] ?? 0,
+            'l_axis' => $left['axis'] ?? 0,
+            'r_degree' => $right['sph'] ?? 0,
+            'r_sph' => $right['sph'] ?? 0,
+            'r_cyl' => $right['cyl'] ?? 0,
+            'r_axi' => $right['axi'] ?? 0,
+            'r_roc1' => $right['roc1'] ?? 0,
+            'r_roc2' => $right['roc2'] ?? 0,
+            'r_axis' => $right['axis'] ?? 0,
+        ]);
+
+        if ($res) {
+            // todo 快照数据
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
     }
 }

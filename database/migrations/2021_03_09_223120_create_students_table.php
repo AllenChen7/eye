@@ -21,7 +21,7 @@ class CreateStudentsTable extends Migration
             $table->string('id_card', 32)->default(0)->comment('身份证号')->index();
             $table->string('birthday', 12)->default(0)->comment('出生日期');
             $table->unsignedInteger('class_data_id')->comment('学校ID')->index();
-            $table->unsignedInteger('grader_id')->comment('年级ID')->index();
+            $table->unsignedInteger('grade_id')->comment('年级ID')->index();
             $table->unsignedInteger('year_class_id')->comment('班级ID')->index();
             $table->unsignedInteger('create_user_id')->comment('创建人ID')->index();
             $table->unsignedTinyInteger('is_myopia')->default(0)->comment('是否近视，0不近视，1近视')->index();

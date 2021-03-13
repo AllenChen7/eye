@@ -73,6 +73,8 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property int $create_user_id 创建人ID
  * @method static \Illuminate\Database\Eloquent\Builder|Student whereCreateUserId($value)
+ * @property int $grade_id 年级ID
+ * @method static \Illuminate\Database\Eloquent\Builder|Student whereGradeId($value)
  */
 class Student extends Model
 {

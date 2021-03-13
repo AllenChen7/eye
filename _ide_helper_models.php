@@ -203,6 +203,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Plan whereRemark($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plan whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plan whereYearClassId($value)
+ * @mixin \Eloquent
+ * @property int $status 状态：1、进行中，2完成
+ * @property int $is_del 是否删除
+ * @method static \Illuminate\Database\Eloquent\Builder|Plan whereIsDel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Plan whereStatus($value)
  */
 	class Plan extends \Eloquent {}
 }

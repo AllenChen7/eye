@@ -36,6 +36,10 @@ class Common
     const PLAN_STATUS_DONE = 2;
     const PLAN_STATUS_PASS = 0; // 超时了
 
+    // 眼镜类型
+    const GLA_TYPE_NORMAL = 0;
+    const GLA_TYPE_LENS = 1;
+
     /**
      * 层级类型
      * @param int $type
@@ -61,6 +65,14 @@ class Common
         }
 
         return $arr;
+    }
+
+    public static function glaType()
+    {
+        return [
+            self::GLA_TYPE_NORMAL => '普通眼镜',
+            self::GLA_TYPE_LENS => '隐形眼镜'
+        ];
     }
 
     /**
@@ -111,6 +123,17 @@ class Common
     }
 
     /**
+     * @return string[]
+     */
+    public static function isArr()
+    {
+        return [
+            self::YES => '是',
+            self::NO => '否'
+        ];
+    }
+
+    /**
      * 状态
      * @return string[]
      */
@@ -154,5 +177,14 @@ class Common
         $nowYear = date('Y');
 
         return $nowYear - $year + 1; // todo
+    }
+
+    public static function transPhoto($sex = 1)
+    {
+        if ($sex) {
+            return 'http://todo.hyyphp.online/uploads/images/avatars/202012/04/14_1607087777_12WaTMK3AT.jpeg';
+        } else {
+            return 'http://todo.hyyphp.online/uploads/images/avatars/202012/04/14_1607087777_12WaTMK3AT.jpeg';
+        }
     }
 }
