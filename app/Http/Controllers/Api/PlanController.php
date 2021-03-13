@@ -63,7 +63,7 @@ class PlanController extends ApiController
     {
         $name = $request->input('name');
         $gradeId = $request->input('grade_id');
-        $classId = $request->input('classId');
+        $classId = $request->input('class_id');
         $type = $request->input('type', 1);
 
         $query = Plan::where([
@@ -113,13 +113,17 @@ class PlanController extends ApiController
             $row['class'] = YearClass::where([
                 'id' => $row['year_class_id']
             ])->first()->name;
-            $row['grade_id'] = Grade::where([
+            $row['grade'] = Grade::where([
                 'id' => $row['grade_id']
             ])->first()->name;
-            $row['count'] = Student::where([
+            $row['count '] = Student::where([
                 'id' => $row['year_class_id']
             ])->count();
             $row['status_name'] = Common::planStatusArr()[$row['status']];
+
+            if (strtotime($row['plan_date']) < time()) {
+                $row['status_name'] = '超时未执行';
+            }
         }
 
         return $this->successResponse([
