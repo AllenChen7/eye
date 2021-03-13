@@ -132,6 +132,8 @@ $api->version('v1', function ($api) {
         $api->post('delete', 'PlanController@delete');
         // 更新
         $api->post('update', 'PlanController@update');
+        // 计划详情
+        $api->get('detail', 'PlanController@detail');
     });
 
     $api->group([

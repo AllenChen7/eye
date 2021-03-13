@@ -132,6 +132,10 @@ class PlanController extends ApiController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -179,6 +183,10 @@ class PlanController extends ApiController
         return $this->errorResponse();
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -200,5 +208,40 @@ class PlanController extends ApiController
         }
 
         return $this->errorResponse();
+    }
+
+    public function detail(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:plans,id'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $data = Plan::where([
+            'id' => $request->input('id'),
+//            'is_del'    => Common::NO
+        ])->first();
+
+        $data['grade'] = Grade::where([
+            'id' => $data['grade_id']
+        ])->first()->name;
+        $data['class'] = YearClass::where([
+            'id' => $data['year_class_id']
+        ])->first()->name;
+        $student = Student::where([
+            'year_class_id' => $data['year_class_id']
+        ])->get();
+        $data['count'] = $student->count();
+        $data['studentIdArr'] = $student->pluck('id');
+        $data['status_name'] = Common::planStatusArr()[$data['status']];
+
+        if (strtotime($data['plan_data']) < time()) {
+            $data['status_name'] = '超时未验光';
+        }
+
+        return $this->successResponse($data);
     }
 }
