@@ -230,4 +230,34 @@ class SchoolController extends ApiController
 
         return $this->successResponse($data);
     }
+
+    /**
+     * 更新学校名称
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateSchoolName(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required|exists:class_data',
+            'name'  => 'required|max:64'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        // 是否同步修改用户名称 todo
+        $res = ClassData::where([
+            'id' => $request->input('id')
+        ])->update([
+            'name' => $request->input('name')
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
 }

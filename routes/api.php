@@ -95,6 +95,8 @@ $api->version('v1', function ($api) {
         $api->get('class-data', 'SchoolController@classData');
         // 学校列表
         $api->get('list', 'SchoolController@list');
+        // 更新学校名称
+        $api->post('update-school-name', 'SchoolController@updateSchoolName');
     });
 
     $api->group([
