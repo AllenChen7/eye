@@ -61,7 +61,8 @@ class SchoolController extends ApiController
                     'grade_id' => $model->id,
                     'name' => $class,
                     'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
+                    'updated_at' => Carbon::now(),
+                    'class_data_id' => auth()->user()->class_data_id
                 ];
             }
 

@@ -104,8 +104,10 @@ $api->version('v1', function ($api) {
         'middleware' => 'jwt.auth',
         'prefix'     => 'student'
     ], function ($api) {
-        // 创建年级班级
+        // 创建学生
         $api->post('create', 'StudentController@create');
+        // 列表
+        $api->get('list', 'StudentController@list');
     });
 
     $api->group([

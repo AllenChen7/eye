@@ -89,4 +89,25 @@ class StudentController extends ApiController
             }
         }
     }
+
+    public function list(Request $request)
+    {
+        $model = new StudentData();
+        $model->schoolId = $request->input('school_id');
+        $model->idCard = $request->input('id_card');
+        $model->gradeId = $request->input('grade_id');
+        $model->classId = $request->input('class_id');
+        $model->studentCode = $request->input('student_code');
+        $model->name = $request->input('name');
+        $model->limit = $request->input('limit', $model->limit);
+        $model->page = $request->input('page', $model->page);
+
+        $count = $model->rowCount();
+        $rows = $model->rowData();
+
+        return $this->successResponse([
+            'count' => $count,
+            'rows' => $rows
+        ]);
+    }
 }

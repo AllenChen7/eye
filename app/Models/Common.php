@@ -26,6 +26,11 @@ class Common
     const YES = 1;
     const NO = 0;
 
+    // 学生状态
+    const STU_STATUS_ACTIVE = 1;
+    const STU_STATUS_STOP = 2;
+    const STU_STATUS_DEL = 0;
+
     /**
      * 层级类型
      * @param int $type
@@ -80,6 +85,15 @@ class Common
         ];
     }
 
+    public static function sexArr()
+    {
+        return [
+            self::SEX_MEN => '男',
+            self::SEX_WOMEN => '女',
+            self::SEX_UNKNOWN => '未知'
+        ];
+    }
+
     /**
      * @return int[]
      */
@@ -101,5 +115,27 @@ class Common
             self::STATUS_ACTIVE     => '启用',
             self::STATUS_DISABLED   => '禁用'
         ];
+    }
+
+    /**
+     * 学生状态
+     * @return string[]
+     */
+    public static function studentStatusArr()
+    {
+        return [
+            self::STU_STATUS_DEL => '删除',
+            self::STU_STATUS_ACTIVE => '正常',
+            self::STU_STATUS_STOP => '休学中'
+        ];
+    }
+
+    public static function transYearOld($birthday)
+    {
+        $arr = explode('-', $birthday);
+        $year = $arr[0];
+        $nowYear = date('Y');
+
+        return $nowYear - $year + 1; // todo
     }
 }
