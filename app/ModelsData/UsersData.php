@@ -54,6 +54,12 @@ use App\User;
  * @method static \Illuminate\Database\Eloquent\Builder|UsersData wherePowerUserId($value)
  * @property int $is_del
  * @method static \Illuminate\Database\Eloquent\Builder|UsersData whereIsDel($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
+ * @property-read int|null $roles_count
+ * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
  */
 class UsersData extends User
 {

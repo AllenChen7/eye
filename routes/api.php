@@ -132,6 +132,10 @@ $api->version('v1', function ($api) {
     ], function ($api) {
         // 获取权限等级
         $api->get('permission-list', 'PermissionController@permissionList');
+        // 测试
+        $api->get('test', 'PermissionController@test');
+        // 权限集
+        $api->get('init-roles-list', 'PermissionController@initRolesList');
     });
 
     $api->group([
