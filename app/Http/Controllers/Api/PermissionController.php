@@ -60,7 +60,7 @@ class PermissionController extends ApiController
             ])->count();
             $role['role_name'] = trans('permission.' . $role['name']);
             $role['last_user'] = User::whereId($role['last_user_id'])->first()->name ?? '-';
-            $role['created_at'] = $role['updated_at']->toDateTimeString();
+            $role['updated_at'] = $role['updated_at']->toDateTimeString();
         }
 
         return $this->successResponse($roles);
