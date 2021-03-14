@@ -102,4 +102,23 @@ class StudentData
 
         return $query;
     }
+
+    public static function excelTitle()
+    {
+        return [
+            '姓名',
+            '身份证',
+            '性别',
+            '出生年月日',
+            '入学年份',
+            '学号',
+            '年级',
+            '班级',
+            '是否近视',
+            '是否佩戴眼镜',
+            '眼镜类型',
+            '左眼度数',
+            '右眼度数',
+        ];
+    }
 }

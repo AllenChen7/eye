@@ -121,6 +121,8 @@ $api->version('v1', function ($api) {
         $api->post('view', 'StudentController@view');
         // 更新度数
         $api->post('update-degree', 'StudentController@updateDegree');
+        // 批量导入
+        $api->post('import', 'StudentController@import');
     });
 
     $api->group([

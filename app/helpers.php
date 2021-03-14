@@ -26,3 +26,33 @@ function ddax(...$args)
     }
     dd(...$args);
 }
+
+/**
+ * 无断点输出
+ * @param mixed ...$args
+ */
+function echo_r(...$args)
+{
+    foreach($args as &$x){
+        if (method_exists($x, 'toArray')) {
+            $x = $x->toArray();
+        }
+    }
+
+    echo '<pre>';
+    var_dump(...$args);
+}
+
+/**
+ * @param $date
+ * @param string $format
+ * @return bool
+ */
+function isDate($date, $format = 'Y-m-d')
+{
+    if (date($format, strtotime($date)) === $date) {
+        return true;
+    } else {
+        return false;
+    }
+}

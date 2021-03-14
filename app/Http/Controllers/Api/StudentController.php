@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exports\StudentExport;
 use App\Http\Controllers\ApiController;
+use App\Imports\StudentImport;
 use App\Models\Common;
 use App\Models\Grade;
 use App\Models\Student;
@@ -12,6 +14,8 @@ use App\ModelsData\StudentData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class StudentController extends ApiController
 {
@@ -187,5 +191,68 @@ class StudentController extends ApiController
         }
 
         return $this->errorResponse();
+    }
+
+    public function import(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'excel' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|max:10485760'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $excel = $request->file('excel');
+        $studentImport = new StudentImport();
+        $studentImport->cacheStr = 'student_import_' . auth()->user()->class_data_id;
+        Excel::import($studentImport, $excel);
+        $excelArr = [];
+
+        if ($studentImport->successFlag) {
+            $data = array_merge([StudentData::excelTitle()], $studentImport->successCacheData);
+            $columnArr = [
+                'B' => NumberFormat::FORMAT_TEXT
+            ];
+            $fileName = '批量添加成功学生信息' . date('Y-m-d-H-i-s') . '.xlsx';
+            $sRes = (new StudentExport($data, $columnArr))->store($fileName, 'public');
+
+            if ($sRes) {
+                $excelArr[] = [
+                    'name' => $fileName,
+                    'status' => 1,
+                    'status_name' => '导入成功',
+                    'create_time' => date('Y-m-d H:i:s'),
+                    'url' => asset('storage/' . $fileName),
+                ];
+            } else {
+                return $this->errorResponse();
+            }
+        }
+
+        if ($studentImport->errorFlag) {
+            $title = StudentData::excelTitle();
+            $title[] = '失败备注';
+            $data = array_merge([$title], $studentImport->cacheData);
+            $columnArr = [
+                'B' => NumberFormat::FORMAT_TEXT
+            ];
+            $fileName = '批量添加失败学生信息' . date('Y-m-d-H-i-s') . '.xlsx';
+            $sRes = (new StudentExport($data, $columnArr))->store($fileName, 'public');
+
+            if ($sRes) {
+                $excelArr[] = [
+                    'name' => $fileName,
+                    'status' => 1,
+                    'status_name' => '导入成功',
+                    'create_time' => date('Y-m-d H:i:s'),
+                    'url' => asset('storage/' . $fileName),
+                ];
+            } else {
+                return $this->errorResponse();
+            }
+        }
+
+        return $this->successResponse($excelArr);
     }
 }

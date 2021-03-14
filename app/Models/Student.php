@@ -78,7 +78,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Student extends Model
 {
-    protected  $fillable = ['name', 'sex', 'student_code', 'id_card', 'birthday', 'class_data_id', 'grader_id',
+    protected  $fillable = ['name', 'sex', 'student_code', 'id_card', 'birthday', 'class_data_id', 'grade_id',
         'year_class_id', 'is_myopia', 'is_glasses', 'glasses_type', 'status', 'is_del', 'l_degree', 'l_sph', 'l_cyl',
         'l_axi', 'l_roc1', 'l_roc2', 'l_axis', 'r_degree', 'r_sph', 'r_cyl', 'r_axi', 'r_roc1', 'r_roc2', 'r_axis',
         'create_user_id'];
