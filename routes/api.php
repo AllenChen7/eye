@@ -136,6 +136,8 @@ $api->version('v1', function ($api) {
         $api->get('test', 'PermissionController@test');
         // 权限集
         $api->get('init-roles-list', 'PermissionController@initRolesList');
+        // 详情
+        $api->get('view', 'PermissionController@view');
     });
 
     $api->group([

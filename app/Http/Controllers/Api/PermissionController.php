@@ -8,6 +8,8 @@ use App\Model\RoleHasPermission;
 use App\Models\Common;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Permission;
 use function Symfony\Component\String\s;
 
 class PermissionController extends ApiController
@@ -46,6 +48,10 @@ class PermissionController extends ApiController
         ddax($res);
     }
 
+    /**
+     * 权限集列表
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function initRolesList()
     {
         if (auth()->user()->type !== 10) {
@@ -64,5 +70,38 @@ class PermissionController extends ApiController
         }
 
         return $this->successResponse($roles);
+    }
+
+    public function view(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required|exists:roles',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $role = \Spatie\Permission\Models\Role::findById($request->input('id'));
+        $allPermission = Permission::all()->toArray();
+        $roleHasPermission = RoleHasPermission::whereRoleId($role['id'])->get()->pluck('permission_id')->toArray();
+
+        foreach ($allPermission as &$permission) {
+            if (in_array($permission['id'], $roleHasPermission)) {
+                $permission['is_check'] = 1;
+            } else {
+                $permission['is_check'] = 0;
+            }
+        }
+
+        $arr = [];
+        foreach ($allPermission as $permission) {
+            $arr = explode('-', $permission['name']);
+            $first = head($arr);
+
+            $arr[$first][] = $permission;
+        }
+
+        dda($arr);
     }
 }
