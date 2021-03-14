@@ -59,6 +59,7 @@ class PermissionController extends ApiController
                 'role_id' => $role['id']
             ])->count();
             $role['role_name'] = trans('permission.' . $role['name']);
+            $role['last_user'] = User::whereId($role['last_user_id'])->first()->name ?? '-';
         }
 
         return $this->successResponse($roles);

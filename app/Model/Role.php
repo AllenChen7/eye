@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $last_user_id 最后操作人
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereLastUserId($value)
  */
 class Role extends Model
 {
