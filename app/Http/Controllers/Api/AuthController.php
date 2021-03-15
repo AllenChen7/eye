@@ -118,11 +118,25 @@ class AuthController extends ApiController
                 $model->province_id = $request->input('province_id');
                 break;
             case Common::TYPE_AREA:
+                $cityInfo = User::whereId($request->input('city_id'))->first();
+
+                if ($cityInfo['province_id'] != $request->input('province_id')) {
+                    return $this->errorResponse('市级数据与省级数据不匹配');
+                }
+
                 $model->province_id = $request->input('province_id');
                 $model->city_id     = $request->input('city_id');
-                // todo 可以进一步验证
                 break;
             case Common::TYPE_SCH:
+                $areaInfo = User::whereId($request->input('area_id'))->first();
+
+                if ($areaInfo['province_id'] != $request->input('province_id')) {
+                    return $this->errorResponse('县级数据与省级数据不匹配');
+                }
+
+                if ($areaInfo['city_id'] != $request->input('city_id')) {
+                    return $this->errorResponse('县级数据与市级数据不匹配');
+                }
                 $model->province_id = $request->input('province_id');
                 $model->city_id     = $request->input('city_id');
                 $model->area_id     = $request->input('area_id');
