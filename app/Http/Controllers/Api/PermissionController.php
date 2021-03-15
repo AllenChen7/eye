@@ -117,4 +117,30 @@ class PermissionController extends ApiController
 
         return $this->successResponse($permissionArr);
     }
+
+    /**
+     * 给角色添加权限
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addPermission(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required|exists:roles',
+            'permission_arr' => 'required|array'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $role = \Spatie\Permission\Models\Role::findById($request->input('id'));
+        $res = $role->givePermissionTo($request->input('permission_arr'));
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
 }

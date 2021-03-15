@@ -138,6 +138,8 @@ $api->version('v1', function ($api) {
         $api->get('init-roles-list', 'PermissionController@initRolesList');
         // 详情
         $api->get('view', 'PermissionController@view');
+        // 角色添加权限
+        $api->post('add-permission', 'PermissionController@addPermission');
     });
 
     $api->group([
