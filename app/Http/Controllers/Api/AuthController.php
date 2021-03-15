@@ -80,6 +80,10 @@ class AuthController extends ApiController
             ]
         ]);
         // 如果是校级的话需要指定省级-市级-县级并创建学校数据
+        // 用户创建怎么处理 todo type 为 0 是为用户创建
+        if ($request->input('type') > 0 && \auth()->user()->type == 0) {
+            return $this->errorResponse('没有创建当前等级用户的权限');
+        }
 
         $validator->sometimes('province_id', 'required|exists:users,id', function ($input) {
             return in_array($input->type, [
@@ -96,6 +100,12 @@ class AuthController extends ApiController
         $validator->sometimes('area_id', 'required|exists:users,id', function ($input) {
             return in_array($input->type, [
                 Common::TYPE_SCH
+            ]);
+        });
+
+        $validator->sometimes('roles_arr', 'nullable|array', function ($input) {
+            return in_array($input->type, [
+                Common::TYPE_ZONE
             ]);
         });
 
@@ -153,7 +163,7 @@ class AuthController extends ApiController
                 if ($areaInfo['type'] != Common::TYPE_AREA) {
                     return $this->errorResponse('县级数据错误');
                 }
-                
+
                 $model->province_id = $request->input('province_id');
                 $model->city_id     = $request->input('city_id');
                 $model->area_id     = $request->input('area_id');
@@ -174,6 +184,17 @@ class AuthController extends ApiController
                     ]);
 
                     $model->class_data_id = $classData->id;
+                }
+                break;
+            case Common::TYPE_ZONE:
+                $model->province_id = \auth()->user()->province_id;
+                $model->city_id = \auth()->user()->city_id;
+                $model->area_id = \auth()->user()->area_id;
+                $model->class_data_id = \auth()->user()->class_data_id;
+
+                if (!\auth()->user()->type) {
+                    $model->power_type = \auth()->user()->power_type;
+                    $model->power_user_id = \auth()->user()->power_user_id;
                 }
                 break;
         }

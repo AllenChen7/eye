@@ -82,6 +82,7 @@ class Common
     public static function typeArrKeys()
     {
         return [
+            self::TYPE_ZONE,
             self::TYPE_XM,
             self::TYPE_PROV,
             self::TYPE_CITY,
