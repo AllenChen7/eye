@@ -115,6 +115,14 @@ class AuthController extends ApiController
 
         switch ($request->input('type')) {
             case Common::TYPE_CITY:
+                $provinceInfo = User::where([
+                    'id' => $request->input('province_id')
+                ])->first();
+
+                if ($provinceInfo['type'] != Common::TYPE_PROV) {
+                    return $this->errorResponse('省级数据错误');
+                }
+
                 $model->province_id = $request->input('province_id');
                 break;
             case Common::TYPE_AREA:
@@ -122,6 +130,10 @@ class AuthController extends ApiController
 
                 if ($cityInfo['province_id'] != $request->input('province_id')) {
                     return $this->errorResponse('市级数据与省级数据不匹配');
+                }
+
+                if ($cityInfo['type'] != Common::TYPE_CITY) {
+                    return $this->errorResponse('市级数据错误');
                 }
 
                 $model->province_id = $request->input('province_id');
@@ -137,6 +149,11 @@ class AuthController extends ApiController
                 if ($areaInfo['city_id'] != $request->input('city_id')) {
                     return $this->errorResponse('县级数据与市级数据不匹配');
                 }
+
+                if ($areaInfo['type'] != Common::TYPE_AREA) {
+                    return $this->errorResponse('县级数据错误');
+                }
+                
                 $model->province_id = $request->input('province_id');
                 $model->city_id     = $request->input('city_id');
                 $model->area_id     = $request->input('area_id');
