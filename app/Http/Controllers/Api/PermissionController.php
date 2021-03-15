@@ -74,6 +74,7 @@ class PermissionController extends ApiController
 
     public function view(Request $request)
     {
+        $permissionArr = Common::permissionArr();
         $validator = Validator::make($request->all(), [
             'id'    => 'required|exists:roles',
         ]);
@@ -85,23 +86,35 @@ class PermissionController extends ApiController
         $role = \Spatie\Permission\Models\Role::findById($request->input('id'));
         $allPermission = Permission::all()->toArray();
         $roleHasPermission = RoleHasPermission::whereRoleId($role['id'])->get()->pluck('permission_id')->toArray();
+        $perArr = [];
 
         foreach ($allPermission as &$permission) {
             if (in_array($permission['id'], $roleHasPermission)) {
                 $permission['is_check'] = 1;
+                $perArr[$permission['name']] = 1;
             } else {
                 $permission['is_check'] = 0;
+                $perArr[$permission['name']] = 0;
             }
         }
 
-        $arr = [];
-        foreach ($allPermission as $permission) {
-            $arr = explode('-', $permission['name']);
-            $first = head($arr);
+        foreach ($permissionArr as &$permission) {
+            $permission['is_check'] = $perArr[$permission['id']] ?? 0;
 
-            $arr[$first][] = $permission;
+            if ($permission['child']) {
+                foreach ($permission['child'] as &$per) {
+                    $per['is_check'] = $perArr[$per['id']] ?? 0;
+
+                    if ($per['child']) {
+                        foreach ($per['child'] as &$p) {
+                            $p['is_check'] = $perArr[$p['id']] ?? 0;
+                        }
+                    }
+                }
+            }
         }
 
-        dda($arr);
+
+        return $this->successResponse($permissionArr);
     }
 }

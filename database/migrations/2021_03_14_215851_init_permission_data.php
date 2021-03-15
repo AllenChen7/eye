@@ -56,7 +56,7 @@ class InitPermissionData extends Migration
         Permission::create(['name' => 'wx-update']); //
 
         Permission::create(['name' => 'big-*']); // 大数据统计
-        Permission::create(['name' => 'big-*view']); // big data
+        Permission::create(['name' => 'big-view']); // big data
 
         Permission::create(['name' => 'setting-*']); //设置
         Permission::create(['name' => 'setting-optometry']); //设置

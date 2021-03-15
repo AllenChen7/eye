@@ -180,6 +180,200 @@ class Common
         return $nowYear - $year + 1; // todo
     }
 
+    /**
+     * 权限数据
+     * @return array[]
+     */
+    public static function permissionArr()
+    {
+        return [
+            [
+                'id' => 'drm-*',
+                'name' => '权限管理',
+                'child' => [
+                    [
+                        'id' => 'drm-roles',
+                        'name' => '角色管理',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'drm-users',
+                        'name' => '用户管理',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'drm-super-users',
+                        'name' => '管理员管理',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'drm-Permissions',
+                        'name' => '权限集管理',
+                        'child' => []
+                    ]
+                ]
+            ],
+            [
+                'id' => 'school-*',
+                'name' => '学校管理',
+                'child' => [
+                    [
+                        'id' => 'school-school-*',
+                        'name' => '学校管理',
+                        'child' => [
+                            [
+                                'id' => 'school-school-view',
+                                'name' => '查看',
+                                'child' => []
+                            ],
+                            [
+                                'id' => 'school-school-add',
+                                'name' => '新增',
+                                'child' => []
+                            ],
+                            [
+                                'id' => 'school-school-update',
+                                'name' => '编辑',
+                                'child' => []
+                            ],
+                            [
+                                'id' => 'school-school-delete',
+                                'name' => '删除',
+                                'child' => []
+                            ]
+                        ]
+                    ],
+                    [
+                        'id' => 'school-grade-*',
+                        'name' => '班级管理',
+                        'child' => [
+                            [
+                                'id' => 'school-grade-view',
+                                'name' => '查看',
+                                'child' => []
+                            ],
+                            [
+                                'id' => 'school-grade-add',
+                                'name' => '编辑',
+                                'child' => []
+                            ],
+                            [
+                                'id' => 'school-grade-update',
+                                'name' => '编辑',
+                                'child' => []
+                            ],
+                            [
+                                'id' => 'school-grade-delete',
+                                'name' => '删除',
+                                'child' => []
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'id' => 'student-*',
+                'name' => '学生管理',
+                'child' => [
+                    [
+                        'id' => 'student-view',
+                        'name' => '查看',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'student-add',
+                        'name' => '新增',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'student-update',
+                        'name' => '更新',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'student-delete',
+                        'name' => '删除',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'student-import',
+                        'name' => '导入',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'student-export',
+                        'name' => '导出',
+                        'child' => []
+                    ]
+                ]
+            ],
+            [
+                'id' => 'plan-*',
+                'name' => '验光计划',
+                'child' => [
+                    [
+                        'id' => 'plan-view',
+                        'name' => '查看',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'plan-add',
+                        'name' => '新增',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'plan-update',
+                        'name' => '更新',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'plan-delete',
+                        'name' => '删除',
+                        'child' => []
+                    ],
+                ]
+            ],
+            [
+                'id' => 'wx-*',
+                'name' => '家长管理',
+                'child' => [
+                    [
+                        'id' => 'wx-view',
+                        'name' => '查看',
+                        'child' => []
+                    ],
+                    [
+                        'id' => 'wx-update',
+                        'name' => '更新',
+                        'child' => []
+                    ],
+                ]
+            ],
+            [
+                'id' => 'big-*',
+                'name' => '大数据统计',
+                'child' => [
+                    [
+                        'id' => 'big-view',
+                        'name' => '查看',
+                        'child' => []
+                    ]
+                ]
+            ],
+            [
+                'id' => 'setting-*',
+                'name' => '设置',
+                'child' => [
+                    [
+                        'id' => 'setting-optometry',
+                        'name' => '查看',
+                        'child' => []
+                    ]
+                ]
+            ]
+        ];
+    }
+
     public static function transPhoto($sex = 1)
     {
         if ($sex) {
