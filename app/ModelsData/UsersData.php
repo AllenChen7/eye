@@ -119,7 +119,7 @@ class UsersData extends User
                     break;
             }
 
-            $re['type'] = Common::typeArr(1)[$re['type']];
+            $re['type'] = Common::typeArr(1)[$re['type']] ?? $re['type'];
             $re['roles'] = [
                 '超级管理员', '程序员'
             ];
