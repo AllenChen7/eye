@@ -106,6 +106,12 @@ $api->version('v1', function ($api) {
         $api->get('list', 'SchoolController@list');
         // 更新学校名称
         $api->post('update-school-name', 'SchoolController@updateSchoolName');
+        // 删除年级
+        $api->post('delete-grade', 'SchoolController@deleteGrade');
+        // 删除班级
+        $api->post('delete-class', 'SchoolController@deleteClass');
+        // 年级列表
+        $api->get('grade-list', 'SchoolController@gradeList');
     });
 
     $api->group([

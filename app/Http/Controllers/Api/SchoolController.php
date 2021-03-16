@@ -217,6 +217,41 @@ class SchoolController extends ApiController
         return $this->successResponse($data);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function gradeList(Request $request)
+    {
+        $gradeId = $request->input('id', 0);
+        $limit = $request->input('limit', 20);
+        $page = $request->input('page', 1);
+
+        if (!$gradeId) {
+            $gradeId = auth()->user()->class_data_id;
+        }
+
+        if (!$gradeId) {
+            return $this->successResponse([
+                'count' => 0,
+                'rows' => []
+            ]);
+        }
+
+        $query = Grade::where([
+            'class_data_id' => $gradeId
+        ])->orderByDesc('id');
+
+        $count = $query->count();
+        $offset = $page <= 1 ? 0 : ($page - 1) * $limit;
+        $rows = $query->offset($offset)->limit($limit)->get();
+
+        return $this->successResponse([
+            'count' => $count,
+            'rows' => $rows
+        ]);
+    }
+
     public function classData(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -253,6 +288,48 @@ class SchoolController extends ApiController
             'id' => $request->input('id')
         ])->update([
             'name' => $request->input('name')
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
+
+    public function deleteGrade(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required|exists:grades',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = Grade::whereId($request->input('id'))->update([
+            'status' => Common::STATUS_DISABLED
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
+
+    public function deleteClass(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required|exists:year_classes',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = YearClass::whereId($request->input('id'))->update([
+            'status' => Common::STATUS_DISABLED
         ]);
 
         if ($res) {
