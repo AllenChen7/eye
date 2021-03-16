@@ -387,6 +387,35 @@ class SchoolController extends ApiController
     }
 
     /**
+     * 禁用学校
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteSchool(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required|exists:class_data',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = ClassData::where([
+            'id' => $request->input('id')
+        ])->update([
+            'status' => Common::STATUS_DISABLED
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+        // todo 将账号改为 无效
+
+        return $this->errorResponse();
+    }
+
+    /**
      * 查看班级
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

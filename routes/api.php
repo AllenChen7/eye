@@ -114,6 +114,8 @@ $api->version('v1', function ($api) {
         $api->get('grade-list', 'SchoolController@gradeList');
         // 查看年级
         $api->get('view-grade', 'SchoolController@viewGrade');
+        // 学校状态修改
+        $api->get('view-grade', 'SchoolController@viewGrade');
     });
 
     $api->group([
