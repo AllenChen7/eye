@@ -9,6 +9,7 @@ use App\Models\Common;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Permission;
 use function Symfony\Component\String\s;
 
@@ -35,7 +36,7 @@ class PermissionController extends ApiController
 
     public function test()
     {
-//        $role = Role::create([
+//         $role = Role::create([
 //            'name' => 'writer'
 //        ]);
 //        $permission = Permission::create([
@@ -50,17 +51,33 @@ class PermissionController extends ApiController
 
     /**
      * 权限集列表
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function initRolesList()
+    public function initRolesList(Request $request)
     {
-        if (auth()->user()->type !== 10) {
-            return $this->errorResponse('没有权限', [], 403);
+        $validator = Validator::make($request->all(), [
+            'type'                  => [
+                'required', Rule::in([0, 1]),
+            ]
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+        // 0 角色管理、1 权限集管理
+        if ($request->input('type') == 1) {
+            $roles = Role::whereCreateUserId(0)->get();
+        } else {
+            $roles = Role::whereCreateUserId(auth()->id())->get();
         }
 
-        $roles = Role::whereCreateUserId(0)->get();
+        foreach ($roles as $key => &$role) {
+            if ($role['name'] == 'xm') {
+                unset($roles[$key]);
+                continue;
+            }
 
-        foreach ($roles as &$role) {
             $role['count'] = RoleHasPermission::where([
                 'role_id' => $role['id']
             ])->count();
