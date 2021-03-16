@@ -16,6 +16,11 @@ use Illuminate\Validation\Rule;
 
 class SchoolController extends ApiController
 {
+    /**
+     * 创建年级班级
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request)
     {
         if (!auth()->user()->class_data_id) {
@@ -78,6 +83,11 @@ class SchoolController extends ApiController
         return $this->errorResponse();
     }
 
+    /**
+     * 添加班级
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function addClass(Request $request)
     {
         if (!auth()->user()->class_data_id) {
@@ -136,6 +146,11 @@ class SchoolController extends ApiController
         return $this->errorResponse();
     }
 
+    /**
+     * 学校列表
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function list(Request $request)
     {
         $user = auth()->user();
@@ -189,6 +204,7 @@ class SchoolController extends ApiController
         $rows = $query->limit($limit)->offset($offset)->get();
 
         foreach ($rows as &$row) {
+            $row['status_name'] = Common::statusArr()[$row['status']];
             $row['grades'] = Grade::where([
                 'class_data_id' => $row['id']
             ])->count();
@@ -220,6 +236,7 @@ class SchoolController extends ApiController
     }
 
     /**
+     * 年级列表
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -241,7 +258,8 @@ class SchoolController extends ApiController
         }
 
         $query = Grade::where([
-            'class_data_id' => $gradeId
+            'class_data_id' => $gradeId,
+            'status' => Common::YES
         ])->orderByDesc('id');
 
         $count = $query->count();
@@ -250,7 +268,8 @@ class SchoolController extends ApiController
 
         foreach ($rows as &$row) {
             $classInfo = YearClass::where([
-                'grade_id' => $row['id']
+                'grade_id' => $row['id'],
+                'status' => Common::YES
             ])->get();
 
             $row['count'] = $classInfo->count();
@@ -265,6 +284,11 @@ class SchoolController extends ApiController
         ]);
     }
 
+    /**
+     * 年级下班级数据
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function classData(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -310,6 +334,11 @@ class SchoolController extends ApiController
         return $this->errorResponse();
     }
 
+    /**
+     * 删除年级
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deleteGrade(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -331,6 +360,11 @@ class SchoolController extends ApiController
         return $this->errorResponse();
     }
 
+    /**
+     * 删除班级
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deleteClass(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -350,5 +384,39 @@ class SchoolController extends ApiController
         }
 
         return $this->errorResponse();
+    }
+
+    /**
+     * 查看班级
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function viewGrade(Request $request)
+    {
+        $id = $request->input('id');
+
+        if (!$id) {
+            return $this->errorResponse('请先选中需要查看的学校');
+        }
+
+        $schoolInfo = ClassData::whereId($id)->first();
+
+        $gradeInfo = Grade::where([
+            'class_data_id' => $id,
+            'status' => Common::YES
+        ])->get();
+
+        foreach ($gradeInfo as $grade) {
+            $grade['created_at'] = date('Y-m-d H:i:s', strtotime($grade['created_at']));
+            $grade['classInfo'] = YearClass::where([
+                'grade_id' => $grade['id'],
+                'status' => Common::YES
+            ])->get()->toArray();
+        }
+
+        return $this->successResponse([
+            'school_name' => $schoolInfo['name'],
+            'grade_info' => $gradeInfo
+        ]);
     }
 }

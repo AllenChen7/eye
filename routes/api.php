@@ -112,6 +112,8 @@ $api->version('v1', function ($api) {
         $api->post('delete-class', 'SchoolController@deleteClass');
         // 年级列表
         $api->get('grade-list', 'SchoolController@gradeList');
+        // 查看年级
+        $api->get('view-grade', 'SchoolController@viewGrade');
     });
 
     $api->group([
