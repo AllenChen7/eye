@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property int $class_data_id 班级数据ID
  * @method static \Illuminate\Database\Eloquent\Builder|YearClass whereClassDataId($value)
+ * @property int $create_user_id 创建人
+ * @method static \Illuminate\Database\Eloquent\Builder|YearClass whereCreateUserId($value)
  */
 class YearClass extends Model
 {

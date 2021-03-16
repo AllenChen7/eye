@@ -51,6 +51,7 @@ class SchoolController extends ApiController
         $model->city_id = auth()->user()->city_id;
         $model->province_id = auth()->user()->province_id;
         $model->name = trim($request->input('grade'));
+        $model->create_user_id = auth()->id();
 
         if ($model->save()) {
             $insertData = [];
@@ -62,7 +63,8 @@ class SchoolController extends ApiController
                     'name' => $class,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
-                    'class_data_id' => auth()->user()->class_data_id
+                    'class_data_id' => auth()->user()->class_data_id,
+                    'create_user_id' => auth()->id()
                 ];
             }
 
@@ -245,6 +247,17 @@ class SchoolController extends ApiController
         $count = $query->count();
         $offset = $page <= 1 ? 0 : ($page - 1) * $limit;
         $rows = $query->offset($offset)->limit($limit)->get();
+
+        foreach ($rows as &$row) {
+            $classInfo = YearClass::where([
+                'grade_id' => $row['id']
+            ])->get();
+
+            $row['count'] = $classInfo->count();
+            $row['class'] = $classInfo->toArray();
+            $row['status_name'] = Common::statusArr()[$row['status']];
+            $row['create_user_name'] = User::whereId($row['create_user_id'])->first()->name ?? '-';
+        }
 
         return $this->successResponse([
             'count' => $count,

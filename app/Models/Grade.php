@@ -29,15 +29,22 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\YearClass[] $yearClass
  * @property-read int|null $year_class_count
+ * @property int $create_user_id 创建人
+ * @method static \Illuminate\Database\Eloquent\Builder|Grade whereCreateUserId($value)
  */
 class Grade extends Model
 {
     protected $hidden = [
-        'created_at', 'updated_at', 'status', 'class_data_id', 'province_id', 'city_id'
+        'updated_at', 'class_data_id', 'province_id', 'city_id'
     ];
 
     public function yearClass()
     {
         return $this->hasMany('App\Models\YearClass');
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return date('Y-m-d H:i:s', strtotime($value));
     }
 }
