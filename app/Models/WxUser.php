@@ -62,7 +62,7 @@ class WxUser extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'status', 'session_key', 'created_at', 'updated_at'
+        'password', 'status', 'session_key', 'updated_at', 'openid', 'union_id'
     ];
 
     /**
@@ -87,6 +87,6 @@ class WxUser extends Authenticatable implements JWTSubject
 
     public function getCreatedAtAttribute($value)
     {
-        return date('Y-m-d', strtotime($value));
+        return date('Y-m-d H:i:s', strtotime($value));
     }
 }

@@ -35,6 +35,8 @@ $api->version('v1', function ($api) {
     ], function ($api) {
         // 解密
         $api->post('decrypt-data', 'WxController@decryptData');
+        // 列表
+        $api->get('list', 'WxController@list');
     });
 
     $api->group([

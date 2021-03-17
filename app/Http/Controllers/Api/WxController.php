@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\Common;
 use App\Models\WxUser;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
@@ -114,5 +115,32 @@ class WxController extends ApiController
         }
 
         return $this->errorResponse();
+    }
+
+    public function list(Request $request)
+    {
+        $limit = $request->input('limit', 20);
+        $page = $request->input('page', 1);
+        $offset = $page <= 1 ? 0 : ($page - 1) * $limit;
+        $name = $request->input('name');
+
+        $query = WxUser::orderByDesc('id');
+        $name = trim($name);
+
+        if ($name) {
+            $query->where('nickname', 'like', '%' . $name . '%');
+        }
+
+        $count = $query->limit($limit)->offset($offset)->count();
+        $rows = $query->get();
+
+        foreach ($rows as &$row) {
+            $row['sex'] = Common::sexArr()[$row['gender']];
+        }
+
+        return $this->successResponse([
+            'count' => $count,
+            'rows' => $rows
+        ]);
     }
 }
