@@ -207,10 +207,12 @@ class SchoolController extends ApiController
         foreach ($rows as &$row) {
             $row['status_name'] = Common::statusArr()[$row['status']];
             $row['grades'] = Grade::where([
-                'class_data_id' => $row['id']
+                'class_data_id' => $row['id'],
+                'status' => Common::YES
             ])->count();
             $row['classes'] = YearClass::where([
-                'class_data_id' => $row['id']
+                'class_data_id' => $row['id'],
+                'status' => Common::YES
             ])->count();
             $row['province'] = User::where([
                 'id' => $row['province_id']
