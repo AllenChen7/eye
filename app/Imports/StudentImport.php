@@ -283,7 +283,8 @@ class StudentImport implements ToCollection
                 'is_glasses' => $isGlasses == '是' ? 1 : 0,
                 'glasses_type' => $glassesType == '隐形眼镜' ? 1 : 0,
                 'l_degree' => intval($lDegree),
-                'r_degree' => intval($rDegree)
+                'r_degree' => intval($rDegree),
+                'join_school_date' => $joinSchoolDay
             ], [
                 'name' => $studentName,
                 'sex' => $sex == '男' ? 1 : 2,
@@ -297,7 +298,8 @@ class StudentImport implements ToCollection
                 'is_glasses' => $isGlasses == '是' ? 1 : 0,
                 'glasses_type' => $glassesType == '隐形眼镜' ? 1 : 0,
                 'l_degree' => intval($lDegree),
-                'r_degree' => intval($rDegree)
+                'r_degree' => intval($rDegree),
+                'join_school_date' => $joinSchoolDay
             ]);
 
             if ($res) {
