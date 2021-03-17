@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
 use App\Models\Common;
+use App\Models\Student;
 use App\Models\WxUser;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Ofcold\IdentityCard\IdentityCard;
 
 class WxController extends ApiController
 {
@@ -142,5 +144,34 @@ class WxController extends ApiController
             'count' => $count,
             'rows' => $rows
         ]);
+    }
+
+    public function search(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'       => 'required',
+            'id_card'    => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $idCardCheck = IdentityCard::make($request->input('id_card'));
+
+        if (!$idCardCheck) {
+            return $this->errorResponse('身份证格式不正确');
+        }
+
+        $studentInfo = Student::where([
+            'name' => $request->input('name'),
+            'id_card' => $request->input('id_card')
+        ])->select(['name', 'id_card', 'student_code', 'l_degree', 'r_degree', 'updated_at'])->first();
+
+        if (!$studentInfo) {
+            return $this->errorResponse('很抱歉，您查询的学生不存在');
+        }
+
+        return $this->successResponse($studentInfo);
     }
 }

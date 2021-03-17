@@ -84,4 +84,14 @@ class Student extends Model
         'year_class_id', 'is_myopia', 'is_glasses', 'glasses_type', 'status', 'is_del', 'l_degree', 'l_sph', 'l_cyl',
         'l_axi', 'l_roc1', 'l_roc2', 'l_axis', 'r_degree', 'r_sph', 'r_cyl', 'r_axi', 'r_roc1', 'r_roc2', 'r_axis',
         'create_user_id'];
+
+    public function getCreatedAtAttribute($value)
+    {
+        return date('Y-m-d H:i:s', strtotime($value));
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return date('Y-m-d H:i:s', strtotime($value));
+    }
 }

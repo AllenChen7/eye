@@ -37,6 +37,8 @@ $api->version('v1', function ($api) {
         $api->post('decrypt-data', 'WxController@decryptData');
         // 列表
         $api->get('list', 'WxController@list');
+        // 学生信息查询
+        $api->post('search', 'WxController@search');
     });
 
     $api->group([
