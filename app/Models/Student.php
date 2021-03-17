@@ -75,6 +75,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Student whereCreateUserId($value)
  * @property int $grade_id 年级ID
  * @method static \Illuminate\Database\Eloquent\Builder|Student whereGradeId($value)
+ * @property string $join_school_date 入学年份
+ * @method static \Illuminate\Database\Eloquent\Builder|Student whereJoinSchoolDate($value)
  */
 class Student extends Model
 {

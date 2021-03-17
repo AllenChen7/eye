@@ -36,7 +36,8 @@ class StudentController extends ApiController
             ],
             'is_glasses'            => [
                 'required', Rule::in(Common::isKeys())
-            ]
+            ],
+            'join_school_date'      => 'required'
         ]);
 
         $validator->sometimes('glasses_type', 'required', function ($input) {
@@ -59,26 +60,20 @@ class StudentController extends ApiController
         $oldData = StudentData::studentByIdCard($request->input('id_card'));
 
         if ($oldData) {
-            // 如果 学校、年级、班级一致的话则提示已存在
-            if ($oldData['class_data_id'] == auth()->user()->class_data_id &&
-                $oldData['grader_id'] == $request->input('grader_id') &&
-                $oldData['year_class_id'] == $request->input('class_id')) {
-                return $this->errorResponse('数据已存在，不能再次添加');
-            } else {
-                $oldData->class_data_id = auth()->user()->class_data_id;
-                $oldData->grader_id = $request->input('grade_id');
-                $oldData->year_class_id = $request->input('class_id');
-                $oldData->is_myopia = $request->input('is_myopia');
-                $oldData->is_glasses = $request->input('is_glasses');
-                $oldData->glasses_type = $request->input('glasses_type');
-                $oldData->l_degree = $request->input('l_degree');
-                $oldData->r_degree = $request->input('r_degree');
+            $oldData->class_data_id = auth()->user()->class_data_id;
+            $oldData->grader_id = $request->input('grade_id');
+            $oldData->year_class_id = $request->input('class_id');
+            $oldData->is_myopia = $request->input('is_myopia');
+            $oldData->is_glasses = $request->input('is_glasses');
+            $oldData->glasses_type = $request->input('glasses_type');
+            $oldData->l_degree = $request->input('l_degree');
+            $oldData->r_degree = $request->input('r_degree');
+            $oldData->join_school_date = $request->input('join_school_date');
 
-                if ($oldData->save()) {
-                    return $this->successResponse();
-                } else {
-                    return $this->errorResponse();
-                }
+            if ($oldData->save()) {
+                return $this->successResponse();
+            } else {
+                return $this->errorResponse();
             }
             // 否则进行更新到本次提交数据
         } else {
@@ -87,6 +82,7 @@ class StudentController extends ApiController
             $model->class_data_id = auth()->user()->class_data_id;
             $model->grader_id = $request->input('grade_id');
             $model->year_class_id = $request->input('class_id');
+            $model->join_school_date = $request->input('join_school_date');
 
             if ($model->save()) {
                 return $this->successResponse();
