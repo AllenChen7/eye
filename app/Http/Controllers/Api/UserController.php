@@ -25,8 +25,9 @@ class UserController extends ApiController
         $model->name = $request->input('name', '');
         $model->phone = $request->input('phone', '');
         $model->status = $request->input('status', '');
-        $model->start_time = $request->input('start_time', '');
-        $model->end_time = $request->input('end_time', '');
+        $timeArr = $request->input('time_arr', '');
+        $model->start_time = $timeArr[0] ?? '';
+        $model->end_time = $timeArr[1] ?? '';
         $model->page = $request->input('page', 1);
         $model->limit = $request->input('limit', 20);
         $model->type = $request->input('type', 1);
