@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Models\ClassData;
 use App\Models\Common;
 use App\Models\Student;
+use App\Models\WxSearchLog;
 use App\Models\WxUser;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
@@ -138,6 +140,9 @@ class WxController extends ApiController
 
         foreach ($rows as &$row) {
             $row['sex'] = Common::sexArr()[$row['gender']];
+            $row['school_name'] = ClassData::where([
+                'id' => $row['class_data_id']
+            ])->first()->name ?? '-';
         }
 
         return $this->successResponse([
@@ -153,6 +158,10 @@ class WxController extends ApiController
             'id_card'    => 'required'
         ]);
 
+        \DB::table('wx_users')->where([
+            'id' => \auth('wx')->id()
+        ])->increment('nums');
+
         if ($validator->fails()) {
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
@@ -166,11 +175,25 @@ class WxController extends ApiController
         $studentInfo = Student::where([
             'name' => $request->input('name'),
             'id_card' => $request->input('id_card')
-        ])->select(['name', 'id_card', 'student_code', 'l_degree', 'r_degree', 'updated_at'])->first();
+        ])->select(['name', 'id_card', 'student_code', 'l_degree', 'r_degree', 'updated_at', 'id', 'class_data_id'])->first();
 
         if (!$studentInfo) {
             return $this->errorResponse('很抱歉，您查询的学生不存在');
         }
+        // 记录查询数据
+        $searchModel = new WxSearchLog();
+        $searchModel->wx_user_id = \auth('wx')->id();
+        $searchModel->student_id = $studentInfo['id'];
+        $searchModel->l_degree = $studentInfo['l_degree'];
+        $searchModel->r_degree = $studentInfo['r_degree'];
+        $searchModel->class_data_id = $studentInfo['class_data_id'];
+        $searchModel->save();
+
+        WxUser::where([
+            'id' => \auth('wx')->id()
+        ])->update([
+            'class_data_id' => $studentInfo['class_data_id']
+        ]);
 
         return $this->successResponse($studentInfo);
     }

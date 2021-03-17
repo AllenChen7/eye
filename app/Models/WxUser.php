@@ -43,6 +43,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @mixin \Eloquent
  * @property string $password password
  * @method static \Illuminate\Database\Eloquent\Builder|WxUser wherePassword($value)
+ * @property int $class_data_id 学校ID
+ * @property string $nums 查询次数
+ * @method static \Illuminate\Database\Eloquent\Builder|WxUser whereClassDataId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|WxUser whereNums($value)
  */
 class WxUser extends Authenticatable implements JWTSubject
 {
