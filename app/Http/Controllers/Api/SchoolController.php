@@ -127,21 +127,34 @@ class SchoolController extends ApiController
 
         $insertData = [];
 
+//        foreach ($request->input('class') as $class) {
+//            $class = trim($class);
+//            $insertData[] = [
+//                'grade_id' => $request->input('id'),
+//                'name' => $class,
+//                'created_at' => Carbon::now(),
+//                'updated_at' => Carbon::now(),
+//                'class_data_id' => auth()->user()->class_data_id
+//            ];
+//        }
+//
+//        $res = \DB::table('year_classes')->insert($insertData);
         foreach ($request->input('class') as $class) {
             $class = trim($class);
-            $insertData[] = [
-                'grade_id' => $request->input('id'),
-                'name' => $class,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-                'class_data_id' => auth()->user()->class_data_id
-            ];
+            $model = new YearClass();
+            $model->grade_id = $request->input('id');
+            $model->name = $class;
+            $model->class_data_id = auth()->user()->class_data_id;
+
+            if ($model->save()) {
+                $insertData[] = $model;
+            } else {
+                return $this->errorResponse();
+            }
         }
 
-        $res = \DB::table('year_classes')->insert($insertData);
-
-        if ($res) {
-            return $this->successResponse();
+        if ($insertData) {
+            return $this->successResponse($insertData);
         }
 
         return $this->errorResponse();
