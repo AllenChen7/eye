@@ -102,6 +102,6 @@ class ClassData extends Model
                 break;
         }
 
-        return $query->select(['id'])->get()->pluck();
+        return $query->select(['id'])->get()->pluck('id');
     }
 }
