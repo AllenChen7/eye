@@ -122,6 +122,8 @@ $api->version('v1', function ($api) {
         $api->get('view-grade', 'SchoolController@viewGrade');
         // 修改学校名称
         $api->post('update-grade-name', 'SchoolController@updateGradeName');
+        // 学校列表
+        $api->get('school-list', 'SchoolController@schoolList');
     });
 
     $api->group([
