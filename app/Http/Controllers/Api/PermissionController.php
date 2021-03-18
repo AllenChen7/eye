@@ -137,7 +137,7 @@ class PermissionController extends ApiController
     public function addRoles(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'           => 'required|exists:roles',
+            'name'           => 'required',
             'permission_arr' => 'required|array'
         ]);
 
