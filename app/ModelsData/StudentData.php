@@ -49,14 +49,14 @@ class StudentData
             $row['sex_name'] = Common::sexArr()[$row['sex']];
             $row['years_old'] = Common::transYearOld($row['birthday']);
             $row['grade'] = Grade::where([
-                'id' => $row['grader_id']
-            ])->first()->name;
+                'id' => $row['grade_id']
+            ])->first()->name ?? '-';
             $row['class'] = YearClass::where([
                 'id' => $row['year_class_id']
-            ])->first()->name;
+            ])->first()->name ?? '-';
             $row['school'] = ClassData::where([
                 'id' => $row['class_data_id']
-            ])->first()->name;
+            ])->first()->name ?? '-';
             $row['status_name'] = Common::studentStatusArr()[$row['status']];
             $row['join_school_date'] = '2020.09';
         }
