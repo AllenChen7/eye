@@ -66,9 +66,10 @@ class StudentData
 
     public function baseQuery()
     {
+        $schoolIdArr = (new ClassData())->idArr();
         $query = Student::where([
             'is_del' => Common::NO
-        ])->orderByDesc('id');
+        ])->whereIn('class_data_id', $schoolIdArr)->orderByDesc('id');
 
         if ($this->schoolId) {
             $query->where([
