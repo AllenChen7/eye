@@ -158,6 +158,8 @@ $api->version('v1', function ($api) {
         $api->get('view', 'PermissionController@view');
         // 角色添加权限
         $api->post('add-permission', 'PermissionController@addPermission');
+        // 添加角色
+        $api->post('add-roles', 'PermissionController@addRoles');
     });
 
     $api->group([
