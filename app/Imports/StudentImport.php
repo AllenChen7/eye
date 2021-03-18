@@ -23,6 +23,10 @@ class StudentImport implements ToCollection
     */
     public function collection(Collection $collection)
     {
+        if ($collection->isEmpty()) {
+            $this->errorFlag = 1;
+        }
+
         foreach ($collection as $key => $row) {
             $row = $row->toArray();
             if ($key === 0) {
