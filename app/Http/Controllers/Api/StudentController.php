@@ -233,7 +233,7 @@ class StudentController extends ApiController
         if (!auth()->user()->class_data_id) {
             return $this->errorResponse('没有权限', [], 403);
         }
-        
+
         $validator = Validator::make($request->all(), [
             'excel' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|max:10485760'
         ]);
@@ -247,6 +247,10 @@ class StudentController extends ApiController
         $studentImport->cacheStr = 'student_import_' . auth()->user()->class_data_id;
         Excel::import($studentImport, $excel);
         $excelArr = [];
+        \Log::info('s i', [
+            's f' => $studentImport->successFlag,
+            's e' => $studentImport->errorFlag
+        ]);
 
         if ($studentImport->successFlag) {
             $data = array_merge([StudentData::excelTitle()], $studentImport->successCacheData);

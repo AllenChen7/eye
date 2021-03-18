@@ -23,6 +23,9 @@ class StudentImport implements ToCollection
     */
     public function collection(Collection $collection)
     {
+        \Log::info('collection', [
+            'c' => $collection->toArray()
+        ]);
         if ($collection->isEmpty()) {
             $this->errorFlag = 1;
         }
