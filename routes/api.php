@@ -136,7 +136,7 @@ $api->version('v1', function ($api) {
         // 列表
         $api->get('list', 'StudentController@list');
         // 详情
-        $api->post('view', 'StudentController@view');
+        $api->get('view', 'StudentController@view');
         // 更新度数
         $api->post('update-degree', 'StudentController@updateDegree');
         // 批量导入
