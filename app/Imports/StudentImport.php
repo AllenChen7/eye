@@ -74,6 +74,7 @@ class StudentImport implements ToCollection
             $rDegree = trim($row[12]);
 
             if (!$studentName) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '姓名不可为空';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -81,6 +82,7 @@ class StudentImport implements ToCollection
             }
 
             if (!$idCard) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '身份证不可为空';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -88,6 +90,7 @@ class StudentImport implements ToCollection
             }
 
             if (!$sex) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '性别不可为空';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -95,6 +98,7 @@ class StudentImport implements ToCollection
             }
 
             if (!$birthday) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '出生年月日不可为空';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -102,6 +106,7 @@ class StudentImport implements ToCollection
             }
 
             if (!$joinSchoolDay) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '入学年份不可为空';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -109,6 +114,7 @@ class StudentImport implements ToCollection
             }
 
             if (!$studentCode) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '学号不可为空';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -116,6 +122,7 @@ class StudentImport implements ToCollection
             }
 
             if (!$grade) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '年级不可为空';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -123,6 +130,7 @@ class StudentImport implements ToCollection
             }
 
             if (!$class) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '班级不可为空';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -130,6 +138,7 @@ class StudentImport implements ToCollection
             }
 
             if (!$isMyopia) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '是否近视不可为空';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -138,6 +147,7 @@ class StudentImport implements ToCollection
 
             if ($isMyopia == '是') {
                 if (!$isGlasses) {
+                    $row[1] = "\t" . $row[1];
                     $row[count($row) + 1] = '是否佩戴眼镜不可为空';
                     $this->cacheData[] = $row;
                     $this->errorFlag = 1;
@@ -146,6 +156,7 @@ class StudentImport implements ToCollection
 
                 if ($isGlasses == '是') {
                     if (!$glassesType) {
+                        $row[1] = "\t" . $row[1];
                         $row[count($row) + 1] = '眼镜类型不可为空';
                         $this->cacheData[] = $row;
                         $this->errorFlag = 1;
@@ -153,6 +164,7 @@ class StudentImport implements ToCollection
                     }
 
                     if (!$lDegree) {
+                        $row[1] = "\t" . $row[1];
                         $row[count($row) + 1] = '左眼度数不可为空';
                         $this->cacheData[] = $row;
                         $this->errorFlag = 1;
@@ -160,6 +172,7 @@ class StudentImport implements ToCollection
                     }
 
                     if (!$rDegree) {
+                        $row[1] = "\t" . $row[1];
                         $row[count($row) + 1] = '右眼度数不可为空';
                         $this->cacheData[] = $row;
                         $this->errorFlag = 1;
@@ -169,6 +182,7 @@ class StudentImport implements ToCollection
             }
 
             if (mb_strlen($studentName) > 12) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '姓名最多可填 12 个字符';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -178,6 +192,7 @@ class StudentImport implements ToCollection
             $idCardInfo = IdentityCard::make($idCard);
 
             if ($idCardInfo === false) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '身份证格式不正确';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -185,6 +200,7 @@ class StudentImport implements ToCollection
             }
 
             if (!in_array($sex, Common::sexArr())) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '性别填写错误，只能填“男”或“女”';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -192,6 +208,7 @@ class StudentImport implements ToCollection
             }
 
             if (!isDate($birthday)) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '出生年月日格式不对，正确格式为：“yyyy-mm-dd”';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -199,6 +216,7 @@ class StudentImport implements ToCollection
             }
 
             if (!isDate($joinSchoolDay . '-01-01')) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '入学年份格式不对，正确格式为：“yyyy”';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -206,6 +224,7 @@ class StudentImport implements ToCollection
             }
 
             if (!is_numeric($studentCode)) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '学号格式错误，仅支持阿拉伯数字';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -213,6 +232,7 @@ class StudentImport implements ToCollection
             }
 
             if (mb_strlen($studentCode) > 32) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '学号最多可填32个数字';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -225,6 +245,7 @@ class StudentImport implements ToCollection
             ])->first();
 
             if (!$gradeInfo) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '年级在系统中不存在，请填写系统中正确的年级名称（请到学校管理中查看）';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -237,6 +258,7 @@ class StudentImport implements ToCollection
             ])->first();
 
             if (!$classInfo) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '班级在系统中不存在，请填写系统中正确的年级名称（请到学校管理中查看）';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -244,6 +266,7 @@ class StudentImport implements ToCollection
             }
 
             if ($classInfo['grade_id'] != $gradeInfo['id']) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '班级和年级不匹配（请到学校管理中查看）';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -251,6 +274,7 @@ class StudentImport implements ToCollection
             }
 
             if (!in_array($isGlasses, Common::isArr())) {
+                $row[1] = "\t" . $row[1];
                 $row[count($row) + 1] = '是否佩眼镜的格式填写错误，仅支持填写“是”或“否”。';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
@@ -259,6 +283,7 @@ class StudentImport implements ToCollection
 
             if ($isGlasses == '是') {
                 if (!$glassesType) {
+                    $row[1] = "\t" . $row[1];
                     $row[count($row) + 1] = '当是否佩眼镜选择为“是”时，眼镜类型不可为空，仅支持填写“普通眼镜”或“隐形眼镜”。';
                     $this->cacheData[] = $row;
                     $this->errorFlag = 1;
@@ -266,6 +291,7 @@ class StudentImport implements ToCollection
                 }
 
                 if (!in_array($glassesType, Common::glaType())) {
+                    $row[1] = "\t" . $row[1];
                     $row[count($row) + 1] = '眼镜类型格式错误，仅支持填写“普通眼镜”或“隐形眼镜”。';
                     $this->cacheData[] = $row;
                     $this->errorFlag = 1;
