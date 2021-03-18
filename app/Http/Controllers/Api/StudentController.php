@@ -22,6 +22,10 @@ class StudentController extends ApiController
 {
     public function create(Request $request)
     {
+        if (!auth()->user()->class_data_id) {
+            return $this->errorResponse('没有权限', [], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name'                  => 'required|max:50',
             'birthday'              => 'required|date',
@@ -226,6 +230,10 @@ class StudentController extends ApiController
 
     public function import(Request $request)
     {
+        if (!auth()->user()->class_data_id) {
+            return $this->errorResponse('没有权限', [], 403);
+        }
+        
         $validator = Validator::make($request->all(), [
             'excel' => 'required|file|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|max:10485760'
         ]);
