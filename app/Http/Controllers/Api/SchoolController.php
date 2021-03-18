@@ -83,48 +83,10 @@ class SchoolController extends ApiController
         return $this->errorResponse();
     }
 
-    public function schoolList(Request $request)
+    public function schoolList()
     {
-        $user = auth()->user();
-        $type = $user['type'];
-
-        if (!$type) {
-            $type = $user['power_type'];
-        }
-
-        $query = ClassData::orderByDesc('id');
-
-        switch ($type) {
-            case Common::TYPE_CITY:
-                $query->where([
-                    'city_id' => $user['city_id']
-                ]);
-                break;
-            case Common::TYPE_AREA:
-                $query->where([
-                    'area_id' => $user['area_id']
-                ]);
-                break;
-            case Common::TYPE_PROV:
-                $query->where([
-                    'province_id' => $user['province']
-                ]);
-                break;
-            case Common::TYPE_XM:
-                break;
-            case Common::TYPE_SCH:
-                $query->where([
-                    'id' => $user['class_data_id']
-                ]);
-                break;
-            default:
-                $query->where([
-                    'id' => 0
-                ]);
-                break;
-        }
-
-        $rows = $query->select(['id', 'name'])->get();
+        $idArr = (new ClassData())->idArr();
+        $rows = ClassData::whereIn('id', $idArr)->select(['id', 'name'])->get();
 
         return $this->successResponse($rows);
     }

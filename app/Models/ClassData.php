@@ -56,4 +56,52 @@ class ClassData extends Model
     {
         return date('Y-m-d', strtotime($value));
     }
+
+    /**
+     * 获取当前用户可以查看的班级id
+     * @return mixed
+     */
+    public function idArr()
+    {
+        $user = auth()->user();
+        $type = $user['type'];
+
+        if (!$type) {
+            $type = $user['power_type'];
+        }
+
+        $query = ClassData::orderByDesc('id');
+
+        switch ($type) {
+            case Common::TYPE_CITY:
+                $query->where([
+                    'city_id' => $user['city_id']
+                ]);
+                break;
+            case Common::TYPE_AREA:
+                $query->where([
+                    'area_id' => $user['area_id']
+                ]);
+                break;
+            case Common::TYPE_PROV:
+                $query->where([
+                    'province_id' => $user['province']
+                ]);
+                break;
+            case Common::TYPE_XM:
+                break;
+            case Common::TYPE_SCH:
+                $query->where([
+                    'id' => $user['class_data_id']
+                ]);
+                break;
+            default:
+                $query->where([
+                    'id' => 0
+                ]);
+                break;
+        }
+
+        return $query->select(['id'])->get()->pluck();
+    }
 }
