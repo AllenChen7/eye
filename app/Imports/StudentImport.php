@@ -147,20 +147,20 @@ class StudentImport implements ToCollection
                         $this->errorFlag = 1;
                         continue;
                     }
-                }
 
-                if (!$lDegree) {
-                    $row[count($row) + 1] = '左眼度数不可为空';
-                    $this->cacheData[] = $row;
-                    $this->errorFlag = 1;
-                    continue;
-                }
+                    if (!$lDegree) {
+                        $row[count($row) + 1] = '左眼度数不可为空';
+                        $this->cacheData[] = $row;
+                        $this->errorFlag = 1;
+                        continue;
+                    }
 
-                if (!$rDegree) {
-                    $row[count($row) + 1] = '右眼度数不可为空';
-                    $this->cacheData[] = $row;
-                    $this->errorFlag = 1;
-                    continue;
+                    if (!$rDegree) {
+                        $row[count($row) + 1] = '右眼度数不可为空';
+                        $this->cacheData[] = $row;
+                        $this->errorFlag = 1;
+                        continue;
+                    }
                 }
             }
 

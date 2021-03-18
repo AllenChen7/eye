@@ -274,8 +274,8 @@ class StudentController extends ApiController
             if ($sRes) {
                 $excelArr[] = [
                     'name' => $fileName,
-                    'status' => 1,
-                    'status_name' => '导入成功',
+                    'status' => 0,
+                    'status_name' => '导入失败',
                     'create_time' => date('Y-m-d H:i:s'),
                     'url' => asset('storage/' . $fileName),
                 ];
