@@ -62,7 +62,7 @@ class StudentController extends ApiController
 
         if ($oldData) {
             $oldData->class_data_id = auth()->user()->class_data_id;
-            $oldData->grader_id = $request->input('grade_id');
+            $oldData->grade_id = $request->input('grade_id');
             $oldData->year_class_id = $request->input('class_id');
             $oldData->is_myopia = $request->input('is_myopia');
             $oldData->is_glasses = $request->input('is_glasses');
@@ -81,7 +81,7 @@ class StudentController extends ApiController
             $model = new Student($request->input());
             $model->create_user_id = auth()->id();
             $model->class_data_id = auth()->user()->class_data_id;
-            $model->grader_id = $request->input('grade_id');
+            $model->grade_id = $request->input('grade_id');
             $model->year_class_id = $request->input('class_id');
             $model->join_school_date = $request->input('join_school_date');
 
