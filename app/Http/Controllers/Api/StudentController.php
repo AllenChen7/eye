@@ -298,4 +298,48 @@ class StudentController extends ApiController
 
         return $this->successResponse($excelArr);
     }
+
+    public function classStudent(Request $request)
+    {
+        if (!auth()->user()->class_data_id) {
+            return $this->errorResponse('没有权限', [], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'grade_id'              => 'required|exists:grades,id',
+            'class_id'              => 'required|exists:year_classes,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $classInfo = YearClass::whereId($request->input('class_id'))->first();
+
+        if ($classInfo->class_data_id != auth()->user()->class_data_id) {
+            return $this->errorResponse('没有操作当前班级的权限');
+        }
+
+        if ($classInfo->grade_id != $request->input('grade_id')) {
+            return $this->errorResponse('年级班级不匹配');
+        }
+
+        $gradeInfo = Grade::whereId($request->input('grade_id'))->first();
+        $student = Student::where([
+            'year_class_id' => $request->input('class_id')
+        ])->get();
+
+        foreach ($student as &$s) {
+            $s['sex_name'] = Common::sexArr()[$s['sex']];
+            $s['grade_name'] = $gradeInfo['name'];
+            $s['class_name'] = $classInfo['name'];
+        }
+
+        $count = $student->count();
+
+        return $this->successResponse([
+            'count' => $count,
+            'rows' => $student
+        ]);
+    }
 }
