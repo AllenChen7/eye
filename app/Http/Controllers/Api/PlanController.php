@@ -109,15 +109,15 @@ class PlanController extends ApiController
         foreach ($rows as $row) {
             $row['school'] = ClassData::where([
                 'id' => $row['class_data_id']
-            ])->first()->name;
+            ])->first()->name ?? '-';
             $row['class'] = YearClass::where([
                 'id' => $row['year_class_id']
-            ])->first()->name;
+            ])->first()->name ?? '-';
             $row['grade'] = Grade::where([
                 'id' => $row['grade_id']
-            ])->first()->name;
-            $row['count '] = Student::where([
-                'id' => $row['year_class_id']
+            ])->first()->name ?? '-';
+            $row['count'] = Student::where([
+                'year_class_id' => $row['year_class_id']
             ])->count();
             $row['status_name'] = Common::planStatusArr()[$row['status']];
 
