@@ -142,7 +142,7 @@ $api->version('v1', function ($api) {
         // 批量导入
         $api->post('import', 'StudentController@import');
         // 班级学生列表
-        $api->post('class-student', 'StudentController@classStudent');
+        $api->get('class-student', 'StudentController@classStudent');
     });
 
     $api->group([
