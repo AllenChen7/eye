@@ -328,7 +328,7 @@ class StudentController extends ApiController
         $student = Student::where([
             'year_class_id' => $request->input('class_id')
         ])->select([
-            'id', 'name', 'sex'
+            'id', 'name', 'sex', 'id_card', 'student_code'
         ])->get();
 
         foreach ($student as &$s) {
