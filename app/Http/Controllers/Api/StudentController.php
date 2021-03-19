@@ -327,6 +327,8 @@ class StudentController extends ApiController
         $gradeInfo = Grade::whereId($request->input('grade_id'))->first();
         $student = Student::where([
             'year_class_id' => $request->input('class_id')
+        ])->select([
+            'id', 'name', 'sex'
         ])->get();
 
         foreach ($student as &$s) {
