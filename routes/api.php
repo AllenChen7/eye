@@ -164,6 +164,8 @@ $api->version('v1', function ($api) {
         $api->post('add-roles', 'PermissionController@addRoles')->middleware('permission:drm-Permissions:drm-*:drm-roles');
         // 角色列表
         $api->get('roles-list', 'PermissionController@roleList');
+        // 修改状态
+        $api->post('update-status', 'PermissionController@updateStatus');
     });
 
     $api->group([

@@ -42,16 +42,16 @@ class AppServiceProvider extends ServiceProvider
             ], 405);
         });
 
-        app('api.exception')->register(function (\Exception $exception) {
-            return \Illuminate\Support\Facades\Response::make([
-                'code' => 500,
-                'msg'  => '发生错误',
-                'data' => [
-                    'message' => $exception->getMessage(),
-                    'line' => $exception->getLine()
-                ]
-            ], 500);
-
-        });
+//        app('api.exception')->register(function (\Exception $exception) {
+//            return \Illuminate\Support\Facades\Response::make([
+//                'code' => 500,
+//                'msg'  => '发生错误',
+//                'data' => [
+//                    'message' => $exception->getMessage(),
+//                    'line' => $exception->getLine()
+//                ]
+//            ], 500);
+//
+//        });
     }
 }

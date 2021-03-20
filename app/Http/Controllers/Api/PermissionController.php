@@ -281,4 +281,34 @@ class PermissionController extends ApiController
 
         return $this->errorResponse();
     }
+
+    public function updateStatus(Request $request)
+    {
+        if (auth()->user()->type <= 0) {
+            return $this->errorResponse('没有权限', [], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'status'                  => [
+                'required', Rule::in([0, 1]),
+            ],
+            'id' => 'required|exists:roles'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = Role::where([
+            'id' => $request->input('id')
+        ])->update([
+            'status' => $request->input('status')
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
 }
