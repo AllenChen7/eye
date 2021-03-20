@@ -46,4 +46,11 @@ class Role extends Model
     {
         return date('Y-m-d H:i:s', strtotime($value));
     }
+
+    public function getNameAttribute($value)
+    {
+        $arr = explode('_', $value);
+
+        return $arr[1] ?? $value;
+    }
 }

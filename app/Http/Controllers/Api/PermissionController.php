@@ -90,7 +90,7 @@ class PermissionController extends ApiController
             $role['count'] = RoleHasPermission::where([
                 'role_id' => $role['id']
             ])->count();
-            $role['role_name'] = trans('permission.' . $role['name']);
+            $role['role_name'] = trans($role['name']);
             $role['last_user'] = User::whereId($role['last_user_id'])->first()->name ?? '-';
         }
 
@@ -173,8 +173,9 @@ class PermissionController extends ApiController
         }
 
         $roles = \Spatie\Permission\Models\Role::create([
-            'name' => $request->input('name'),
-            'create_user_id' => auth()->id()
+            'name' => auth()->id() . '_' . $request->input('name'),
+            'create_user_id' => auth()->id(),
+            'last_user_id' => auth()->id()
         ]);
 
         $res = $roles->givePermissionTo($request->input('permission_arr'));
