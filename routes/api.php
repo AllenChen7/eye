@@ -52,7 +52,7 @@ $api->version('v1', function ($api) {
         // 获取用户信息
         $api->get('me', 'AuthController@me')->name('me');
         // 创建用户
-        $api->post('create', 'AuthController@create');
+        $api->post('create', 'AuthController@create')->middleware('permission:drm-users');
         // 省级用户
         $api->get('province', 'AuthController@province');
         // 市级用户
@@ -67,7 +67,7 @@ $api->version('v1', function ($api) {
         'prefix'     => 'user'
     ], function ($api) {
         // 用户列表
-        $api->get('list', 'UserController@list');
+        $api->get('list', 'UserController@list')->middleware('permission:drm-users');
         // 更新密码
         $api->post('update-password', 'UserController@updatePassword');
         // 用户信息
@@ -99,31 +99,31 @@ $api->version('v1', function ($api) {
         'prefix'     => 'school'
     ], function ($api) {
         // 创建年级班级
-        $api->post('create', 'SchoolController@create');
+        $api->post('create', 'SchoolController@create')->middleware('permission:school-*:school-grade-*:school-grade-add');
         // 添加班级
-        $api->post('add-class', 'SchoolController@addClass');
+        $api->post('add-class', 'SchoolController@addClass')->middleware('permission:school-*:school-grade-*:school-grade-add');
         // 获取学校下的年级
         $api->get('grade', 'SchoolController@grade');
         // 获取年级下班级
         $api->get('class-data', 'SchoolController@classData');
         // 学校列表
-        $api->get('list', 'SchoolController@list');
+        $api->get('list', 'SchoolController@list')->middleware('permission:school-*:school-school-*:school-school-view');
         // 更新学校名称
-        $api->post('update-school-name', 'SchoolController@updateSchoolName');
+        $api->post('update-school-name', 'SchoolController@updateSchoolName')->middleware('permission:school-*:school-school-*:school-school-update');
         // 删除年级
-        $api->post('delete-grade', 'SchoolController@deleteGrade');
+        $api->post('delete-grade', 'SchoolController@deleteGrade')->middleware('permission:school-*:school-grade-*:school-grade-delete');
         // 删除班级
-        $api->post('delete-class', 'SchoolController@deleteClass');
+        $api->post('delete-class', 'SchoolController@deleteClass')->middleware('permission:school-*:school-grade-*:school-grade-delete');
         // 年级列表
-        $api->get('grade-list', 'SchoolController@gradeList');
+        $api->get('grade-list', 'SchoolController@gradeList')->middleware('permission:school-*:school-grade-*:school-grade-view');
         // 查看年级
         $api->get('view-grade', 'SchoolController@viewGrade');
         // 学校状态修改
-        $api->get('view-grade', 'SchoolController@viewGrade');
+        $api->get('view-grade', 'SchoolController@viewGrade')->middleware('permission:school-*:school-grade-*:school-grade-update');
         // 修改学校名称
-        $api->post('update-grade-name', 'SchoolController@updateGradeName');
+        $api->post('update-grade-name', 'SchoolController@updateGradeName')->middleware('permission:school-*:school-grade-*:school-grade-update');
         // 学校列表
-        $api->get('school-list', 'SchoolController@schoolList');
+        $api->get('school-list', 'SchoolController@schoolList')->middleware('permission:school-*:school-school-*:school-school-view');
     });
 
     $api->group([
@@ -132,15 +132,15 @@ $api->version('v1', function ($api) {
         'prefix'     => 'student'
     ], function ($api) {
         // 创建学生
-        $api->post('create', 'StudentController@create');
+        $api->post('create', 'StudentController@create')->middleware('permission:student-*:student-add');
         // 列表
-        $api->get('list', 'StudentController@list');
+        $api->get('list', 'StudentController@list')->middleware('permission:student-*:student-list');
         // 详情
         $api->get('view', 'StudentController@view');
         // 更新度数
-        $api->post('update-degree', 'StudentController@updateDegree');
+        $api->post('update-degree', 'StudentController@updateDegree')->middleware('permission:student-*:student-update');
         // 批量导入
-        $api->post('import', 'StudentController@import');
+        $api->post('import', 'StudentController@import')->middleware('permission:student-*:student-import');
         // 班级学生列表
         $api->get('class-student', 'StudentController@classStudent');
     });
@@ -151,17 +151,17 @@ $api->version('v1', function ($api) {
         'prefix'     => 'permission'
     ], function ($api) {
         // 获取权限等级
-        $api->get('permission-list', 'PermissionController@permissionList');
+        $api->get('permission-list', 'PermissionController@permissionList')->middleware('permission:drm-Permissions:drm-*');
         // 测试
         $api->get('test', 'PermissionController@test');
         // 权限集
-        $api->get('init-roles-list', 'PermissionController@initRolesList');
+        $api->get('init-roles-list', 'PermissionController@initRolesList')->middleware('permission:drm-Permissions:drm-*');
         // 详情
         $api->get('view', 'PermissionController@view');
         // 角色添加权限
-        $api->post('add-permission', 'PermissionController@addPermission');
+        $api->post('add-permission', 'PermissionController@addPermission')->middleware('permission:drm-Permissions:drm-*:drm-roles');
         // 添加角色
-        $api->post('add-roles', 'PermissionController@addRoles');
+        $api->post('add-roles', 'PermissionController@addRoles')->middleware('permission:drm-Permissions:drm-*:drm-roles');
         // 角色列表
         $api->get('roles-list', 'PermissionController@roleList');
     });
@@ -172,13 +172,13 @@ $api->version('v1', function ($api) {
         'prefix'     => 'plan'
     ], function ($api) {
         // 创建验光计划
-        $api->post('create', 'PlanController@create');
+        $api->post('create', 'PlanController@create')->middleware('permission:plan-*:plan-add');
         // 验光计划列表
-        $api->get('list', 'PlanController@list');
+        $api->get('list', 'PlanController@list')->middleware('permission:plan-*:plan-view');
         // 删除
-        $api->post('delete', 'PlanController@delete');
+        $api->post('delete', 'PlanController@delete')->middleware('permission:plan-*:plan-delete');
         // 更新
-        $api->post('update', 'PlanController@update');
+        $api->post('update', 'PlanController@update')->middleware('permission:plan-*:plan-update');
         // 计划详情
         $api->get('detail', 'PlanController@detail');
     });

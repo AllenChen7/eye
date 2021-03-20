@@ -254,7 +254,7 @@ class Common
                             ],
                             [
                                 'id' => 'school-grade-add',
-                                'name' => '编辑',
+                                'name' => '新增',
                                 'child' => []
                             ],
                             [
