@@ -201,6 +201,11 @@ class StudentController extends ApiController
         $oldData = Student::whereId($request->input('id'))->first();
 
         $oldData->class_data_id = auth()->user()->class_data_id;
+        $oldData->name = $request->input('name');
+        $oldData->birthday = $request->input('birthday');
+        $oldData->student_code = $request->input('student_code');
+        $oldData->id_card = $request->input('id_card');
+        $oldData->sex = $request->input('sex');
         $oldData->grade_id = $request->input('grade_id');
         $oldData->year_class_id = $request->input('class_id');
         $oldData->is_myopia = $request->input('is_myopia');
