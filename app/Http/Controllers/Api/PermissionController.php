@@ -117,6 +117,7 @@ class PermissionController extends ApiController
         }
 
         $permissionArr = Common::permissionArr();
+
         $userPermission = Common::getPermissionList();
         $validator = Validator::make($request->all(), [
             'id'    => 'nullable|exists:roles',
@@ -149,24 +150,24 @@ class PermissionController extends ApiController
             }
         }
 
-        foreach ($permissionArr as &$permission) {
-            $permission['is_check'] = $perArr[$permission['id']] ?? 0;
-
-            if ($permission['child']) {
-                foreach ($permission['child'] as &$per) {
-                    $per['is_check'] = $perArr[$per['id']] ?? 0;
-
-                    if ($per['child']) {
-                        foreach ($per['child'] as &$p) {
-                            $p['is_check'] = $perArr[$p['id']] ?? 0;
-                        }
-                    }
-                }
-            }
-        }
+//        foreach ($permissionArr as &$permission) {
+//            $permission['is_check'] = $perArr[$permission['id']] ?? 0;
+//
+//            if ($permission['child']) {
+//                foreach ($permission['child'] as &$per) {
+//                    $per['is_check'] = $perArr[$per['id']] ?? 0;
+//
+//                    if ($per['child']) {
+//                        foreach ($per['child'] as &$p) {
+//                            $p['is_check'] = $perArr[$p['id']] ?? 0;
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         $arr = [];
-
+        
         foreach ($permissionArr as $permission) {
 
             if (in_array($permission['id'], $userPermission)) {
