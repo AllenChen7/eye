@@ -134,6 +134,15 @@ class PermissionController extends ApiController
         return $this->successResponse($permissionArr);
     }
 
+    public function roleList(Request $request)
+    {
+        $data = Role::where([
+            'create_user_id' => auth()->id()
+        ])->select(['id', 'name'])->get();
+
+        return $this->successResponse($data);
+    }
+
     /**
      * 添加角色
      * @param Request $request

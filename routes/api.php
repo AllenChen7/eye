@@ -162,6 +162,8 @@ $api->version('v1', function ($api) {
         $api->post('add-permission', 'PermissionController@addPermission');
         // 添加角色
         $api->post('add-roles', 'PermissionController@addRoles');
+        // 角色列表
+        $api->get('roles-list', 'PermissionController@roleList');
     });
 
     $api->group([
