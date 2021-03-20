@@ -470,6 +470,7 @@ class SchoolController extends ApiController
 
         return $this->successResponse([
             'school_name' => $schoolInfo['name'],
+            'school_id' => $id,
             'grade_info' => $gradeInfo
         ]);
     }
