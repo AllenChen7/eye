@@ -134,6 +134,11 @@ class PermissionController extends ApiController
         return $this->successResponse($permissionArr);
     }
 
+    /**
+     * 添加角色
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function addRoles(Request $request)
     {
         $validator = Validator::make($request->all(), [
