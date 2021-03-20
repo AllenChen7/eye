@@ -135,18 +135,6 @@ class SchoolController extends ApiController
 
         $insertData = [];
 
-//        foreach ($request->input('class') as $class) {
-//            $class = trim($class);
-//            $insertData[] = [
-//                'grade_id' => $request->input('id'),
-//                'name' => $class,
-//                'created_at' => Carbon::now(),
-//                'updated_at' => Carbon::now(),
-//                'class_data_id' => auth()->user()->class_data_id
-//            ];
-//        }
-//
-//        $res = \DB::table('year_classes')->insert($insertData);
         foreach ($request->input('class') as $class) {
             $class = trim($class);
             $model = new YearClass();
@@ -175,48 +163,15 @@ class SchoolController extends ApiController
      */
     public function list(Request $request)
     {
-        $user = auth()->user();
-        $type = $user['type'];
         $limit = $request->input('limit', 20);
         $page = $request->input('page', 1);
 
-        if (!$type) {
-            $type = $user['power_type'];
-        }
-
         $query = ClassData::orderByDesc('id');
-
-        switch ($type) {
-            case Common::TYPE_CITY:
-                $query->where([
-                    'city_id' => $user['city_id']
-                ]);
-                break;
-            case Common::TYPE_AREA:
-                $query->where([
-                    'area_id' => $user['area_id']
-                ]);
-                break;
-            case Common::TYPE_PROV:
-                $query->where([
-                    'province_id' => $user['province']
-                ]);
-                break;
-            case Common::TYPE_XM:
-                break;
-            case Common::TYPE_SCH:
-                $query->where([
-                    'id' => $user['class_data_id']
-                ]);
-                break;
-            default:
-                $query->where([
-                    'id' => 0
-                ]);
-                break;
-        }
+        $idArr = (new ClassData())->idArr();
+        $query->whereIn('id', $idArr);
 
         $name = trim($request->input('name'));
+
         if ($name) {
             $query->where('name', 'like', '%' . $name . '%');
         }
@@ -260,6 +215,12 @@ class SchoolController extends ApiController
             $schoolId = auth()->user()->class_data_id;
         }
 
+        $idArr = (new ClassData())->idArr();
+
+        if (!in_array($schoolId, $idArr)) {
+            return $this->errorResponse('没有操作当前数据的权限', [], 403);
+        }
+
         $data = School::gradeListByClassDataId($schoolId);
 
         return $this->successResponse($data);
@@ -285,6 +246,12 @@ class SchoolController extends ApiController
                 'count' => 0,
                 'rows' => []
             ]);
+        }
+
+        $idArr = (new ClassData())->idArr();
+
+        if (!in_array($gradeId, $idArr)) {
+            return $this->errorResponse('没有操作当前数据的权限', [], 403);
         }
 
         $query = Grade::where([
@@ -348,6 +315,12 @@ class SchoolController extends ApiController
 
         if ($validator->fails()) {
             return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $idArr = (new ClassData())->idArr();
+
+        if (!in_array($request->input('id'), $idArr)) {
+            return $this->errorResponse('没有操作当前数据的权限', [], 403);
         }
 
         // 是否同步修改用户名称 todo
@@ -431,6 +404,12 @@ class SchoolController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
+        $idArr = (new ClassData())->idArr();
+
+        if (!in_array($request->input('id'), $idArr)) {
+            return $this->errorResponse('没有操作当前数据的权限', [], 403);
+        }
+
         $res = ClassData::where([
             'id' => $request->input('id')
         ])->update([
@@ -456,6 +435,12 @@ class SchoolController extends ApiController
 
         if (!$id) {
             return $this->errorResponse('请先选中需要查看的学校');
+        }
+
+        $idArr = (new ClassData())->idArr();
+
+        if (!in_array($id, $idArr)) {
+            return $this->errorResponse('没有操作当前数据的权限', [], 403);
         }
 
         $schoolInfo = ClassData::whereId($id)->first();
