@@ -67,7 +67,7 @@ $api->version('v1', function ($api) {
         'prefix'     => 'user'
     ], function ($api) {
         // 用户列表
-        $api->get('list', 'UserController@list')->middleware('permission:drm-users');
+        $api->get('list', 'UserController@list')->middleware('permission:/authority/user:/authority-*');
         // 更新密码
         $api->post('update-password', 'UserController@updatePassword');
         // 用户信息

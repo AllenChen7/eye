@@ -190,82 +190,82 @@ class Common
     {
         return [
             [
-                'id' => 'drm-*',
+                'id' => '/authority-*',
                 'name' => '权限管理',
                 'child' => [
                     [
-                        'id' => 'drm-roles',
+                        'id' => '/authority/character',
                         'name' => '角色管理',
                         'child' => []
                     ],
                     [
-                        'id' => 'drm-users',
+                        'id' => '/authority/user',
                         'name' => '用户管理',
                         'child' => []
                     ],
                     [
-                        'id' => 'drm-super-users',
+                        'id' => '/authority/manager',
                         'name' => '管理员管理',
                         'child' => []
                     ],
                     [
-                        'id' => 'drm-Permissions',
+                        'id' => '/authority/authSet',
                         'name' => '权限集管理',
                         'child' => []
                     ]
                 ]
             ],
             [
-                'id' => 'school-*',
+                'id' => '/school-*',
                 'name' => '学校管理',
                 'child' => [
                     [
-                        'id' => 'school-school-*',
+                        'id' => '/school/index-*',
                         'name' => '学校管理',
                         'child' => [
                             [
-                                'id' => 'school-school-view',
+                                'id' => '/school/index-view',
                                 'name' => '查看',
                                 'child' => []
                             ],
                             [
-                                'id' => 'school-school-add',
+                                'id' => '/school/index-add',
                                 'name' => '新增',
                                 'child' => []
                             ],
                             [
-                                'id' => 'school-school-update',
+                                'id' => '/school/index-edit',
                                 'name' => '编辑',
                                 'child' => []
                             ],
                             [
-                                'id' => 'school-school-delete',
+                                'id' => '/school/index-delete',
                                 'name' => '删除',
                                 'child' => []
                             ]
                         ]
                     ],
                     [
-                        'id' => 'school-grade-*',
+                        'id' => '/school/grade-*',
                         'name' => '班级管理',
                         'child' => [
                             [
-                                'id' => 'school-grade-view',
+                                'id' => '/school/grade-view',
                                 'name' => '查看',
                                 'child' => []
                             ],
                             [
-                                'id' => 'school-grade-add',
+                                'id' => '/school/grade-add',
                                 'name' => '新增',
                                 'child' => []
                             ],
                             [
-                                'id' => 'school-grade-update',
+                                'id' => '/school/grade-edit',
                                 'name' => '编辑',
                                 'child' => []
                             ],
                             [
-                                'id' => 'school-grade-delete',
+                                'id' => '/school/grade-delete',
                                 'name' => '删除',
                                 'child' => []
                             ]
@@ -274,62 +274,62 @@ class Common
                 ]
             ],
             [
-                'id' => 'student-*',
+                'id' => '/student/index-*',
                 'name' => '学生管理',
                 'child' => [
                     [
-                        'id' => 'student-view',
+                        'id' => '/student/index-view',
                         'name' => '查看',
                         'child' => []
                     ],
                     [
-                        'id' => 'student-add',
+                        'id' => '/student/index-add',
                         'name' => '新增',
                         'child' => []
                     ],
                     [
-                        'id' => 'student-update',
+                        'id' => '/student/index-edit',
                         'name' => '更新',
                         'child' => []
                     ],
                     [
-                        'id' => 'student-delete',
+                        'id' => '/student/index-delete',
                         'name' => '删除',
                         'child' => []
                     ],
                     [
-                        'id' => 'student-import',
+                        'id' => '/student/index-import',
                         'name' => '导入',
                         'child' => []
                     ],
                     [
-                        'id' => 'student-export',
+                        'id' => '/student/index-export',
                         'name' => '导出',
                         'child' => []
                     ]
                 ]
             ],
             [
-                'id' => 'plan-*',
+                'id' => '/project/index-*',
                 'name' => '验光计划',
                 'child' => [
                     [
-                        'id' => 'plan-view',
+                        'id' => '/project/index-view',
                         'name' => '查看',
                         'child' => []
                     ],
                     [
-                        'id' => 'plan-add',
+                        'id' => '/project/index-add',
                         'name' => '新增',
                         'child' => []
                     ],
                     [
-                        'id' => 'plan-update',
+                        'id' => '/project/index-edit',
                         'name' => '更新',
                         'child' => []
                     ],
                     [
-                        'id' => 'plan-delete',
+                        'id' => '/project/index-delete',
                         'name' => '删除',
                         'child' => []
                     ],

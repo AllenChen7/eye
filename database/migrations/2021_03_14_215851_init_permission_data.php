@@ -19,37 +19,37 @@ class InitPermissionData extends Migration
         app()['cache']->forget('spatie.permission.cache');
 
         // 创建权限
-        Permission::create(['name' => 'drm-*']); // 权限管理
-        Permission::create(['name' => 'drm-roles']); // 角色管理
-        Permission::create(['name' => 'drm-users']); // 用户管理
-        Permission::create(['name' => 'drm-super-users']); // 管理员管理
-        Permission::create(['name' => 'drm-Permissions']); // 权限集管理
+        Permission::create(['name' => '/authority-*']); // 权限管理
+        Permission::create(['name' => '/authority/character']); // 角色管理
+        Permission::create(['name' => '/authority/user']); // 用户管理
+        Permission::create(['name' => '/authority/manager']); // 管理员管理
+        Permission::create(['name' => '/authority/authSet']); // 权限集管理
 
-        Permission::create(['name' => 'school-*']); // 学校管理
-        Permission::create(['name' => 'school-school-*']); // 学校管理
-        Permission::create(['name' => 'school-school-view']); // 查看
-        Permission::create(['name' => 'school-school-add']); // 新增
-        Permission::create(['name' => 'school-school-update']); // 编辑
-        Permission::create(['name' => 'school-school-delete']); // 删除
-        Permission::create(['name' => 'school-grade-*']); // 班级管理
-        Permission::create(['name' => 'school-grade-view']); // 查看
-        Permission::create(['name' => 'school-grade-add']); // 查看
-        Permission::create(['name' => 'school-grade-update']); // 查看
-        Permission::create(['name' => 'school-grade-delete']); // 查看
+        Permission::create(['name' => '/school-*']); // 学校管理
+        Permission::create(['name' => '/school/index-*']); // 学校管理
+        Permission::create(['name' => '/school/index-view']); // 查看
+        Permission::create(['name' => '/school/index-add']); // 新增
+        Permission::create(['name' => '/school/index-edit']); // 编辑
+        Permission::create(['name' => '/school/index-delete']); // 删除
+        Permission::create(['name' => '/school/grade-*']); // 班级管理
+        Permission::create(['name' => '/school/grade-view']); // 查看
+        Permission::create(['name' => '/school/grade-add']); // 查看
+        Permission::create(['name' => '/school/grade-edit']); // 查看
+        Permission::create(['name' => '/school/grade-delete']); // 查看
 
-        Permission::create(['name' => 'student-*']); // 学生管理
-        Permission::create(['name' => 'student-view']); //
-        Permission::create(['name' => 'student-add']); //
-        Permission::create(['name' => 'student-update']); //
-        Permission::create(['name' => 'student-delete']); //
-        Permission::create(['name' => 'student-import']); //
-        Permission::create(['name' => 'student-export']); //
+        Permission::create(['name' => '/student/index-*']); // 学生管理
+        Permission::create(['name' => '/student/index-view']); //
+        Permission::create(['name' => '/student/index-add']); //
+        Permission::create(['name' => '/student/index-edit']); //
+        Permission::create(['name' => '/student/index-delete']); //
+        Permission::create(['name' => '/student/index-import']); //
+        Permission::create(['name' => '/student/index-export']); //
 
-        Permission::create(['name' => 'plan-*']); // 验光计划
-        Permission::create(['name' => 'plan-view']); //
-        Permission::create(['name' => 'plan-add']); //
-        Permission::create(['name' => 'plan-update']); //
-        Permission::create(['name' => 'plan-delete']); //
+        Permission::create(['name' => '/project/index-*']); // 验光计划
+        Permission::create(['name' => '/project/index-view']); //
+        Permission::create(['name' => '/project/index-add']); //
+        Permission::create(['name' => '/project/index-edit']); //
+        Permission::create(['name' => '/project/index-delete']); //
 
         Permission::create(['name' => 'wx-*']); // 家长管理
         Permission::create(['name' => 'wx-view']); //
