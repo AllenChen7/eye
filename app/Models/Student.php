@@ -94,4 +94,19 @@ class Student extends Model
     {
         return date('Y-m-d H:i:s', strtotime($value));
     }
+
+    public function setGlassesTypeAttribute($value)
+    {
+        $this->attributes['glasses_type'] = (int)$value;
+    }
+
+    public function setLDegreeAttribute($value)
+    {
+        $this->attributes['l_degree'] = (int)$value;
+    }
+
+    public function setRDegreeAttribute($value)
+    {
+        $this->attributes['r_degree'] = (int)$value;
+    }
 }
