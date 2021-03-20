@@ -417,9 +417,15 @@ class SchoolController extends ApiController
         ]);
 
         if ($res) {
+            // 将账号改为 无效
+            User::where([
+                'class_data_id' => $request->input('id')
+            ])->update([
+                'status' => Common::NO
+            ]);
+
             return $this->successResponse();
         }
-        // todo 将账号改为 无效
 
         return $this->errorResponse();
     }

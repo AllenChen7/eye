@@ -35,8 +35,6 @@ class AuthController extends ApiController
         $credentials = $request->only('phone', 'password');
         $token = $this->guard()->attempt($credentials);
 
-        // 判断状态
-
         if ($token) {
             return $this->respondWithToken($token);
         }
@@ -232,6 +230,11 @@ class AuthController extends ApiController
     protected function respondWithToken($token)
     {
         $user = $this->guard()->user();
+
+        if (!$user->status) {
+            return $this->errorResponse('账号无效');
+        }
+
         $permissionArr = Common::getPermissionList($user);
 
         return $this->successResponse([
