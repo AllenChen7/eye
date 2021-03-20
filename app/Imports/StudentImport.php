@@ -309,43 +309,42 @@ class StudentImport implements ToCollection
                 }
             }
 
-            $res = Student::updateOrCreate([
-                'name' => $studentName,
-                'sex' => $sex == '男' ? 1 : 2,
-                'student_code' => $studentCode,
-                'id_card' => $idCard,
-                'birthday' => $birthday,
-                'class_data_id' => auth()->user()->class_data_id,
-                'grade_id' => $gradeInfo['id'],
-                'year_class_id' => $classInfo['id'],
-                'create_user_id' => auth()->id(),
-                'is_myopia' => $isMyopia == '是' ? 1 : 0,
-                'is_glasses' => $isGlasses == '是' ? 1 : 0,
-                'glasses_type' => $glassesType == '隐形眼镜' ? 1 : 0,
-                'l_degree' => intval($lDegree),
-                'r_degree' => intval($rDegree),
-                'join_school_date' => $joinSchoolDay
-            ], [
-                'name' => $studentName,
-                'sex' => $sex == '男' ? 1 : 2,
-                'student_code' => $studentCode,
-                'id_card' => $idCard,
-                'birthday' => $birthday,
-                'class_data_id' => auth()->user()->class_data_id,
-                'grade_id' => $gradeInfo['id'],
-                'year_class_id' => $classInfo['id'],
-                'is_myopia' => $isMyopia == '是' ? 1 : 0,
-                'is_glasses' => $isGlasses == '是' ? 1 : 0,
-                'glasses_type' => $glassesType == '隐形眼镜' ? 1 : 0,
-                'l_degree' => intval($lDegree),
-                'r_degree' => intval($rDegree),
-                'join_school_date' => $joinSchoolDay
-            ]);
+            $studentInfo = Student::where([
+                'id_card' => $idCard
+            ])->first();
 
-            if ($res) {
+            if (!$studentInfo) {
+                $studentInfo = new Student();
+                $studentInfo->id_card = $idCard;
+            }
+
+            $studentInfo->name = $studentName;
+            $studentInfo->sex = '男' ? 1 : 2;
+            $studentInfo->student_code = $studentCode;
+            $studentInfo->birthday = $birthday;
+            $studentInfo->class_data_id = auth()->user()->class_data_id;
+            $studentInfo->grade_id = $gradeInfo['id'];
+            $studentInfo->year_class_id = $classInfo['id'];
+            $studentInfo->create_user_id = auth()->id();
+            $studentInfo->is_myopia = '是' ? 1 : 0;
+            $studentInfo->is_glasses = '是' ? 1 : 0;
+            $studentInfo->glasses_type = '隐形眼镜' ? 1 : 0;
+            $studentInfo->l_degree = intval($lDegree);
+            $studentInfo->r_degree = intval($rDegree);
+            $studentInfo->join_school_date = $joinSchoolDay;
+
+            if ($studentInfo->save()) {
                 $this->successFlag = 1;
                 $row[1] = "\t" . $row[1];
                 $this->successCacheData[] = $row;
+            } else {
+                \Log::error('import error', [
+                    'error' => $studentInfo
+                ]);
+                $row[1] = "\t" . $row[1];
+                $row[count($row) + 1] = '数据操作失败，请重试';
+                $this->cacheData[] = $row;
+                $this->errorFlag = 1;
             }
         }
 
