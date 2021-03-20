@@ -20,6 +20,8 @@ class CheckPermission
             return $next($request);
         }
 
+        return $next($request); // 暂时去除
+
         if ($role) {
             $roles = explode(':', $role);
             $flag = 0;
