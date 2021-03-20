@@ -247,10 +247,10 @@ class StudentController extends ApiController
         $studentImport->cacheStr = 'student_import_' . auth()->user()->class_data_id;
         Excel::import($studentImport, $excel);
         $excelArr = [];
-        \Log::info('s i', [
-            's f' => $studentImport->successFlag,
-            's e' => $studentImport->errorFlag
-        ]);
+
+        if ($studentImport->errorFlag == -1) {
+            return $this->errorResponse($studentImport->cacheStr);
+        }
 
         if ($studentImport->successFlag) {
             $data = array_merge([StudentData::excelTitle()], $studentImport->successCacheData);

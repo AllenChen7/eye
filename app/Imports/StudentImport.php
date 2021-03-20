@@ -23,11 +23,18 @@ class StudentImport implements ToCollection
     */
     public function collection(Collection $collection)
     {
-        \Log::info('collection', [
-            'c' => $collection->toArray()
-        ]);
         if (!$collection->toArray()) {
-            $this->errorFlag = 1;
+            $this->errorFlag = -1;
+            $this->cacheStr = '导入数据为空';
+
+            return false;
+        }
+
+        if ($collection->count() < 2) {
+            $this->errorFlag = -1;
+            $this->cacheStr = '导入数据为空';
+
+            return false;
         }
 
         foreach ($collection as $key => $row) {
@@ -339,8 +346,6 @@ class StudentImport implements ToCollection
                 $this->successFlag = 1;
                 $row[1] = "\t" . $row[1];
                 $this->successCacheData[] = $row;
-            } else {
-                ddax($res);
             }
         }
 
