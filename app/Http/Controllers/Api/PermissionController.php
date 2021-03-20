@@ -90,7 +90,7 @@ class PermissionController extends ApiController
             $role['count'] = RoleHasPermission::where([
                 'role_id' => $role['id']
             ])->count();
-            $role['role_name'] = trans($role['name']);
+            $role['role_name'] = trans('permission.' . $role['name']);
             $role['last_user'] = User::whereId($role['last_user_id'])->first()->name ?? '-';
         }
 

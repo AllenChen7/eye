@@ -53,4 +53,11 @@ class Role extends Model
 
         return $arr[1] ?? $value;
     }
+
+    public function getRoleNameAttribute($value)
+    {
+        $arr = explode('.', $value);
+
+        return $arr[1] ?? $value;
+    }
 }
