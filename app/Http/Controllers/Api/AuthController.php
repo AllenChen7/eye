@@ -305,7 +305,8 @@ class AuthController extends ApiController
 
         $res = User::where([
             'type' => Common::TYPE_CITY,
-            'province_id' => $request->input('id')
+            'province_id' => $request->input('id'),
+            'is_del' => Common::NO
         ])->select(['id', 'name'])->get()->toArray();
 
         return $this->successResponse($res);
@@ -328,7 +329,8 @@ class AuthController extends ApiController
 
         $res = User::where([
             'type' => Common::TYPE_AREA,
-            'city_id' => $request->input('id')
+            'city_id' => $request->input('id'),
+            'is_del' => Common::NO
         ])->select(['id', 'name'])->get()->toArray();
 
         return $this->successResponse($res);
