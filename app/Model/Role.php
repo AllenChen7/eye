@@ -25,6 +25,11 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property int $last_user_id 最后操作人
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereLastUserId($value)
+ * @property int $is_del 是否删除
+ * @property int $status 状态
+ * @property-read mixed $role_name
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereIsDel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereStatus($value)
  */
 class Role extends Model
 {
@@ -34,7 +39,7 @@ class Role extends Model
      * @var array
      */
     protected $hidden = [
-        'guard_name', 'create_user_id'
+        'guard_name', 'create_user_id', 'is_del'
     ];
 
     public function getCreatedAtAttribute($value)

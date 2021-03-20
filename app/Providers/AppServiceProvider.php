@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,6 +40,18 @@ class AppServiceProvider extends ServiceProvider
                 'msg'  => '请求方式错误',
                 'data' => []
             ], 405);
+        });
+
+        app('api.exception')->register(function (\Exception $exception) {
+            return \Illuminate\Support\Facades\Response::make([
+                'code' => 500,
+                'msg'  => '发生错误',
+                'data' => [
+                    'message' => $exception->getMessage(),
+                    'line' => $exception->getLine()
+                ]
+            ], 500);
+
         });
     }
 }
