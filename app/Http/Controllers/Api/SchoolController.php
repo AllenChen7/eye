@@ -252,9 +252,15 @@ class SchoolController extends ApiController
         ]);
     }
 
-    public function grade()
+    public function grade(Request $request)
     {
-        $data = School::gradeListByClassDataId(auth()->user()->class_data_id);
+        $schoolId = $request->input('school_id', '');
+
+        if (!$schoolId) {
+            $schoolId = auth()->user()->class_data_id;
+        }
+
+        $data = School::gradeListByClassDataId($schoolId);
 
         return $this->successResponse($data);
     }
