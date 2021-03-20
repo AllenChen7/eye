@@ -56,6 +56,10 @@ class PermissionController extends ApiController
      */
     public function initRolesList(Request $request)
     {
+        if (auth()->user()->type <= 0) {
+            return $this->errorResponse('没有权限', [], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'type'                  => [
                 'required', Rule::in([0, 1]),
