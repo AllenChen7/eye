@@ -166,6 +166,8 @@ $api->version('v1', function ($api) {
         $api->get('roles-list', 'PermissionController@roleList');
         // 修改状态
         $api->post('update-status', 'PermissionController@updateStatus');
+        // 删除
+        $api->post('delete', 'PermissionController@delete');
     });
 
     $api->group([

@@ -315,4 +315,31 @@ class PermissionController extends ApiController
 
         return $this->errorResponse();
     }
+
+    public function delete(Request $request)
+    {
+        if (auth()->user()->type <= 0) {
+            return $this->errorResponse('没有权限', [], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:roles'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = Role::where([
+            'id' => $request->input('id')
+        ])->update([
+            'is_del' => Common::YES
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
 }
