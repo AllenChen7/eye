@@ -108,7 +108,9 @@ class UserController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $res = User::whereId($request->input('id'))->first()->toArray();
+        $res = User::whereId($request->input('id'))->where([
+            'is_del' => Common::NO
+        ])->first()->toArray();
         $arr = Common::typeArr(1);
 
         $res['power_list'] = [];
@@ -243,7 +245,9 @@ class UserController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $model              = User::whereId($request->input('id'))->first();
+        $model              = User::whereId($request->input('id'))->where([
+            'is_del' => Common::NO
+        ])->first();
         $model->name        = $request->input('name');
         $model->phone       = $request->input('phone');
         $model->remark      = $request->input('remark');
