@@ -70,9 +70,9 @@ class StudentController extends ApiController
             $oldData->year_class_id = $request->input('class_id');
             $oldData->is_myopia = $request->input('is_myopia');
             $oldData->is_glasses = $request->input('is_glasses');
-            $oldData->glasses_type = $request->input('glasses_type');
-            $oldData->l_degree = $request->input('l_degree');
-            $oldData->r_degree = $request->input('r_degree');
+            $oldData->glasses_type = (int)$request->input('glasses_type');
+            $oldData->l_degree = (int)$request->input('l_degree');
+            $oldData->r_degree = (int)$request->input('r_degree');
             $oldData->join_school_date = $request->input('join_school_date');
 
             if ($oldData->save()) {
