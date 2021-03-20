@@ -69,6 +69,11 @@ class PermissionController extends ApiController
         if ($validator->fails()) {
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
+
+        $page = $request->input('page', 1);
+        $limit = $request->input('limit', 20);
+        $offset = $page <= 1 ? 0 : ($page - 1) * $limit;
+
         // 0 角色管理、1 权限集管理
         if ($request->input('type') == 1) {
 
@@ -76,9 +81,9 @@ class PermissionController extends ApiController
                 return $this->errorResponse('没有权限', [],403);
             }
 
-            $roles = Role::whereCreateUserId(0)->get();
+            $roles = Role::whereCreateUserId(0)->limit($limit)->offset($offset)->get();
         } else {
-            $roles = Role::whereCreateUserId(auth()->id())->get();
+            $roles = Role::whereCreateUserId(auth()->id())->limit($limit)->offset($offset)->get();
         }
 
         foreach ($roles as $key => &$role) {
@@ -94,7 +99,10 @@ class PermissionController extends ApiController
             $role['last_user'] = User::whereId($role['last_user_id'])->first()->name ?? '-';
         }
 
-        return $this->successResponse($roles);
+        return $this->successResponse([
+            'count' => $roles->count(),
+            'rows' => $roles
+        ]);
     }
 
     public function view(Request $request)
@@ -152,8 +160,40 @@ class PermissionController extends ApiController
             }
         }
 
+        $arr = [];
+
+        foreach ($permissionArr as $permission) {
+
+            if (in_array($permission['id'], $userPermission)) {
+                $arr[] = $permission;
+                continue;
+            }
+
+            if ($permission['child']) {
+                foreach ($permission['child'] as $per) {
+
+                    if (in_array($per['id'], $userPermission)) {
+                        $per['name'] = $permission['name'] . '-' . $per['name'];
+                        $arr[] = $per;
+                        continue;
+                    }
+
+                    if ($per['child']) {
+                        foreach ($per['child'] as $p) {
+                            if (in_array($p['id'], $userPermission)) {
+                                $p['name'] = $permission['name'] . '-' . $p['name'];
+                                $arr[] = $p;
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
         return $this->successResponse([
-            'permission_arr' => $permissionArr,
+            'permission_arr' => $arr,
             'check_arr' => $checkArr
         ]);
     }
