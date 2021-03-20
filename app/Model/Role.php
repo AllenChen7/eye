@@ -34,10 +34,15 @@ class Role extends Model
      * @var array
      */
     protected $hidden = [
-        'updated_at', 'guard_name', 'create_user_id'
+        'guard_name', 'create_user_id'
     ];
 
     public function getCreatedAtAttribute($value)
+    {
+        return date('Y-m-d H:i:s', strtotime($value));
+    }
+
+    public function getUpdatedAtAttribute($value)
     {
         return date('Y-m-d H:i:s', strtotime($value));
     }

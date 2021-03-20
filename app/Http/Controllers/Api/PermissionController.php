@@ -71,6 +71,11 @@ class PermissionController extends ApiController
         }
         // 0 角色管理、1 权限集管理
         if ($request->input('type') == 1) {
+
+            if (auth()->user()->type != Common::TYPE_XM) {
+                return $this->errorResponse('没有权限', [],403);
+            }
+
             $roles = Role::whereCreateUserId(0)->get();
         } else {
             $roles = Role::whereCreateUserId(auth()->id())->get();
@@ -87,7 +92,6 @@ class PermissionController extends ApiController
             ])->count();
             $role['role_name'] = trans('permission.' . $role['name']);
             $role['last_user'] = User::whereId($role['last_user_id'])->first()->name ?? '-';
-            $role['updated_at'] = $role['updated_at']->toDateTimeString();
         }
 
         return $this->successResponse($roles);
@@ -95,7 +99,12 @@ class PermissionController extends ApiController
 
     public function view(Request $request)
     {
+        if (auth()->user()->type <= 0) {
+            return $this->errorResponse('没有权限', [], 403);
+        }
+
         $permissionArr = Common::permissionArr();
+
         $validator = Validator::make($request->all(), [
             'id'    => 'required|exists:roles',
         ]);
