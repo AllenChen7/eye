@@ -223,6 +223,13 @@ class PermissionController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
+        $userPermission = Common::getPermissionList();
+        $diff = array_diff($request->input('permission_arr'), $userPermission);
+
+        if ($diff) {
+            return $this->errorResponse('赋予权限数据不正确');
+        }
+
         $roles = \Spatie\Permission\Models\Role::create([
             'name' => auth()->id() . '_' . $request->input('name'),
             'create_user_id' => auth()->id(),
@@ -252,6 +259,13 @@ class PermissionController extends ApiController
 
         if ($validator->fails()) {
             return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $userPermission = Common::getPermissionList();
+        $diff = array_diff($request->input('permission_arr'), $userPermission);
+
+        if ($diff) {
+            return $this->errorResponse('赋予权限数据不正确');
         }
 
         $role = \Spatie\Permission\Models\Role::findById($request->input('id'));
