@@ -306,7 +306,6 @@ class SchoolController extends ApiController
             $row['class'] = $classInfo->toArray();
             $row['status_name'] = Common::statusArr()[$row['status']];
             $row['create_user_name'] = User::whereId($row['create_user_id'])->first()->name ?? '-';
-            $row['school_id'] = $gradeId;
         }
 
         return $this->successResponse([
@@ -461,6 +460,10 @@ class SchoolController extends ApiController
 
         $schoolInfo = ClassData::whereId($id)->first();
 
+        if (!$schoolInfo) {
+            return $this->errorResponse('学校不存在');
+        }
+
         $gradeInfo = Grade::where([
             'class_data_id' => $id,
             'status' => Common::YES
@@ -472,11 +475,11 @@ class SchoolController extends ApiController
                 'grade_id' => $grade['id'],
                 'status' => Common::YES
             ])->get()->toArray();
+            $grade['school_id'] = $id;
         }
 
         return $this->successResponse([
             'school_name' => $schoolInfo['name'],
-            'school_id' => $id,
             'grade_info' => $gradeInfo
         ]);
     }
