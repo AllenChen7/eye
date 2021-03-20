@@ -70,12 +70,6 @@ class InitPermissionData extends Migration
         Role::create(['name' => 'city']);
         Role::create(['name' => 'area']);
         Role::create(['name' => 'school']);
-
-        $users = \App\User::whereType(\App\Models\Common::TYPE_XM)->get();
-
-        foreach ($users as $user) {
-            $user->assignRole('xm');
-        }
     }
 
     /**

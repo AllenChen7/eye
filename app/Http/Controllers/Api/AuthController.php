@@ -225,11 +225,17 @@ class AuthController extends ApiController
      */
     protected function respondWithToken($token)
     {
+        $permission = $this->guard()->user()->getAllPermissions();
+        $permissionArr = [];
+        foreach ($permission as $p) {
+            $permissionArr[] = $p['name'];
+        }
         return $this->successResponse([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $this->guard()->factory()->getTTL() * 60,
-            'user' => $this->guard()->user()
+            'user' => $this->guard()->user(),
+            'permission_arr' => $permissionArr
         ]);
     }
 
