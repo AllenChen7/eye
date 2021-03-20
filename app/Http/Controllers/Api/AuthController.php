@@ -35,6 +35,8 @@ class AuthController extends ApiController
         $credentials = $request->only('phone', 'password');
         $token = $this->guard()->attempt($credentials);
 
+        // 判断状态
+
         if ($token) {
             return $this->respondWithToken($token);
         }

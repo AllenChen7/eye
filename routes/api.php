@@ -78,6 +78,8 @@ $api->version('v1', function ($api) {
         $api->post('delete', 'UserController@delete');
         // 用户更新
         $api->post('update', 'UserController@update');
+        // 调整用户状态
+        $api->post('update-status', 'UserController@updateStatus');
     });
 
     $api->group([

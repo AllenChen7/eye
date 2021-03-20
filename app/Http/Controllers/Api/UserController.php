@@ -289,4 +289,35 @@ class UserController extends ApiController
             return $this->errorResponse();
         }
     }
+
+    /**
+     * 更改用户状态
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateStatus(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'status'                  => [
+                'required', Rule::in([0, 1]),
+            ],
+            'id' => 'required|exists:users'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = User::where([
+            'id' => $request->input('id')
+        ])->update([
+            'status' => $request->input('status')
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
 }
