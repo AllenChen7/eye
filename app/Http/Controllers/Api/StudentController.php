@@ -177,10 +177,6 @@ class StudentController extends ApiController
             'join_school_date'      => 'required'
         ]);
 
-        if (!isDate($request->input('join_school_date') . '-01-01', 'Y-m-d')) {
-            return $this->errorResponse('入学年份格式不正确');
-        }
-
         $validator->sometimes('glasses_type', 'required', function ($input) {
             return $input->is_glasses;
         });
@@ -195,6 +191,10 @@ class StudentController extends ApiController
 
         if ($validator->fails()) {
             return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        if (!isDate($request->input('join_school_date') . '-01-01', 'Y-m-d')) {
+            return $this->errorResponse('入学年份格式不正确');
         }
 
         // 先查处 id card 对应数据是否存在
