@@ -184,6 +184,7 @@ return [
         'is_glasses'            => '是否佩戴眼镜',
         'glasses_type'          => '眼镜类型',
         'l_degree'              => '左眼度数',
-        'r_degree'              => '右眼度数'
+        'r_degree'              => '右眼度数',
+        'join_school_date'      => '入学年份'
     ],
 ];
