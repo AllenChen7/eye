@@ -230,31 +230,7 @@ class AuthController extends ApiController
     protected function respondWithToken($token)
     {
         $user = $this->guard()->user();
-        $permissionArr = [];
-
-        switch ($user->type) {
-            case Common::TYPE_XM:
-            case Common::TYPE_ZONE:
-                $permission = $this->guard()->user()->getAllPermissions();
-
-                break;
-            case Common::TYPE_AREA:
-                $permission = Role::findByName('area')->getAllPermissions();
-                break;
-            case Common::TYPE_PROV:
-                $permission = Role::findByName('province')->getAllPermissions();
-                break;
-            case Common::TYPE_CITY:
-                $permission = Role::findByName('city')->getAllPermissions();
-                break;
-            default:
-                $permission = [];
-                break;
-        }
-
-        foreach ($permission as $p) {
-            $permissionArr[] = $p['name'];
-        }
+        $permissionArr = Common::getPermissionList($user);
 
         return $this->successResponse([
             'access_token' => $token,

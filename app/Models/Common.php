@@ -3,6 +3,8 @@
 namespace App\Models;
 
 
+use Spatie\Permission\Models\Role;
+
 class Common
 {
     // 类型
@@ -372,6 +374,46 @@ class Common
                 ]
             ]
         ];
+    }
+
+    /**
+     * 权限列表
+     * @param string $user
+     * @return array
+     */
+    public static function getPermissionList($user = '')
+    {
+        if (!$user) {
+            $user = auth()->user();
+        }
+
+        $permissionArr = [];
+
+        switch ($user->type) {
+            case Common::TYPE_XM:
+            case Common::TYPE_ZONE:
+                $permission = $user->getAllPermissions();
+
+                break;
+            case Common::TYPE_AREA:
+                $permission = Role::findByName('area')->getAllPermissions();
+                break;
+            case Common::TYPE_PROV:
+                $permission = Role::findByName('province')->getAllPermissions();
+                break;
+            case Common::TYPE_CITY:
+                $permission = Role::findByName('city')->getAllPermissions();
+                break;
+            default:
+                $permission = [];
+                break;
+        }
+
+        foreach ($permission as $p) {
+            $permissionArr[] = $p['name'];
+        }
+
+        return $permissionArr;
     }
 
     public static function transPhoto($sex = 1)

@@ -104,18 +104,24 @@ class PermissionController extends ApiController
         }
 
         $permissionArr = Common::permissionArr();
-
+        $userPermission = Common::getPermissionList();
         $validator = Validator::make($request->all(), [
-            'id'    => 'required|exists:roles',
+            'id'    => 'nullable|exists:roles',
         ]);
 
         if ($validator->fails()) {
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $role = \Spatie\Permission\Models\Role::findById($request->input('id'));
-        $allPermission = Permission::all()->toArray();
-        $roleHasPermission = RoleHasPermission::whereRoleId($role['id'])->get()->pluck('permission_id')->toArray();
+        $allPermission = [];
+        $roleHasPermission = [];
+
+        if ($request->input('id')) {
+            $role = \Spatie\Permission\Models\Role::findById($request->input('id'));
+            $allPermission = Permission::all()->toArray();
+            $roleHasPermission = RoleHasPermission::whereRoleId($role['id'])->get()->pluck('permission_id')->toArray();
+        }
+
         $perArr = [];
         $checkArr = [];
 
