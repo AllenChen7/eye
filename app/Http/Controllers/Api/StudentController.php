@@ -61,6 +61,10 @@ class StudentController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
+        if (!isDate($request->input('join_school_date') . '-01-01', 'Y-m-d')) {
+            return $this->errorResponse('入学年份格式不正确');
+        }
+
         // 先查处 id card 对应数据是否存在
         $oldData = StudentData::studentByIdCard($request->input('id_card'));
 
@@ -145,6 +149,72 @@ class StudentController extends ApiController
         $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
 
         return $this->successResponse($data);
+    }
+
+    public function update(Request $request)
+    {
+        if (!auth()->user()->class_data_id) {
+            return $this->errorResponse('没有权限', [], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'id'                    => 'required|exists:students',
+            'name'                  => 'required|max:50',
+            'birthday'              => 'required|date',
+            'student_code'          => 'required|max:50',
+            'id_card'               => 'required|max:50',
+            'sex'                   => [
+                'required', Rule::in(Common::sexArrKeys()),
+            ],
+            'grade_id'              => 'required|exists:grades,id',
+            'class_id'              => 'required|exists:year_classes,id',
+            'is_myopia'             => [
+                'required', Rule::in(Common::isKeys()),
+            ],
+            'is_glasses'            => [
+                'required', Rule::in(Common::isKeys())
+            ],
+            'join_school_date'      => 'required'
+        ]);
+
+        if (!isDate($request->input('join_school_date') . '-01-01', 'Y-m-d')) {
+            return $this->errorResponse('入学年份格式不正确');
+        }
+
+        $validator->sometimes('glasses_type', 'required', function ($input) {
+            return $input->is_glasses;
+        });
+
+        $validator->sometimes('l_degree', 'required', function ($input) {
+            return $input->is_glasses;
+        });
+
+        $validator->sometimes('r_degree', 'required', function ($input) {
+            return $input->is_glasses;
+        });
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        // 先查处 id card 对应数据是否存在
+        $oldData = Student::whereId($request->input('id'))->first();
+
+        $oldData->class_data_id = auth()->user()->class_data_id;
+        $oldData->grade_id = $request->input('grade_id');
+        $oldData->year_class_id = $request->input('class_id');
+        $oldData->is_myopia = $request->input('is_myopia');
+        $oldData->is_glasses = $request->input('is_glasses');
+        $oldData->glasses_type = (int)$request->input('glasses_type');
+        $oldData->l_degree = (int)$request->input('l_degree');
+        $oldData->r_degree = (int)$request->input('r_degree');
+        $oldData->join_school_date = $request->input('join_school_date');
+
+        if ($oldData->save()) {
+            return $this->successResponse();
+        } else {
+            return $this->errorResponse();
+        }
     }
 
     /**

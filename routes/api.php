@@ -145,6 +145,8 @@ $api->version('v1', function ($api) {
         $api->post('import', 'StudentController@import')->middleware('permission:student-*:student-import');
         // 班级学生列表
         $api->get('class-student', 'StudentController@classStudent');
+        // 更新
+        $api->post('update', 'StudentController@update');
     });
 
     $api->group([
