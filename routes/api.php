@@ -134,7 +134,7 @@ $api->version('v1', function ($api) {
         // 创建学生
         $api->post('create', 'StudentController@create')->middleware('permission:student-*:student-add');
         // 列表
-        $api->get('list', 'StudentController@list')->middleware('permission:student-*:student-list');
+        $api->get('list', 'StudentController@list')->middleware('permission:student-*:student-view');
         // 详情
         $api->get('view', 'StudentController@view');
         // 更新度数

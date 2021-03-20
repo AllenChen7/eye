@@ -300,6 +300,7 @@ class SchoolController extends ApiController
             $row['class'] = $classInfo->toArray();
             $row['status_name'] = Common::statusArr()[$row['status']];
             $row['create_user_name'] = User::whereId($row['create_user_id'])->first()->name ?? '-';
+            $row['school_id'] = $gradeId;
         }
 
         return $this->successResponse([
