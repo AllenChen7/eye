@@ -220,7 +220,10 @@ class PermissionController extends ApiController
     {
         $validator = Validator::make($request->all(), [
             'name'           => 'required',
-            'permission_arr' => 'required|array'
+            'permission_arr' => 'required|array',
+            'status'                  => [
+                'nullable', Rule::in([0, 1]),
+            ],
         ]);
 
         if ($validator->fails()) {
@@ -237,7 +240,8 @@ class PermissionController extends ApiController
         $roles = \Spatie\Permission\Models\Role::create([
             'name' => auth()->id() . '_' . $request->input('name'),
             'create_user_id' => auth()->id(),
-            'last_user_id' => auth()->id()
+            'last_user_id' => auth()->id(),
+            'status'    => $request->input('status', 1)
         ]);
 
         $res = $roles->givePermissionTo($request->input('permission_arr'));
