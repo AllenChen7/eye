@@ -113,6 +113,14 @@ class AuthController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
+        $powerUserId = \auth()->id();
+        $powerType = \auth()->user()->type;
+
+        if (!\auth()->user()->type) {
+            $powerUserId = \auth()->user()->power_user_id;
+            $powerType = \auth()->user()->power_type;
+        }
+
         $model              = new User();
         $model->name        = $request->input('name');
         $model->phone       = $request->input('phone');
@@ -120,8 +128,8 @@ class AuthController extends ApiController
         $model->remark      = $request->input('remark');
         $model->type        = $request->input('type');
         $model->create_user_id = \auth()->id();
-        $model->power_user_id = \auth()->id(); // todo 结合用户管理综合处理一下
-        $model->power_type  = \auth()->user()->type;
+        $model->power_user_id  = $powerUserId;
+        $model->power_type  = $powerType;
 
         switch ($request->input('type')) {
             case Common::TYPE_CITY:
@@ -191,11 +199,6 @@ class AuthController extends ApiController
                 $model->city_id = \auth()->user()->city_id;
                 $model->area_id = \auth()->user()->area_id;
                 $model->class_data_id = \auth()->user()->class_data_id;
-
-                if (!\auth()->user()->type) {
-                    $model->power_type = \auth()->user()->power_type;
-                    $model->power_user_id = \auth()->user()->power_user_id;
-                }
                 break;
         }
 
