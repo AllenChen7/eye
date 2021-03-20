@@ -117,11 +117,13 @@ class PermissionController extends ApiController
         $allPermission = Permission::all()->toArray();
         $roleHasPermission = RoleHasPermission::whereRoleId($role['id'])->get()->pluck('permission_id')->toArray();
         $perArr = [];
+        $checkArr = [];
 
         foreach ($allPermission as &$permission) {
             if (in_array($permission['id'], $roleHasPermission)) {
                 $permission['is_check'] = 1;
                 $perArr[$permission['name']] = 1;
+                $checkArr[] = $permission['name'];
             } else {
                 $permission['is_check'] = 0;
                 $perArr[$permission['name']] = 0;
@@ -144,7 +146,10 @@ class PermissionController extends ApiController
             }
         }
 
-        return $this->successResponse($permissionArr);
+        return $this->successResponse([
+            'permission_arr' => $permissionArr,
+            'check_arr' => $checkArr
+        ]);
     }
 
     public function roleList(Request $request)
