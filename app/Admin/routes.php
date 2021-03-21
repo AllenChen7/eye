@@ -14,4 +14,5 @@ Route::group([
 
     $router->get('/', 'HomeController@index');
     $router->resource('posts', 'PostController');
+    $router->resource('version', 'XmVersionController');
 });
