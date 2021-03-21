@@ -128,6 +128,8 @@ $api->version('v1', function ($api) {
         $api->get('school-list', 'SchoolController@schoolList');
         // 将学校置为无效
         $api->post('update-status', 'SchoolController@deleteSchool');
+        // 删除
+        $api->post('delete', 'SchoolController@delete');
     });
 
     $api->group([

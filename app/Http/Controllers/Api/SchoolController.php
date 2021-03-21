@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Models\ClassData;
 use App\Models\Common;
 use App\Models\Grade;
+use App\Models\Student;
 use App\Models\YearClass;
 use App\ModelsData\School;
 use App\User;
@@ -489,6 +490,39 @@ class SchoolController extends ApiController
         $res = Grade::whereId($request->input('id'))->update([
             'name' => $request->input('name')
         ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
+
+    public function delete(Request $request)
+    {
+        $id = $request->input('id');
+
+        if (!$id) {
+            return $this->errorResponse('请先选中需要查看的学校');
+        }
+
+        $idArr = (new ClassData())->idArr();
+
+        if (!in_array($id, $idArr)) {
+            return $this->errorResponse('没有操作当前数据的权限', [], 403);
+        }
+
+        // 检测是否有学生
+        $ex = Student::where([
+            'class_data_id' => $id,
+            'is_del' => Common::NO
+        ])->first();
+
+        if ($ex) {
+            return $this->errorResponse('当前学校下已有学生，不允许删除');
+        }
+
+        $res = ClassData::whereId($id)->delete();
 
         if ($res) {
             return $this->successResponse();
