@@ -21,7 +21,7 @@ $api->version('v1', function ($api) {
     $api->group(['namespace' => 'App\Http\Controllers\Api'], function ($api) {
         // 测试接口
         $api->get('test', 'TestController@test');
-        $api->get('wx/mini-login', 'WxController@wxMiniLogin');
+        $api->post('wx/mini-login', 'WxController@wxMiniLogin');
         // 通过手机号进行登录
         $api->post('auth/login-by-phone', 'AuthController@loginByPhone');
         // 通过邮箱进行登录
@@ -126,6 +126,8 @@ $api->version('v1', function ($api) {
         $api->post('update-grade-name', 'SchoolController@updateGradeName')->middleware('permission:/school-*:/school/index-*:/school/index-edit');
         // 学校列表
         $api->get('school-list', 'SchoolController@schoolList');
+        // 将学校置为无效
+        $api->post('update-status', 'SchoolController@deleteSchool');
     });
 
     $api->group([
