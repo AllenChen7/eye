@@ -78,8 +78,7 @@ class AuthController extends ApiController
             'remark'                => 'nullable|max:200',
             'type'                  => [
                 'required', Rule::in(Common::typeArrKeys()),
-            ],
-            'role_arr'              => 'nullable|array'
+            ]
         ]);
         // 如果是校级的话需要指定省级-市级-县级并创建学校数据
         // 用户创建怎么处理 todo type 为 0 是为用户创建
@@ -207,9 +206,9 @@ class AuthController extends ApiController
         if ($model->save()) {
 
             if ($request->input('type') == Common::TYPE_ZONE) {
-                $model->assignRole($request->input('role_arr'));
+                $model->assignRole($request->input('roles_arr'));
             }
-            
+
             return $this->successResponse();
         } else {
             return $this->errorResponse();
