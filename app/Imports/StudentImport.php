@@ -313,7 +313,15 @@ class StudentImport implements ToCollection
                 'id_card' => $idCard
             ])->first();
 
-            if (!$studentInfo) {
+            if ($studentInfo) {
+                // 班级发生改变时，验光计划恢复初始化
+                if ($studentInfo->class_data_id != auth()->user()->class_data_id ||
+                    $studentInfo->grade_id != $gradeInfo['id'] ||
+                    $studentInfo->year_class_id != $classInfo['id']) {
+                    $studentInfo->plan_id = 0;
+                    $studentInfo->plan_status = 0;
+                }
+            } else {
                 $studentInfo = new Student();
                 $studentInfo->id_card = $idCard;
             }

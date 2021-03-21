@@ -241,6 +241,12 @@ class UserController extends ApiController
             ]);
         });
 
+        $validator->sometimes('roles_arr', 'nullable|array', function ($input) {
+            return in_array($input->type, [
+                Common::TYPE_ZONE
+            ]);
+        });
+
         if ($validator->fails()) {
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
@@ -288,6 +294,11 @@ class UserController extends ApiController
         }
 
         if ($model->save()) {
+
+            if ($request->input('type') == Common::TYPE_ZONE) {
+                $model->syncRoles($request->input('roles_arr'));
+            }
+
             return $this->successResponse();
         } else {
             return $this->errorResponse();

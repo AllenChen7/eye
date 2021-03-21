@@ -69,6 +69,15 @@ class StudentController extends ApiController
         $oldData = StudentData::studentByIdCard($request->input('id_card'));
 
         if ($oldData) {
+
+            // 班级发生改变时，验光计划恢复初始化
+            if ($oldData->class_data_id != auth()->user()->class_date_id ||
+                $oldData->grade_id != $request->input('grade_id') ||
+                $oldData->year_class_id != $request->input('class_id')) {
+                $oldData->plan_id = 0;
+                $oldData->plan_status = 0;
+            }
+
             $oldData->class_data_id = auth()->user()->class_data_id;
             $oldData->grade_id = $request->input('grade_id');
             $oldData->year_class_id = $request->input('class_id');

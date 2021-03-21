@@ -77,6 +77,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Student whereGradeId($value)
  * @property string $join_school_date 入学年份
  * @method static \Illuminate\Database\Eloquent\Builder|Student whereJoinSchoolDate($value)
+ * @property int $plan_status 计划状态, 0未验光计划、1开启验光计划、2验光完毕、3验光废弃
+ * @property int $plan_id 计划ID
+ * @method static \Illuminate\Database\Eloquent\Builder|Student wherePlanId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Student wherePlanStatus($value)
  */
 class Student extends Model
 {

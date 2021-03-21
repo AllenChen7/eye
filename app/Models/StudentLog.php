@@ -77,6 +77,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|StudentLog whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|StudentLog whereYearClassId($value)
  * @mixin \Eloquent
+ * @property int $plan_id 计划ID
+ * @method static \Illuminate\Database\Eloquent\Builder|StudentLog wherePlanId($value)
  */
 class StudentLog extends Model
 {
