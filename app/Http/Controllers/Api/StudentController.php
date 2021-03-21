@@ -271,6 +271,7 @@ class StudentController extends ApiController
             'r_roc1' => $right['roc1'] ?? 0,
             'r_roc2' => $right['roc2'] ?? 0,
             'r_axis' => $right['axis'] ?? 0,
+            'plan_status'   => 2
         ]);
 
         if ($res) {
@@ -306,7 +307,12 @@ class StudentController extends ApiController
             $studentLogModel->r_roc1 = $student->r_roc1;
             $studentLogModel->r_roc2 = $student->r_roc2;
             $studentLogModel->r_axis = $student->r_axis;
-            return $this->successResponse();
+            $studentLogModel->plan_id = $student->plan_id;
+
+            if ($studentLogModel->save()) {
+                return $this->successResponse();
+            }
+
         }
 
         return $this->errorResponse();

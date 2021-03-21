@@ -53,6 +53,13 @@ class PlanController extends ApiController
         $model->class_data_id = $classInfo['class_data_id'];
 
         if ($model->save()) {
+            // 将学生列入验光计划
+            Student::where([
+                'year_class_id' => $request->input('class_id')
+            ])->update([
+                'plan_id' => $model->id,
+                'plan_status' => 1
+            ]);
             return $this->successResponse();
         }
 
@@ -243,5 +250,36 @@ class PlanController extends ApiController
         }
 
         return $this->successResponse($data);
+    }
+
+    public function done(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:plans,id'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        // 检查是否有学生尚未检测完毕
+        $exists = Student::where([
+            'plan_id' => $request->input('id'),
+            'plan_status' => 1
+        ])->count();
+
+        if ($exists) {
+            return $this->errorResponse('系统检测到还有' . $exists . '个学生');
+        }
+
+        $res = Plan::whereId($request->input('id'))->update([
+            'status' => 2
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
     }
 }

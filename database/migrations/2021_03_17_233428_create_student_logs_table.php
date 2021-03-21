@@ -29,7 +29,7 @@ class CreateStudentLogsTable extends Migration
             $table->unsignedTinyInteger('is_glasses')->default(0)->comment('是否佩戴眼镜，0不带，1带')->index();
             $table->unsignedTinyInteger('glasses_type')->default(0)->comment('眼镜类型0,普通眼镜，1隐形眼镜');
             $table->unsignedTinyInteger('status')->default(1)->comment('状态，0开除，1正常，2休学中')->index();
-            $table->unsignedTinyInteger('join_school_date')->comment('入学日期');
+            $table->string('join_school_date', 4)->comment('入学日期');
             $table->unsignedTinyInteger('is_del')->default(0)->comment('是否删除，0否，1删除')->index();
             $table->decimal('l_degree', 8, 2)->default(0)->comment('左眼度数');
             $table->decimal('l_sph', 8, 2)->default(0)->comment('左眼球经度');

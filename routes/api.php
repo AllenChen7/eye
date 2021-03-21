@@ -189,6 +189,8 @@ $api->version('v1', function ($api) {
         $api->post('update', 'PlanController@update')->middleware('permission:plan-*:plan-update');
         // 计划详情
         $api->get('detail', 'PlanController@detail');
+        // 完成验光
+        $api->post('done', 'PlanController@done');
     });
 
     $api->group([
