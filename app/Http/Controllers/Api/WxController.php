@@ -86,8 +86,8 @@ class WxController extends ApiController
         $config = config('wxmini');
         $app = Factory::miniProgram($config);
         $validator = Validator::make($request->all(), [
-            'encryptedData'                    => 'required',
-            'iv'    => 'required'
+            'encryptedData' => 'required',
+            'iv'            => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -114,6 +114,40 @@ class WxController extends ApiController
 
             if ($res) {
                 unset($decryptedData['watermark']);
+                return $this->successResponse($decryptedData);
+            }
+        }
+
+        return $this->errorResponse();
+    }
+
+    public function updateUserInfo(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'userInfo' => 'required|array'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $decryptedData = $request->input('userInfo');
+        $user = \auth('wx')->user();
+
+        if (isset($decryptedData['openId'])) {
+            $res = WxUser::where([
+                'openid' => $user['openId']
+            ])->update([
+                'nickname' => $decryptedData['nickName'] ?? '-',
+                'gender' => $decryptedData['gender'] ?? 0,
+                'language' => $decryptedData['language'] ?? '-',
+                'city'  => $decryptedData['city'] ?? '-',
+                'province' => $decryptedData['province'] ?? '-',
+                'country' => $decryptedData['country'] ?? '-',
+                'avatar' => $decryptedData['avatarUrl'] ?? ''
+            ]);
+
+            if ($res) {
                 return $this->successResponse($decryptedData);
             }
         }
