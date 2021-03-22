@@ -404,6 +404,9 @@ class Common
             case Common::TYPE_CITY:
                 $permission = Role::findByName('city')->getAllPermissions();
                 break;
+            case Common::TYPE_SCH:
+                $permission = Role::findByName('school')->getAllPermissions();
+                break;
             default:
                 $permission = [];
                 break;
