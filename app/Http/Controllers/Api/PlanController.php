@@ -18,7 +18,7 @@ class PlanController extends ApiController
     {
         $validator = Validator::make($request->all(), [
             'name'    => 'required|max:100',
-            'plan_data' => 'required',
+            'plan_date' => 'required',
             'plan_user' => 'nullable|max:64',
             'remark' => 'nullable|max:200',
             'grade_id'  => 'required|exists:grades,id',
@@ -31,7 +31,7 @@ class PlanController extends ApiController
 
         $model = new Plan();
         $model->name = $request->input('name');
-        $model->plan_date = $request->input('plan_data');
+        $model->plan_date = $request->input('plan_date');
         $model->plan_user = $request->input('plan_user');
         $model->remark = $request->input('remark');
         $model->grade_id = $request->input('grade_id');
