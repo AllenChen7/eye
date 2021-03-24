@@ -20,15 +20,15 @@ class CheckPermission
             return $next($request);
         }
 
-//        return $next($request); // 暂时去除
-
         if ($role) {
             $roles = explode(':', $role);
             $flag = 0;
+            $permissionArr = Common::getPermissionList($request->user());
 
             foreach ($roles as $r) {
-                if ($request->user()->hasPermissionTo($r)) {
+                if (in_array($r, $permissionArr)) {
                     $flag = 1;
+                    break;
                 }
             }
 
