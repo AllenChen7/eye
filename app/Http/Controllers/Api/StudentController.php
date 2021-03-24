@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Exports\StudentExport;
 use App\Http\Controllers\ApiController;
 use App\Imports\StudentImport;
+use App\Models\ClassData;
 use App\Models\Common;
 use App\Models\Grade;
 use App\Models\Student;
@@ -433,5 +434,31 @@ class StudentController extends ApiController
             'count' => $count,
             'rows' => $student
         ]);
+    }
+
+    public function delete(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'              => 'required|exists:student,id'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $idArr = (new ClassData())->idArr();
+        $studentInfo = Student::whereId($request->input('id'))->first();
+
+        if (!in_array($studentInfo['class_data_id'], $idArr)) {
+            return $this->errorResponse('不能删除当前学生信息');
+        }
+
+        $res = $studentInfo->delete();
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
     }
 }

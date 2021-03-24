@@ -153,6 +153,8 @@ $api->version('v1', function ($api) {
         $api->get('class-student', 'StudentController@classStudent');
         // 更新
         $api->post('update', 'StudentController@update')->middleware('permission:/student/index-*:/student/index-edit');
+        // 删除
+        $api->post('delete', 'StudentController@delete')->middleware('permission:/student/index-*:/student/index-delete');
     });
 
     $api->group([
