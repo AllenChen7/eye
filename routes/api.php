@@ -26,6 +26,8 @@ $api->version('v1', function ($api) {
         $api->post('auth/login-by-phone', 'AuthController@loginByPhone');
         // 通过邮箱进行登录
         $api->post('auth/login-by-email', 'AuthController@loginByEmail');
+        //
+        $api->get('auth/logout', 'AuthController@logout');
     });
 
     $api->group([
@@ -48,7 +50,6 @@ $api->version('v1', function ($api) {
         'middleware' => 'jwt.auth',
         'prefix'     => 'auth'
     ], function ($api) {
-        $api->get('logout', 'AuthController@logout');
         // 用户重置 token
         $api->get('refresh', 'AuthController@refresh');
         // 获取用户信息
