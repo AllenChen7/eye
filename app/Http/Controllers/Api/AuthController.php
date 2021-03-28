@@ -258,7 +258,11 @@ class AuthController extends ApiController
      */
     public function logout()
     {
-        $this->guard()->logout();
+        try {
+            $this->guard()->logout();
+        } catch (\Exception $exception) {
+
+        }
 
         return $this->successResponse([], '退出成功');
     }
