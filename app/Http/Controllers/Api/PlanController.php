@@ -8,6 +8,7 @@ use App\Models\Common;
 use App\Models\Grade;
 use App\Models\Plan;
 use App\Models\Student;
+use App\Models\StudentLog;
 use App\Models\YearClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -207,11 +208,22 @@ class PlanController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
+        // 检查是否已绑定学生
+        $se = Student::wherePlanId($request->input('id'))->exists();
+
+        if ($se) {
+            return $this->errorResponse('已有数据，不能被删除');
+        } else {
+            $sle = StudentLog::wherePlanId($request->input('id'))->exists();
+
+            if ($sle) {
+                return $this->errorResponse('已有数据，不能被删除');
+            }
+        }
+
         $res = Plan::where([
             'id' => $request->input('id')
-        ])->update([
-            'is_del' => Common::YES
-        ]);
+        ])->delete();
 
         if ($res) {
             return $this->successResponse();
