@@ -214,6 +214,15 @@ $api->version('v1', function ($api) {
     $api->group([
         'namespace'  => 'App\Http\Controllers\Api',
         'middleware' => 'jwt.auth',
+        'prefix'     => 'home'
+    ], function ($api) {
+        // 检测是否有更新
+        $api->get('index', 'HomeController@index');
+    });
+
+    $api->group([
+        'namespace'  => 'App\Http\Controllers\Api',
+        'middleware' => 'jwt.auth',
     ], function ($api) {
         $api->get('auth-test', 'TestController@authTest');
     });

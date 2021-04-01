@@ -72,6 +72,8 @@ class PlanController extends ApiController
         $gradeId = $request->input('grade_id');
         $classId = $request->input('class_id');
         $type = $request->input('type', 1);
+        $limit = $request->input('limit', 20);
+        $page = $request->input('page', 1);
 
         $query = Plan::where([
             'is_del' => Common::NO
@@ -109,9 +111,10 @@ class PlanController extends ApiController
             ];
         }
 
+        $offset = $page <= 1 ? 0 : ($page - 1) * $limit;
         $rows = $query->where([
             'status' => $type
-        ])->get();
+        ])->limit($limit)->offset($offset)->get();
 
         foreach ($rows as $row) {
             $row['school'] = ClassData::where([

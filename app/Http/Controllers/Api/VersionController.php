@@ -18,7 +18,7 @@ class VersionController extends ApiController
 
         $res = XmVersion::where('v_code', '>', $vCode)->select([
             'v_code', 'url'
-        ])->first();
+        ])->orderByDesc('id')->first();
 
         if ($res) {
             return $this->successResponse($res);

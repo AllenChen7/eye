@@ -26,7 +26,8 @@ class Common
 
     // 是否
     const YES = 1;
-    const NO = 0;
+    const NO = 2;
+    const UNKNOWN = 0; // 未知
 
     // 学生状态
     const STU_STATUS_ACTIVE = 1;
