@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Model\Role;
 use App\Model\RoleHasPermission;
 use App\Models\Common;
+use App\Models\ModelHasRole;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -167,7 +168,7 @@ class PermissionController extends ApiController
 //        }
 
         $arr = [];
-        
+
         foreach ($permissionArr as $permission) {
 
             if (in_array($permission['id'], $userPermission)) {
@@ -331,11 +332,21 @@ class PermissionController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
+        $rhpe = RoleHasPermission::whereRoleId($request->input('id'))->exists();
+
+        if ($rhpe) {
+            return $this->errorResponse('数据已被使用，不可被删除');
+        }
+
+        $mhre = ModelHasRole::whereRoleId($request->input('id'))->exists();
+
+        if ($mhre) {
+            return $this->errorResponse('数据已被使用，不可被删除');
+        }
+
         $res = Role::where([
             'id' => $request->input('id')
-        ])->update([
-            'is_del' => Common::YES
-        ]);
+        ])->delete();
 
         if ($res) {
             return $this->successResponse();
