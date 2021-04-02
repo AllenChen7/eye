@@ -131,10 +131,10 @@ class WxController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $decryptedData = $request->input('userInfo');
+        $decryptedData = $request->input('user_info');
         $user = \auth('wx')->user();
         $res = WxUser::where([
-            'openid' => $user['openId']
+            'id' => $user['id']
         ])->update([
             'nickname' => $decryptedData['nickName'] ?? '-',
             'gender' => $decryptedData['gender'] ?? 0,
@@ -142,7 +142,8 @@ class WxController extends ApiController
             'city'  => $decryptedData['city'] ?? '-',
             'province' => $decryptedData['province'] ?? '-',
             'country' => $decryptedData['country'] ?? '-',
-            'avatar' => $decryptedData['avatarUrl'] ?? ''
+            'avatar' => $decryptedData['avatarUrl'] ?? '',
+//            'unionid' => $decryptedData['unionid'] ?? ''
         ]);
 
         if ($res) {
