@@ -124,7 +124,7 @@ class WxController extends ApiController
     public function updateUserInfo(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'userInfo' => 'required|array'
+            'user_info' => 'required|array'
         ]);
 
         if ($validator->fails()) {
@@ -133,23 +133,20 @@ class WxController extends ApiController
 
         $decryptedData = $request->input('userInfo');
         $user = \auth('wx')->user();
+        $res = WxUser::where([
+            'openid' => $user['openId']
+        ])->update([
+            'nickname' => $decryptedData['nickName'] ?? '-',
+            'gender' => $decryptedData['gender'] ?? 0,
+            'language' => $decryptedData['language'] ?? '-',
+            'city'  => $decryptedData['city'] ?? '-',
+            'province' => $decryptedData['province'] ?? '-',
+            'country' => $decryptedData['country'] ?? '-',
+            'avatar' => $decryptedData['avatarUrl'] ?? ''
+        ]);
 
-        if (isset($decryptedData['openId'])) {
-            $res = WxUser::where([
-                'openid' => $user['openId']
-            ])->update([
-                'nickname' => $decryptedData['nickName'] ?? '-',
-                'gender' => $decryptedData['gender'] ?? 0,
-                'language' => $decryptedData['language'] ?? '-',
-                'city'  => $decryptedData['city'] ?? '-',
-                'province' => $decryptedData['province'] ?? '-',
-                'country' => $decryptedData['country'] ?? '-',
-                'avatar' => $decryptedData['avatarUrl'] ?? ''
-            ]);
-
-            if ($res) {
-                return $this->successResponse($decryptedData);
-            }
+        if ($res) {
+            return $this->successResponse($decryptedData);
         }
 
         return $this->errorResponse();

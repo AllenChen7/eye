@@ -332,6 +332,12 @@ class PermissionController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
+        $role = Role::whereId($request->input('id'))->first();
+
+        if (in_array($role->name, Common::typeArr(1))) {
+            return $this->errorResponse('当前数据不可被删除');
+        }
+
         $rhpe = RoleHasPermission::whereRoleId($request->input('id'))->exists();
 
         if ($rhpe) {
