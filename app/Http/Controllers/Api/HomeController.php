@@ -87,9 +87,11 @@ class HomeController extends ApiController
         return $this->successResponse([
             'plan_done_nums' => $planDoneNums,
             'plan_not_nums' => $planNotNums,
+            'plan_count'    => $planDoneNums + $planNotNums,
             'myopia_nums' => $myopiaNum,
             'not_myopia_nums' => $notMyopiaNum,
             'unknown_nums' => $unknownNums,
+            'myopia_count' => $myopiaNum + $notMyopiaNum + $unknownNums,
             'is_plan_edit' => $type == Common::TYPE_SCH ? 1 : 0,
             'rows'   => $rows
         ]);
