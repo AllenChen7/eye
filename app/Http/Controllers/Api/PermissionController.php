@@ -82,13 +82,9 @@ class PermissionController extends ApiController
                 return $this->errorResponse('没有权限', [],403);
             }
 
-            $roles = Role::whereCreateUserId(0)->where([
-                'is_del' => Common::NO
-            ])->limit($limit)->offset($offset)->get();
+            $roles = Role::whereCreateUserId(0)->limit($limit)->offset($offset)->get();
         } else {
-            $roles = Role::whereCreateUserId(auth()->id())->where([
-                'is_del' => Common::NO
-            ])->limit($limit)->offset($offset)->get();
+            $roles = Role::whereCreateUserId(auth()->id())->limit($limit)->offset($offset)->get();
         }
 
         foreach ($roles as $key => &$role) {

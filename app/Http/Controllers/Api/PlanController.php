@@ -76,9 +76,7 @@ class PlanController extends ApiController
         $limit = $request->input('limit', 20);
         $page = $request->input('page', 1);
         $ids = (new ClassData())->idArr();
-        $query = Plan::where([
-            'is_del' => Common::NO
-        ])->whereIn('class_data_id', $ids)->orderByDesc('id');
+        $query = Plan::whereIn('class_data_id', $ids)->orderByDesc('id');
 
         if ($name) {
             $query->where('name', 'like', '%' . $name . '%');

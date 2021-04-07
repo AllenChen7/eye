@@ -28,7 +28,6 @@ class StudentData
     {
         return Student::where([
             'id_card' => $idCard,
-            'is_del'  => Common::NO
         ])->first();
     }
 
@@ -67,9 +66,7 @@ class StudentData
     public function baseQuery()
     {
         $schoolIdArr = (new ClassData())->idArr();
-        $query = Student::where([
-            'is_del' => Common::NO
-        ])->whereIn('class_data_id', $schoolIdArr)->orderByDesc('id');
+        $query = Student::whereIn('class_data_id', $schoolIdArr)->orderByDesc('id');
 
         if ($this->schoolId) {
             $query->where([

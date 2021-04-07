@@ -515,7 +515,6 @@ class SchoolController extends ApiController
         // 检测是否有学生
         $ex = Student::where([
             'class_data_id' => $id,
-            'is_del' => Common::NO
         ])->first();
 
         if ($ex) {

@@ -138,9 +138,7 @@ class UsersData extends User
 
     public function baseQuery()
     {
-        $query = User::orderByDesc('id')->where([
-            'is_del' => Common::NO
-        ]);
+        $query = User::orderByDesc('id');
         $this->phone = trim($this->phone);
 
         if ($this->phone) {
