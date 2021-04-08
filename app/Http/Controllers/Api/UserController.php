@@ -199,9 +199,12 @@ class UserController extends ApiController
         }
 
         $res = User::find($request->input('id'));
-        $res->is_del =Common::YES;
 
-        if ($res->save()) {
+        if ($res->type == Common::TYPE_XM) {
+            return $this->errorResponse('希铭级管理用户不能被删除');
+        }
+
+        if ($res->delete()) {
             return $this->successResponse();
         }
 
