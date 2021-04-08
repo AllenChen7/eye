@@ -294,7 +294,8 @@ class AuthController extends ApiController
     public function province()
     {
         $res = User::where([
-            'type'   => Common::TYPE_PROV
+            'type'   => Common::TYPE_PROV,
+            'status' => 1
         ])->select(['id', 'name'])->get()->toArray();
 
         return $this->successResponse($res);
@@ -318,6 +319,7 @@ class AuthController extends ApiController
         $res = User::where([
             'type' => Common::TYPE_CITY,
             'province_id' => $request->input('id'),
+            'status' => 1
         ])->select(['id', 'name'])->get()->toArray();
 
         return $this->successResponse($res);
@@ -341,6 +343,7 @@ class AuthController extends ApiController
         $res = User::where([
             'type' => Common::TYPE_AREA,
             'city_id' => $request->input('id'),
+            'status' => 1
         ])->select(['id', 'name'])->get()->toArray();
 
         return $this->successResponse($res);
