@@ -108,7 +108,8 @@ class UserController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $res = User::whereId($request->input('id'))->first();
+        $resA = User::whereId($request->input('id'))->first();
+        $res = $resA->toArray();
         $arr = Common::typeArr(1);
         $res['power_list'] = [];
 
@@ -174,7 +175,7 @@ class UserController extends ApiController
                 }
                 break;
             case Common::TYPE_ZONE:
-                $roles = $res->roles;
+                $roles = $resA->roles;
 
                 foreach ($roles as $role) {
                     $role_name = explode('_', $role['name']);
