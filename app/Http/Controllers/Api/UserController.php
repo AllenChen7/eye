@@ -112,6 +112,11 @@ class UserController extends ApiController
         $arr = Common::typeArr(1);
 
         $res['power_list'] = [];
+
+        if (!$res['type']) {
+            $res['type'] = $res['power_type'];
+        }
+
         switch ($res['type']) {
             case Common::TYPE_SCH:
                 $prov = User::whereId($res['province_id'])->first();

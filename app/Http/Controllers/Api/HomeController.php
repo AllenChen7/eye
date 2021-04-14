@@ -24,7 +24,6 @@ class HomeController extends ApiController
         }
 
         $studentArr = Student::whereIn('class_data_id', $idArr)->get();
-//        dda($studentArr);
         $planDoneNums = 0;
         $planNotNums = 0;
         $myopiaNum = 0;
