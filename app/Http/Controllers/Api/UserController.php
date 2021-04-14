@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
+use App\Model\Role;
 use App\Models\ClassData;
 use App\Models\Common;
 use App\ModelsData\UsersData;
@@ -114,75 +115,44 @@ class UserController extends ApiController
         $res['power_list'] = [];
 
         switch ($res['type']) {
-            case Common::TYPE_SCH:
-                $prov = User::whereId($res['province_id'])->first();
+            case Common::TYPE_XM:
+                $prov = Role::whereName('xm')->first();
 
                 if ($prov) {
-                    $res['power_list'][] = [
-                        'id' => $arr[$prov['type']],
-                        'name' => $prov['name']
-                    ];
+                    $res['power_list'][] = $prov['id'];
                 }
 
-                $city = User::whereId($res['city_id'])->first();
+                break;
+            case Common::TYPE_SCH:
+                $prov = Role::whereName('school')->first();
 
-                if ($city) {
-                    $res['power_list'][] = [
-                        'id' => $arr[$city['type']],
-                        'name' => $city['name']
-                    ];
-                }
-
-                $area = User::whereId($res['area_id'])->first();
-
-                if ($area) {
-                    $res['power_list'][] = [
-                        'id' => $arr[$area['type']],
-                        'name' => $city['name']
-                    ];
+                if ($prov) {
+                    $res['power_list'][] = $prov['id'];
                 }
 
                 break;
 
             case Common::TYPE_AREA:
-                $prov = User::whereId($res['province_id'])->first();
+                $prov = Role::whereName('area')->first();
 
                 if ($prov) {
-                    $res['power_list'][] = [
-                        'id' => $arr[$prov['type']],
-                        'name' => $prov['name']
-                    ];
+                    $res['power_list'][] = $prov['id'];
                 }
 
-                $city = User::whereId($res['city_id'])->first();
-
-                if ($city) {
-                    $res['power_list'][] = [
-                        'id' => $arr[$city['type']],
-                        'name' => $city['name']
-                    ];
-                }
                 break;
 
             case Common::TYPE_CITY:
-                $prov = User::whereId($res['province_id'])->first();
+                $prov = Role::whereName('city')->first();
 
                 if ($prov) {
-                    $res['power_list'][] = [
-                        'id' => $arr[$prov['type']],
-                        'name' => $prov['name']
-                    ];
+                    $res['power_list'][] = $prov['id'];
                 }
                 break;
             case Common::TYPE_ZONE:
                 $roles = $resA->roles;
 
                 foreach ($roles as $role) {
-                    $role_name = explode('_', $role['name']);
-                    $res['power_list'][] = [
-                        'id' => $role['id'],
-                        'name' => $role_name[1] ?? $role['name']
-                    ];
+                    $res['power_list'][] = $role['id'];
                 }
 
                 break;
