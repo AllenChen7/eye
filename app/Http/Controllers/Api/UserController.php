@@ -108,14 +108,9 @@ class UserController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $res = User::whereId($request->input('id'))->first()->toArray();
+        $res = User::whereId($request->input('id'))->first();
         $arr = Common::typeArr(1);
-
         $res['power_list'] = [];
-
-        if (!$res['type']) {
-            $res['type'] = $res['power_type'];
-        }
 
         switch ($res['type']) {
             case Common::TYPE_SCH:
@@ -178,9 +173,12 @@ class UserController extends ApiController
                     ];
                 }
                 break;
+            case Common::TYPE_ZONE:
+                $res['power_list'] = $res->getRoleNames();
+                break;
         }
 
-        $res['type_name'] = $arr[$res['type']];
+        $res['type_name'] = $arr[$res['type']] ?? '普通用户';
         unset($res['class_data_id']);
         unset($res['power_user_id']);
         unset($res['power_type']);
