@@ -166,10 +166,55 @@ class SchoolController extends ApiController
     {
         $limit = $request->input('limit', 20);
         $page = $request->input('page', 1);
-
         $query = ClassData::orderByDesc('id');
         $idArr = (new ClassData())->idArr();
         $query->whereIn('id', $idArr);
+        $province = $request->input('province');
+        $status = $request->input('status');
+        $user = '';
+
+        if ($status === 1 || $status === 0) {
+            $query->where([
+                'status' => $status
+            ]);
+        }
+
+        if ($province) {
+            $user = User::whereId($province)->first();
+        }
+
+        if ($user) {
+            $type = $user->type;
+
+            if ($type) {
+                $type = $user->power_type;
+            }
+
+            switch ($type) {
+                case Common::TYPE_PROV:
+                    $query->where([
+                        'province_id' => $province
+                    ]);
+                    break;
+                case Common::TYPE_CITY:
+                    $query->where([
+                        'city_id' => $province
+                    ]);
+                    break;
+                case Common::TYPE_AREA:
+                    $query->where([
+                        'area_id' => $province
+                    ]);
+                    break;
+                case Common::TYPE_XM:
+                    break;
+                default:
+                    $query->where([
+                        'id' => 0
+                    ]);
+                    break;
+            }
+        }
 
         $name = trim($request->input('name'));
 
