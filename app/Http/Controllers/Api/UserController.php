@@ -112,14 +112,14 @@ class UserController extends ApiController
         $resA = User::whereId($request->input('id'))->first();
         $res = $resA->toArray();
         $arr = Common::typeArr(1);
-        $res['power_list'] = [];
+        $res['roles_arr'] = [];
 
         switch ($res['type']) {
             case Common::TYPE_XM:
                 $prov = Role::whereName('xm')->first();
 
                 if ($prov) {
-                    $res['power_list'][] = $prov['id'];
+                    $res['roles_arr'][] = $prov['id'];
                 }
 
                 break;
@@ -127,7 +127,7 @@ class UserController extends ApiController
                 $prov = Role::whereName('school')->first();
 
                 if ($prov) {
-                    $res['power_list'][] = $prov['id'];
+                    $res['roles_arr'][] = $prov['id'];
                 }
 
                 break;
@@ -136,7 +136,7 @@ class UserController extends ApiController
                 $prov = Role::whereName('area')->first();
 
                 if ($prov) {
-                    $res['power_list'][] = $prov['id'];
+                    $res['roles_arr'][] = $prov['id'];
                 }
 
                 break;
@@ -145,14 +145,14 @@ class UserController extends ApiController
                 $prov = Role::whereName('city')->first();
 
                 if ($prov) {
-                    $res['power_list'][] = $prov['id'];
+                    $res['roles_arr'][] = $prov['id'];
                 }
                 break;
             case Common::TYPE_ZONE:
                 $roles = $resA->roles;
 
                 foreach ($roles as $role) {
-                    $res['power_list'][] = $role['id'];
+                    $res['roles_arr'][] = $role['id'];
                 }
 
                 break;
