@@ -174,7 +174,16 @@ class UserController extends ApiController
                 }
                 break;
             case Common::TYPE_ZONE:
-                $res['power_list'] = $res->getRoleNames();
+                $roles = $res->roles;
+
+                foreach ($roles as $role) {
+                    $role_name = explode('_', $role['name']);
+                    $res['power_list'][] = [
+                        'id' => $role['id'],
+                        'name' => $role_name[1] ?? $role['name']
+                    ];
+                }
+
                 break;
         }
 
