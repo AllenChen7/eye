@@ -173,7 +173,7 @@ class SchoolController extends ApiController
         $status = $request->input('status', '');
         $user = '';
 
-        if ($status === 1 || $status === 0) {
+        if ($status === '1' || $status === '0') {
             $query->where([
                 'status' => $status
             ]);
