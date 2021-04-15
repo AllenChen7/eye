@@ -122,8 +122,12 @@ class StudentController extends ApiController
         $model->name = $request->input('name');
         $model->limit = $request->input('limit', $model->limit);
         $model->page = $request->input('page', $model->page);
-        $model->sex = $request->input('sex');
+        $model->sex = $request->input('sex', '');
         $model->joinDate = $request->input('date');
+        \Log::info('input', [
+            'input' => $request->input(),
+            'model' => $model
+        ]);
 
         $count = $model->rowCount();
         $rows = $model->rowData();
