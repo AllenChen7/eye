@@ -19,6 +19,8 @@ class StudentData
     public $studentCode;
     public $limit = 20;
     public $page = 1;
+    public $sex;
+    public $joinDate;
 
     /**
      * @param $idCard
@@ -57,7 +59,7 @@ class StudentData
                 'id' => $row['class_data_id']
             ])->first()->name ?? '-';
             $row['status_name'] = Common::studentStatusArr()[$row['status']];
-            $row['join_school_date'] = '2020.09';
+            $row['join_school_date'] = $row['join_school_date'] . '.09';
         }
 
         return $rows;
@@ -96,6 +98,18 @@ class StudentData
 
         if ($this->studentCode) {
             $query->where('student_code', 'like', '%' . $this->studentCode . '%');
+        }
+
+        if ($this->sex) {
+            $query->where([
+                'sex' => $this->sex
+            ]);
+        }
+
+        if ($this->joinDate) {
+            $query->where([
+                'join_school_data' => $this->joinDate
+            ]);
         }
 
         return $query;
