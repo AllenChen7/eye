@@ -204,7 +204,6 @@ $api->version('v1', function ($api) {
 
     $api->group([
         'namespace'  => 'App\Http\Controllers\Api',
-        'middleware' => 'jwt.auth',
         'prefix'     => 'version'
     ], function ($api) {
         // 检测是否有更新
