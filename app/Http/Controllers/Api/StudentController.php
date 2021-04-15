@@ -125,7 +125,7 @@ class StudentController extends ApiController
         $model->page = $request->input('page', $model->page);
         $model->sex = $request->input('sex', '');
         $model->joinDate = $request->input('date');
-        Log::info('input', [
+        Log::notice('input', [
             'input' => $request->input(),
             'model' => $model->sex
         ]);
