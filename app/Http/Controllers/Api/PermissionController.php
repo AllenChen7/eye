@@ -74,6 +74,7 @@ class PermissionController extends ApiController
         $page = $request->input('page', 1);
         $limit = $request->input('limit', 20);
         $offset = $page <= 1 ? 0 : ($page - 1) * $limit;
+        $name = $request->input('name');
 
         // 0 角色管理、1 权限集管理
         if ($request->input('type') == 1) {
@@ -84,7 +85,13 @@ class PermissionController extends ApiController
 
             $roles = Role::whereCreateUserId(0)->limit($limit)->offset($offset)->get();
         } else {
-            $roles = Role::whereCreateUserId(auth()->id())->limit($limit)->offset($offset)->get();
+            $query = Role::whereCreateUserId(auth()->id());
+
+            if ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            }
+
+            $roles = $query->limit($limit)->offset($offset)->get();
         }
 
         foreach ($roles as $key => &$role) {
