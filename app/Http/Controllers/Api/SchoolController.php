@@ -169,8 +169,8 @@ class SchoolController extends ApiController
         $query = ClassData::orderByDesc('id');
         $idArr = (new ClassData())->idArr();
         $query->whereIn('id', $idArr);
-        $province = $request->input('province');
-        $status = $request->input('status');
+        $province = $request->input('province'); // 省市区的用户id
+        $status = $request->input('status', '');
         $user = '';
 
         if ($status === 1 || $status === 0) {
@@ -264,7 +264,7 @@ class SchoolController extends ApiController
         $idArr = (new ClassData())->idArr();
 
         if (!in_array($schoolId, $idArr)) {
-            return $this->errorResponse('没有操作当前数据的权限', [], 403);
+            return $this->successResponse();
         }
 
         $data = School::gradeListByClassDataId($schoolId);
