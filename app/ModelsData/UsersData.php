@@ -159,10 +159,22 @@ class UsersData extends User
 
         if ($this->is_super) {
             $query->where('type', '>', Common::TYPE_ZONE);
+
+            if ($this->type) {
+                $query->where([
+                    'type' => $this->type
+                ]);
+            }
         } else {
             $query->where([
                 'type' => Common::TYPE_ZONE
             ]);
+
+            if ($this->type) {
+                $query->where([
+                    'power_type' => $this->type
+                ]);
+            }
         }
 
         if ($this->start_time) {
