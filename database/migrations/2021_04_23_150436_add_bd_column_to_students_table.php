@@ -13,7 +13,7 @@ class AddBdColumnToStudentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('student', function (Blueprint $table) {
+        Schema::table('students', function (Blueprint $table) {
             //
             $table->decimal('pd', 8, 2)->default(0)->after('is_del')->comment('tj');
         });
