@@ -133,7 +133,8 @@ class Common
     {
         return [
             self::YES => '是',
-            self::NO => '否'
+            self::NO => '否',
+            self::UNKNOWN => '未知'
         ];
     }
 
