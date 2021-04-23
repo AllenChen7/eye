@@ -231,6 +231,7 @@ class StudentController extends ApiController
         $oldData->l_degree = (int)$request->input('l_degree');
         $oldData->r_degree = (int)$request->input('r_degree');
         $oldData->join_school_date = $request->input('join_school_date');
+        $oldData->pd = $request->input('pd');
 
         if ($oldData->save()) {
             return $this->successResponse();
@@ -279,7 +280,8 @@ class StudentController extends ApiController
             'r_roc1' => $right['roc1'] ?? 0,
             'r_roc2' => $right['roc2'] ?? 0,
             'r_axis' => $right['axis'] ?? 0,
-            'plan_status'   => 2
+            'plan_status'   => 2,
+            'pd'    => $request->input('pd')
         ]);
 
         if ($res) {
@@ -316,6 +318,7 @@ class StudentController extends ApiController
             $studentLogModel->r_roc2 = $student->r_roc2;
             $studentLogModel->r_axis = $student->r_axis;
             $studentLogModel->plan_id = $student->plan_id;
+            $studentLogModel->pd = $student->pd;
 
             if ($studentLogModel->save()) {
                 return $this->successResponse();
