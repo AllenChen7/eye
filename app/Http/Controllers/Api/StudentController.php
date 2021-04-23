@@ -253,6 +253,10 @@ class StudentController extends ApiController
             'right' => 'required'
         ]);
 
+        Log::info('request', [
+            'res' => $request->input()
+        ]);
+
         if ($validator->fails()) {
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
