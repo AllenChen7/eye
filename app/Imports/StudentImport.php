@@ -264,7 +264,8 @@ class StudentImport implements ToCollection
 
             $classInfo = YearClass::where([
                 'name' => $class,
-                'class_data_id' => auth()->user()->class_data_id
+                'class_data_id' => auth()->user()->class_data_id,
+                'grade_id' => $gradeInfo['id']
             ])->first();
 
             if (!$classInfo) {
