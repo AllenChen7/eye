@@ -164,6 +164,7 @@ class StudentController extends ApiController
         $data['is_myopia_name'] = Common::isArr()[$data['is_myopia']];
         $data['is_glasses_name'] = Common::isArr()[$data['is_glasses']];
         $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
+        $data['PD'] = $data['pd'];
 
         return $this->successResponse($data);
     }
