@@ -201,13 +201,13 @@ class WxController extends ApiController
         $idCardCheck = IdentityCard::make($request->input('id_card'));
 
         if (!$idCardCheck) {
-            return $this->errorResponse('身份证格式不正确');
+            return $this->errorResponse('请输入正确的身份证！');
         }
 
         $studentInfo = Student::where([
             'name' => $request->input('name'),
             'id_card' => $request->input('id_card')
-        ])->select(['name', 'id_card', 'student_code', 'l_degree', 'r_degree', 'updated_at', 'id', 'class_data_id'])->first();
+        ])->first();
 
         if (!$studentInfo) {
             return $this->errorResponse('很抱歉，您查询的学生不存在');
