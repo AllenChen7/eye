@@ -200,6 +200,8 @@ $api->version('v1', function ($api) {
         $api->get('detail', 'PlanController@detail')->middleware('permission:/project/index-*:/project/index-edit');
         // 完成验光
         $api->post('done', 'PlanController@done')->middleware('permission:/project/index-*:/project/index-edit');
+        // 取消学生的验光
+        $api->post('cancel', 'PlanController@cancel')->middleware('permission:/project/index-*:/project/index-edit');
     });
 
     $api->group([

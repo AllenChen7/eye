@@ -67,6 +67,31 @@ class PlanController extends ApiController
         return $this->errorResponse();
     }
 
+    public function cancel(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'plan_id'  => 'required|exists:plans,id',
+            'student_id' => 'required|exists:students,id'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = Student::whereId($request->input('student_id'))->where([
+            'plan_id' => $request->input('plan_id')
+        ])->update([
+            'plan_id' => 0,
+            'plan_status' => 0
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
+
     public function list(Request $request)
     {
         $name = $request->input('name');
