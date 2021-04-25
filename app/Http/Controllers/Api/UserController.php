@@ -31,7 +31,7 @@ class UserController extends ApiController
         $model->end_time = $timeArr[1] ?? '';
         $model->page = $request->input('page', 1);
         $model->limit = $request->input('limit', 20);
-        $model->type = $request->input('type', 1);
+        $model->type = $request->input('type', 0);
         $model->is_super = $request->input('is_super', 1);
         $count = $model->rowCount();
         $rows = $model->rowsData();
