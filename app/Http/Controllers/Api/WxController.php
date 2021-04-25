@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\Models\ClassData;
 use App\Models\Common;
+use App\Models\Grade;
 use App\Models\Student;
 use App\Models\WxSearchLog;
 use App\Models\WxUser;
+use App\Models\YearClass;
 use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -204,29 +206,43 @@ class WxController extends ApiController
             return $this->errorResponse('请输入正确的身份证！');
         }
 
-        $studentInfo = Student::where([
+        $data = Student::where([
             'name' => $request->input('name'),
             'id_card' => $request->input('id_card')
         ])->first();
 
-        if (!$studentInfo) {
+        if (!$data) {
             return $this->errorResponse('很抱歉，您查询的学生不存在');
         }
+
+        $data['image'] = Common::transPhoto($data['sex']);
+        $data['grade'] = Grade::where([
+                'id' => $data['grade_id']
+            ])->first()->name ?? '-';
+        $data['class'] = YearClass::where([
+                'id' => $data['year_class_id']
+            ])->first()->name ?? '--';
+        $data['sex_name'] = Common::sexArr()[$data['sex']];
+        $data['is_myopia_name'] = Common::isArr()[$data['is_myopia']];
+        $data['is_glasses_name'] = Common::isArr()[$data['is_glasses']];
+        $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
+        $data['PD'] = $data['pd'];
+
         // 记录查询数据
         $searchModel = new WxSearchLog();
         $searchModel->wx_user_id = \auth('wx')->id();
-        $searchModel->student_id = $studentInfo['id'];
-        $searchModel->l_degree = $studentInfo['l_degree'];
-        $searchModel->r_degree = $studentInfo['r_degree'];
-        $searchModel->class_data_id = $studentInfo['class_data_id'];
+        $searchModel->student_id = $data['id'];
+        $searchModel->l_degree = $data['l_degree'];
+        $searchModel->r_degree = $data['r_degree'];
+        $searchModel->class_data_id = $data['class_data_id'];
         $searchModel->save();
 
         WxUser::where([
             'id' => \auth('wx')->id()
         ])->update([
-            'class_data_id' => $studentInfo['class_data_id']
+            'class_data_id' => $data['class_data_id']
         ]);
 
-        return $this->successResponse($studentInfo);
+        return $this->successResponse($data);
     }
 }
