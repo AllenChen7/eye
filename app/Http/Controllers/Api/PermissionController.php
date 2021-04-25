@@ -275,11 +275,11 @@ class PermissionController extends ApiController
         }
 
         $userPermission = Common::getPermissionList();
-        $diff = array_diff($request->input('permission_arr'), $userPermission);
-
-        if ($diff) {
-            return $this->errorResponse('赋予权限数据不正确');
-        }
+//        $diff = array_diff($request->input('permission_arr'), $userPermission);
+//
+//        if ($diff) {
+//            return $this->errorResponse('赋予权限数据不正确');
+//        }
 
         $role = \Spatie\Permission\Models\Role::findById($request->input('id'));
         $role->permissions()->delete();
