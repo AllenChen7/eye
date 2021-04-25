@@ -205,16 +205,16 @@ class Common
                         'name' => '用户管理',
                         'child' => []
                     ],
-                    [
-                        'id' => '/authority/manager',
-                        'name' => '管理员管理',
-                        'child' => []
-                    ],
-                    [
-                        'id' => '/authority/authSet',
-                        'name' => '权限集管理',
-                        'child' => []
-                    ]
+//                    [
+//                        'id' => '/authority/manager',
+//                        'name' => '管理员管理',
+//                        'child' => []
+//                    ],
+//                    [
+//                        'id' => '/authority/authSet',
+//                        'name' => '权限集管理',
+//                        'child' => []
+//                    ]
                 ]
             ],
             [
