@@ -31,7 +31,7 @@ class UserController extends ApiController
         $model->end_time = $timeArr[1] ?? '';
         $model->page = $request->input('page', 1);
         $model->limit = $request->input('limit', 20);
-        $model->type = $request->input('type', 1);
+        $model->type = $request->input('type', 0);
         $model->is_super = $request->input('is_super', 1);
         $count = $model->rowCount();
         $rows = $model->rowsData();
@@ -196,11 +196,12 @@ class UserController extends ApiController
 
     public function update(Request $request)
     {
+        $id = $request->input('id');
         $validator = Validator::make($request->all(), [
-            'name'                  => 'required|max:64|unique:users',
-            'phone'                 => 'required|unique:users|max:32',
-            'remark'                => 'nullable|max:200',
             'id'                    => 'required|exists:users',
+            'name'                  => 'required|max:64|unique:users,id,'.$id,
+            'phone'                 => 'required|max:32|unique:users,id,'.$id,
+            'remark'                => 'nullable|max:200',
             'type'                  => [
                 'required', Rule::in(Common::typeArrKeys()),
             ]

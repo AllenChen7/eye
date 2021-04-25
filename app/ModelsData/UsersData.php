@@ -167,7 +167,8 @@ class UsersData extends User
             }
         } else {
             $query->where([
-                'type' => Common::TYPE_ZONE
+                'type' => Common::TYPE_ZONE,
+                'create_user_id' => auth()->id()
             ]);
 
             if ($this->type) {
