@@ -282,7 +282,7 @@ class PermissionController extends ApiController
 //        }
 
         $role = \Spatie\Permission\Models\Role::findById($request->input('id'));
-        $role->permissions()->delete();
+//        $role->permissions()->delete();
 
         $res = $role->givePermissionTo($request->input('permission_arr'));
 
