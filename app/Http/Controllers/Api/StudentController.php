@@ -103,6 +103,10 @@ class StudentController extends ApiController
             $model->grade_id = $request->input('grade_id');
             $model->year_class_id = $request->input('class_id');
             $model->join_school_date = $request->input('join_school_date');
+            $model->l_sph = (int)$request->input('l_sph');
+            $model->r_sph = (int)$request->input('r_sph');
+            $model->l_degree = (int)$request->input('l_degree');
+            $model->r_degree = (int)$request->input('r_degree');
 
             if ($model->save()) {
                 return $this->successResponse();
