@@ -7,6 +7,7 @@ use App\Models\ClassData;
 use App\Models\Common;
 use App\Models\Grade;
 use App\Models\Student;
+use App\Models\StudentLog;
 use App\Models\WxSearchLog;
 use App\Models\WxUser;
 use App\Models\YearClass;
@@ -227,6 +228,13 @@ class WxController extends ApiController
         $data['is_glasses_name'] = Common::isArr()[$data['is_glasses']];
         $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
         $data['PD'] = $data['pd'];
+
+        $old = StudentLog::where([
+            'student_id' => $data['id']
+        ])->first();
+
+        $data['old_l_degree'] = $old['l_degree'] ?? $data['l_degree'];
+        $data['old_r_degree'] = $old['r_degree'] ?? $old['r_degree'];
 
         // 记录查询数据
         $searchModel = new WxSearchLog();
