@@ -38,6 +38,7 @@ class StudentImport implements ToCollection
         }
 
         foreach ($collection as $key => $row) {
+
             $row = $row->toArray();
             if ($key === 0) {
                 $title = StudentData::excelTitle();
@@ -155,7 +156,16 @@ class StudentImport implements ToCollection
                 continue;
             }
 
-            if ($isMyopia == '是') {
+            if (!in_array($isMyopia, Common::isMyopiaArr())) {
+                $row[1] = "\t" . $row[1];
+                $row[count($row) + 1] = '近视类型错误';
+                $this->cacheData[] = $row;
+                $this->errorFlag = 1;
+                continue;
+            }
+
+            // 正常、近视、远视
+            if ($isMyopia == '近视' || $isMyopia == '远视') {
                 if (!$isGlasses) {
                     $row[1] = "\t" . $row[1];
                     $row[count($row) + 1] = '是否佩戴眼镜不可为空';
@@ -218,11 +228,16 @@ class StudentImport implements ToCollection
             }
 
             if (!isDate($birthday)) {
-                $row[1] = "\t" . $row[1];
-                $row[count($row) + 1] = '出生年月日格式不对，正确格式为：“yyyy-mm-dd”';
-                $this->cacheData[] = $row;
-                $this->errorFlag = 1;
-                continue;
+
+                $birthday = transDate($birthday);
+
+                if (!isDate($birthday)) {
+                    $row[1] = "\t" . $row[1];
+                    $row[count($row) + 1] = '出生年月日格式不对，正确格式为：“yyyy-mm-dd”';
+                    $this->cacheData[] = $row;
+                    $this->errorFlag = 1;
+                    continue;
+                }
             }
 
             if (!isDate($joinSchoolDay . '-01-01')) {

@@ -28,6 +28,7 @@ class Common
     const YES = 1;
     const NO = 2;
     const UNKNOWN = 0; // 未知
+    const OTHER = 3; // 未知
 
     // 学生状态
     const STU_STATUS_ACTIVE = 1;
@@ -115,6 +116,16 @@ class Common
         ];
     }
 
+    public static function isMyopiaArr()
+    {
+        return [
+            self::YES => '正常',
+            self::NO => '近视',
+            self::OTHER => '远视',
+            self::UNKNOWN => '未知'
+        ];
+    }
+
     /**
      * @return int[]
      */
@@ -122,7 +133,8 @@ class Common
     {
         return [
             self::YES,
-            self::NO
+            self::NO,
+            self::UNKNOWN
         ];
     }
 
@@ -181,7 +193,7 @@ class Common
         $year = $arr[0];
         $nowYear = date('Y');
 
-        return $nowYear - $year + 1; // todo
+        return $nowYear - $year;
     }
 
     /**
