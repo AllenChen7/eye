@@ -198,8 +198,8 @@ class UserController extends ApiController
     {
         $id = $request->input('id');
         $validator = Validator::make($request->all(), [
-            'name'                  => 'required|max:64|unique:users'.$id,
-            'phone'                 => 'required|unique:users|max:32'.$id,
+            'name'                  => 'required|max:64|unique:users,'.$id,
+            'phone'                 => 'required|max:32|unique:users,'.$id,
             'remark'                => 'nullable|max:200',
             'id'                    => 'required|exists:users',
             'type'                  => [
