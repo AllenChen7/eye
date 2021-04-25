@@ -100,7 +100,7 @@ class StudentData
             $query->where('student_code', 'like', '%' . $this->studentCode . '%');
         }
 
-        if ($this->sex === '0' || $this->sex === '1') {
+        if ($this->sex === '0' || $this->sex === '1' || $this->sex === '2') {
             $query->where([
                 'sex' => $this->sex
             ]);
