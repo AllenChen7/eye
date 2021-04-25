@@ -20,7 +20,7 @@ class HomeController extends ApiController
         $idArr = (new ClassData())->idArr();
 
         if (!$idArr) {
-            return $this->errorResponse();
+            return $this->successResponse();
         }
 
         $studentArr = Student::whereIn('class_data_id', $idArr)->get();
