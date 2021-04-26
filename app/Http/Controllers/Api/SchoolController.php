@@ -282,6 +282,8 @@ class SchoolController extends ApiController
         $gradeId = $request->input('id', 0);
         $limit = $request->input('limit', 20);
         $page = $request->input('page', 1);
+        $name = $request->input('name', '');
+        $status = $request->input('status', '');
 
         if (!$gradeId) {
             $gradeId = auth()->user()->class_data_id;
@@ -301,9 +303,20 @@ class SchoolController extends ApiController
         }
 
         $query = Grade::where([
-            'class_data_id' => $gradeId,
-            'status' => Common::YES
+            'class_data_id' => $gradeId
         ])->orderByDesc('id');
+
+        $name = trim($name);
+
+        if ($name) {
+            $query->where('name', 'like', '%' . $name . '%');
+        }
+
+        if ($status === '0' || $status === '1') {
+            $query->where([
+                'status' => $status
+            ]);
+        }
 
         $count = $query->count();
         $offset = $page <= 1 ? 0 : ($page - 1) * $limit;
