@@ -142,6 +142,7 @@ class SchoolController extends ApiController
             $model->grade_id = $request->input('id');
             $model->name = $class;
             $model->class_data_id = auth()->user()->class_data_id;
+            $model->create_user_id = auth()->id();
 
             if ($model->save()) {
                 $insertData[] = $model;
