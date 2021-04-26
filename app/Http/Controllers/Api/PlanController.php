@@ -162,6 +162,12 @@ class PlanController extends ApiController
                 'year_class_id' => $row['year_class_id']
             ])->count();
             $row['status_name'] = Common::planStatusArr()[$row['status']];
+            $student = Student::where([
+                'plan_id' => $row['id'],
+                'plan_status' => 1
+            ])->first();
+
+            $row['next_id'] = $student['id'] ?? 0;
 
             if (strtotime($row['plan_date']) < time()) {
                 $row['status_name'] = '超时未执行';
