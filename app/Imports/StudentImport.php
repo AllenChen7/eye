@@ -30,13 +30,6 @@ class StudentImport implements ToCollection
             return false;
         }
 
-        if ($collection->count() < 2) {
-            $this->errorFlag = -1;
-            $this->cacheStr = '导入数据为空';
-
-            return false;
-        }
-
         foreach ($collection as $key => $row) {
 
             $row = $row->toArray();
