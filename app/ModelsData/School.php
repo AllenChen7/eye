@@ -11,6 +11,7 @@ class School
 {
     /**
      * @param $classArr
+     * @param $gradeId
      * @return \Illuminate\Support\Collection
      */
     public static function yearClassByName($classArr, $gradeId)
