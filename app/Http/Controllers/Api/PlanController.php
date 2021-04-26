@@ -53,6 +53,14 @@ class PlanController extends ApiController
 
         $model->class_data_id = $classInfo['class_data_id'];
 
+        $stuEx = Student::where([
+            'year_class_id' => $request->input('class_id')
+        ])->first();
+
+        if (!$stuEx) {
+            return $this->errorResponse('该年级下没有学生，请先创建学生信息');
+        }
+
         if ($model->save()) {
             // 将学生列入验光计划
             Student::where([
