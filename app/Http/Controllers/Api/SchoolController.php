@@ -611,4 +611,36 @@ class SchoolController extends ApiController
 
         return $this->errorResponse();
     }
+
+    /**
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     */
+    public function updateGradeStatus(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'status'                  => [
+                'required', Rule::in([0, 1]),
+            ],
+            'id' => 'required|exists:grades'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('验证错误', $validator->errors(), 422);
+        }
+
+        $res = Grade::where([
+            'id' => $request->input('id')
+        ])->update([
+            'status' => $request->input('status')
+        ]);
+
+        if ($res) {
+            return $this->successResponse();
+        }
+
+        return $this->errorResponse();
+    }
 }

@@ -121,8 +121,6 @@ $api->version('v1', function ($api) {
         $api->post('delete-class', 'SchoolController@deleteClass')->middleware('permission:/school-*:/school/grade-*:/school/grade-delete');
         // 年级列表
         $api->get('grade-list', 'SchoolController@gradeList')->middleware('permission:/school-*:/school/grade-*:/school/grade-view');
-        // 查看年级
-        $api->get('view-grade', 'SchoolController@viewGrade');
         // 学校状态修改
         $api->get('view-grade', 'SchoolController@viewGrade')->middleware('permission:/school-*:/school/index-*:/school/index-edit');
         // 修改学校名称
@@ -134,6 +132,8 @@ $api->version('v1', function ($api) {
         // 删除
         $api->post('delete', 'SchoolController@delete')->middleware('permission:/school-*:/school/index-*:/school/index-edit');
         $api->post('delete-school', 'SchoolController@deleteSchool')->middleware('permission:/school-*:/school/index-*:/school/index-edit');
+        // 修改年级状态
+        $api->post('update-grade-status', 'SchoolController@updateGradeStatus')->middleware('permission:/school-*:/school/grade-*:/school/grade-edit');
     });
 
     $api->group([
