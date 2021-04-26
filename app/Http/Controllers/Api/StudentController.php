@@ -51,11 +51,11 @@ class StudentController extends ApiController
         });
 
         $validator->sometimes('l_degree', 'required', function ($input) {
-            return $input->is_myopia == Common::NO || Common::OTHER;
+            return $input->is_myopia == Common::NO || $input->is_myopia == Common::OTHER;
         });
 
         $validator->sometimes('r_degree', 'required', function ($input) {
-            return $input->is_myopia == Common::NO || Common::OTHER;
+            return $input->is_myopia == Common::NO || $input->is_myopia == Common::OTHER;
         });
 
         if ($validator->fails()) {
