@@ -122,7 +122,7 @@ class SchoolController extends ApiController
             return $this->errorResponse('验证错误', $data, 422);
         }
 
-        $exists = School::yearClassByName($request->input('class'));
+        $exists = School::yearClassByName($request->input('class'), $gradeId);
 
         if ($exists->isNotEmpty()) {
             $data = [

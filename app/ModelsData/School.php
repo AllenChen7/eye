@@ -13,9 +13,11 @@ class School
      * @param $classArr
      * @return \Illuminate\Support\Collection
      */
-    public static function yearClassByName($classArr)
+    public static function yearClassByName($classArr, $gradeId)
     {
-        return YearClass::whereIn('name', $classArr)->get();
+        return YearClass::whereIn('name', $classArr)->where([
+            'grade_id' => $gradeId
+        ])->get();
     }
 
     /**
