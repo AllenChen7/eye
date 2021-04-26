@@ -479,6 +479,8 @@ class SchoolController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
+        $status = $request->input('status', 0);
+
         $idArr = (new ClassData())->idArr();
 
         if (!in_array($request->input('id'), $idArr)) {
@@ -488,7 +490,7 @@ class SchoolController extends ApiController
         $res = ClassData::where([
             'id' => $request->input('id')
         ])->update([
-            'status' => Common::STATUS_DISABLED
+            'status' => $status
         ]);
 
         if ($res) {
@@ -496,7 +498,7 @@ class SchoolController extends ApiController
             User::where([
                 'class_data_id' => $request->input('id')
             ])->update([
-                'status' => Common::NO
+                'status' => $status
             ]);
 
             return $this->successResponse();

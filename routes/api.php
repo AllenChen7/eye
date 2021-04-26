@@ -130,9 +130,10 @@ $api->version('v1', function ($api) {
         // 学校列表
         $api->get('school-list', 'SchoolController@schoolList');
         // 将学校置为无效
-        $api->post('update-status', 'SchoolController@deleteSchool');
+        $api->post('update-status', 'SchoolController@deleteSchool')->middleware('permission:/school-*:/school/index-*:/school/index-edit');
         // 删除
-        $api->post('delete', 'SchoolController@delete');
+        $api->post('delete', 'SchoolController@delete')->middleware('permission:/school-*:/school/index-*:/school/index-edit');
+        $api->post('delete-school', 'SchoolController@deleteSchool')->middleware('permission:/school-*:/school/index-*:/school/index-edit');
     });
 
     $api->group([
