@@ -422,6 +422,9 @@ class SchoolController extends ApiController
         $res = Grade::whereId($request->input('id'))->delete();
 
         if ($res) {
+            YearClass::where([
+                'grade_id' => $request->input('id')
+            ])->delete();
             return $this->successResponse();
         }
 
@@ -594,6 +597,12 @@ class SchoolController extends ApiController
         $res = ClassData::whereId($id)->delete();
 
         if ($res) {
+            Grade::where([
+                'class_data_id' => $id
+            ])->delete();
+            YearClass::where([
+                'class_data_id' => $id
+            ])->delete();
             return $this->successResponse();
         }
 
