@@ -38,7 +38,7 @@ class StudentController extends ApiController
             'grade_id'              => 'required|exists:grades,id',
             'class_id'              => 'required|exists:year_classes,id',
             'is_myopia'             => [
-                'required', Rule::in(Common::isKeys()),
+                'required', Rule::in(array_flip(Common::isMyopiaArr())),
             ],
             'is_glasses'            => [
                 'required', Rule::in(Common::isKeys())
@@ -51,11 +51,11 @@ class StudentController extends ApiController
         });
 
         $validator->sometimes('l_degree', 'required', function ($input) {
-            return $input->is_glasses;
+            return $input->is_myopia == Common::NO || Common::OTHER;
         });
 
         $validator->sometimes('r_degree', 'required', function ($input) {
-            return $input->is_glasses;
+            return $input->is_myopia == Common::NO || Common::OTHER;
         });
 
         if ($validator->fails()) {
