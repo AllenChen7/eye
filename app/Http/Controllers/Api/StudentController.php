@@ -11,7 +11,6 @@ use App\Models\Grade;
 use App\Models\Student;
 use App\Models\StudentLog;
 use App\Models\YearClass;
-use App\ModelsData\School;
 use App\ModelsData\StudentData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -129,10 +128,6 @@ class StudentController extends ApiController
         $model->page = $request->input('page', $model->page);
         $model->sex = $request->input('sex', '');
         $model->joinDate = $request->input('date');
-        Log::notice('input', [
-            'input' => $request->input(),
-            'model' => $model->sex
-        ]);
 
         $count = $model->rowCount();
         $rows = $model->rowData();

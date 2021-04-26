@@ -250,12 +250,6 @@ class PlanController extends ApiController
 
         if ($se) {
             return $this->errorResponse('已有数据，不能被删除');
-        } else {
-            $sle = StudentLog::wherePlanId($request->input('id'))->exists();
-
-            if ($sle) {
-                return $this->errorResponse('已有数据，不能被删除');
-            }
         }
 
         $res = Plan::where([
