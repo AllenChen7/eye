@@ -32,7 +32,7 @@ class PlanController extends ApiController
 
         $model = new Plan();
         $model->name = $request->input('name');
-        $model->plan_date = $request->input('plan_date');
+        $model->plan_date = $request->input('plan_date') . ' 23:59:59';
         $model->plan_user = $request->input('plan_user');
         $model->remark = $request->input('remark');
         $model->grade_id = $request->input('grade_id');
