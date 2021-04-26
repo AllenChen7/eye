@@ -279,7 +279,7 @@ class StudentImport implements ToCollection
 
             if (!$classInfo) {
                 $row[1] = "\t" . $row[1];
-                $row[count($row) + 1] = '班级在系统中不存在，请填写系统中正确的年级名称（请到学校管理中查看）';
+                $row[count($row) + 1] = '班级在系统中不存在，请填写系统中正确的班级名称（请到学校管理中查看）';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
                 continue;
