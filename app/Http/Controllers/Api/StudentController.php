@@ -457,7 +457,7 @@ class StudentController extends ApiController
     public function delete(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id'              => 'required|exists:student,id'
+            'id'              => 'required|exists:students,id'
         ]);
 
         if ($validator->fails()) {
