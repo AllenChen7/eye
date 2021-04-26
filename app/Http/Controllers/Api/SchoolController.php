@@ -411,9 +411,15 @@ class SchoolController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $res = Grade::whereId($request->input('id'))->update([
-            'status' => Common::STATUS_DISABLED
-        ]);
+        $ex = Student::where([
+            'grade_id' => $request->input('id'),
+        ])->first();
+
+        if ($ex) {
+            return $this->errorResponse('当前年级下已有学生，不允许删除');
+        }
+
+        $res = Grade::whereId($request->input('id'))->delete();
 
         if ($res) {
             return $this->successResponse();
@@ -437,9 +443,15 @@ class SchoolController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $res = YearClass::whereId($request->input('id'))->update([
-            'status' => Common::STATUS_DISABLED
-        ]);
+        $ex = Student::where([
+            'year_class_id' => $request->input('id'),
+        ])->first();
+
+        if ($ex) {
+            return $this->errorResponse('当前班级下已有学生，不允许删除');
+        }
+
+        $res = YearClass::whereId($request->input('id'))->delete();
 
         if ($res) {
             return $this->successResponse();
