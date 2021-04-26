@@ -17,7 +17,8 @@ class School
     public static function yearClassByName($classArr, $gradeId)
     {
         return YearClass::whereIn('name', $classArr)->where([
-            'grade_id' => $gradeId
+            'grade_id' => $gradeId,
+            'status' => 1
         ])->get();
     }
 
