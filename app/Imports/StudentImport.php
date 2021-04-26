@@ -33,16 +33,17 @@ class StudentImport implements ToCollection
         foreach ($collection as $key => $row) {
 
             $row = $row->toArray();
+
             if ($key === 0) {
                 $title = StudentData::excelTitle();
                 $titleStr = implode('-', $title);
                 $excelTitleStr = implode('-', $row);
 
                 if ($titleStr != $excelTitleStr) {
-                    return [
-                        'code' => '1',
-                        'msg' => '导入模版不正确'
-                    ];
+                    $this->errorFlag = -1;
+                    $this->cacheStr = '导入模版不正确';
+
+                    return false;
                 }
 
                 continue;
