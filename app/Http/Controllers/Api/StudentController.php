@@ -106,6 +106,14 @@ class StudentController extends ApiController
             }
             // 否则进行更新到本次提交数据
         } else {
+            $exCode = Student::where([
+                'student_code' => $request->input('student_code')
+            ])->first();
+
+            if ($exCode) {
+                return $this->errorResponse('学号不能重复。');
+            }
+
             $model = new Student($request->input());
             $model->create_user_id = auth()->id();
             $model->class_data_id = auth()->user()->class_data_id;

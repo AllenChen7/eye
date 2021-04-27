@@ -347,6 +347,18 @@ class StudentImport implements ToCollection
                     $studentInfo->plan_status = 0;
                 }
             } else {
+                $exCode = Student::where([
+                    'student_code' => $studentCode
+                ])->first();
+
+                if ($exCode) {
+                    $row[1] = "\t" . $row[1];
+                    $row[count($row) + 1] = '学号不能重复。';
+                    $this->cacheData[] = $row;
+                    $this->errorFlag = 1;
+                    continue;
+                }
+
                 $studentInfo = new Student();
                 $studentInfo->id_card = $idCard;
             }
