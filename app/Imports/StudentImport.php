@@ -337,16 +337,16 @@ class StudentImport implements ToCollection
             }
 
             $studentInfo->name = $studentName;
-            $studentInfo->sex = '男' ? 1 : 2;
+            $studentInfo->sex = $sex == '男' ? 1 : 2;
             $studentInfo->student_code = $studentCode;
             $studentInfo->birthday = $birthday;
             $studentInfo->class_data_id = auth()->user()->class_data_id;
             $studentInfo->grade_id = $gradeInfo['id'];
             $studentInfo->year_class_id = $classInfo['id'];
             $studentInfo->create_user_id = auth()->id();
-            $studentInfo->is_myopia = '是' ? 1 : 0;
-            $studentInfo->is_glasses = '是' ? 1 : 0;
-            $studentInfo->glasses_type = '隐形眼镜' ? 1 : 0;
+            $studentInfo->is_myopia = array_flip(Common::isMyopiaArr())[$isMyopia] ?? Common::UNKNOWN;
+            $studentInfo->is_glasses = $isGlasses == '是' ? 1 : 0;
+            $studentInfo->glasses_type = $glassesType == '隐形眼镜' ? 1 : 0;
             $studentInfo->l_degree = intval($lDegree);
             $studentInfo->r_degree = intval($rDegree);
             $studentInfo->join_school_date = $joinSchoolDay;
