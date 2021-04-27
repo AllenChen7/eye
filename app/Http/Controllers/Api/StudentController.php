@@ -71,6 +71,16 @@ class StudentController extends ApiController
 
         if ($oldData) {
 
+            if ($oldData['student_code'] != $request->input('student_code')) {
+                $exCode = Student::where([
+                    'student_code' => $request->input('student_code')
+                ])->first();
+
+                if ($exCode) {
+                    return $this->errorResponse('学号不能重复。');
+                }
+            }
+
             // 班级发生改变时，验光计划恢复初始化
             if ($oldData->class_data_id != auth()->user()->class_date_id ||
                 $oldData->grade_id != $request->input('grade_id') ||

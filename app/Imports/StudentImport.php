@@ -324,6 +324,21 @@ class StudentImport implements ToCollection
             ])->first();
 
             if ($studentInfo) {
+
+                if ($studentInfo['student_code'] != $studentCode) {
+                    $exCode = Student::where([
+                        'student_code' => $studentCode
+                    ])->first();
+
+                    if ($exCode) {
+                        $row[1] = "\t" . $row[1];
+                        $row[count($row) + 1] = '学号不能重复。';
+                        $this->cacheData[] = $row;
+                        $this->errorFlag = 1;
+                        continue;
+                    }
+                }
+
                 // 班级发生改变时，验光计划恢复初始化
                 if ($studentInfo->class_data_id != auth()->user()->class_data_id ||
                     $studentInfo->grade_id != $gradeInfo['id'] ||
