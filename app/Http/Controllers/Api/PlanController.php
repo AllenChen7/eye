@@ -303,6 +303,11 @@ class PlanController extends ApiController
         ])->first();
 
         $data['next_id'] = $student['id'] ?? ($data['studentIdArr'][0] ?? 0);
+        \Log::notice('plan data', [
+            'plan data' => $data['plan_data'],
+            'time' => time(),
+            'str' => strtotime($data['plan_data'])
+        ]);
 
         if (strtotime($data['plan_data']) < time()) {
             $data['status_name'] = '超时未验光';
