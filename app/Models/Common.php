@@ -41,8 +41,8 @@ class Common
     const PLAN_STATUS_PASS = 0; // 超时了
 
     // 眼镜类型
-    const GLA_TYPE_NORMAL = 1;
-    const GLA_TYPE_LENS = 2;
+    const GLA_TYPE_NORMAL = 0;
+    const GLA_TYPE_LENS = 1;
 
     /**
      * 层级类型

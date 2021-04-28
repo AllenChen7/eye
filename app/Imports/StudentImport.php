@@ -373,7 +373,7 @@ class StudentImport implements ToCollection
             $studentInfo->create_user_id = auth()->id();
             $studentInfo->is_myopia = array_flip(Common::isMyopiaArr())[$isMyopia] ?? Common::UNKNOWN;
             $studentInfo->is_glasses = $isGlasses == '是' ? 1 : 2;
-            $studentInfo->glasses_type = $glassesType == '隐形眼镜' ? 1 : 2;
+            $studentInfo->glasses_type = $glassesType == '隐形眼镜' ? 1 : 0;
             $studentInfo->l_degree = intval($lDegree);
             $studentInfo->r_degree = intval($rDegree);
             $studentInfo->join_school_date = $joinSchoolDay;
