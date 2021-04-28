@@ -438,9 +438,9 @@ class Common
     public static function transPhoto($sex = 1)
     {
         if ($sex) {
-            return 'http://todo.hyyphp.online/uploads/images/avatars/202012/04/14_1607087777_12WaTMK3AT.jpeg';
+            return asset('storage/man.png');
         } else {
-            return 'http://todo.hyyphp.online/uploads/images/avatars/202012/04/14_1607087777_12WaTMK3AT.jpeg';
+            return asset('storage/woman.png');
         }
     }
 }
