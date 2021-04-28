@@ -283,7 +283,19 @@ class PlanController extends ApiController
         ])->get();
         $data['count'] = $student->count();
         $data['studentIdArr'] = $student->pluck('id');
+
+        $infoArr = [];
+
+        foreach ($student as $s) {
+            $infoArr[] = [
+                'id' => $s['id'],
+                'name' => $s['name'],
+                'status' => $s['plan_status'] == 2 ? '待验光' : '已验光' ,
+                'image' => Common::transPhoto($s['sex'])
+            ];
+        }
         $data['status_name'] = Common::planStatusArr()[$data['status']];
+        $data['infoArr'] = $infoArr;
 
         $student = Student::where([
             'plan_id' => $request->input('id'),
