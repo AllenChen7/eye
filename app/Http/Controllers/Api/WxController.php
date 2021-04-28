@@ -219,7 +219,7 @@ class WxController extends ApiController
         $data['image'] = Common::transPhoto($data['sex']);
         $data['grade'] = Grade::where([
                 'id' => $data['grade_id']
-            ])->first()->name ?? '-';
+            ])->first()->name ?? '--';
         $data['class'] = YearClass::where([
                 'id' => $data['year_class_id']
             ])->first()->name ?? '--';
@@ -235,6 +235,8 @@ class WxController extends ApiController
 
         $data['old_l_degree'] = $old['l_degree'] ?? $data['l_degree'];
         $data['old_r_degree'] = $old['r_degree'] ?? $old['r_degree'];
+        $data['school_name'] = ClassData::whereId($data['class_data_id'])->first()->name ?? '--';
+        $data['age'] = Common::transYearOld($data['birthday']);
 
         // 记录查询数据
         $searchModel = new WxSearchLog();
