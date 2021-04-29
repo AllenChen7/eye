@@ -30,7 +30,7 @@ class StudentController extends ApiController
         $validator = Validator::make($request->all(), [
             'name'                  => 'required|max:50',
             'birthday'              => 'required|date',
-            'student_code'          => 'required|max:50',
+            'student_code'          => 'required|max:32',
             'id_card'               => 'required|max:50',
             'sex'                   => [
                 'required', Rule::in(Common::sexArrKeys()),
@@ -73,11 +73,12 @@ class StudentController extends ApiController
 
             if ($oldData['student_code'] != $request->input('student_code')) {
                 $exCode = Student::where([
-                    'student_code' => $request->input('student_code')
+                    'student_code' => $request->input('student_code'),
+                    'class_data_id' => auth()->user()->class_data_id
                 ])->first();
 
                 if ($exCode) {
-                    return $this->errorResponse('学号不能重复。');
+                    return $this->errorResponse('学号在此校重复！');
                 }
             }
 
@@ -107,11 +108,12 @@ class StudentController extends ApiController
             // 否则进行更新到本次提交数据
         } else {
             $exCode = Student::where([
-                'student_code' => $request->input('student_code')
+                'student_code' => $request->input('student_code'),
+                'class_data_id' => auth()->user()->class_data_id
             ])->first();
 
             if ($exCode) {
-                return $this->errorResponse('学号不能重复。');
+                return $this->errorResponse('学号在此校重复！');
             }
 
             $model = new Student($request->input());

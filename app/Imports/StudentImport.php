@@ -242,17 +242,17 @@ class StudentImport implements ToCollection
                 continue;
             }
 
-            if (!is_numeric($studentCode)) {
-                $row[1] = "\t" . $row[1];
-                $row[count($row) + 1] = '学号格式错误，仅支持阿拉伯数字';
-                $this->cacheData[] = $row;
-                $this->errorFlag = 1;
-                continue;
-            }
+//            if (!is_numeric($studentCode)) {
+//                $row[1] = "\t" . $row[1];
+//                $row[count($row) + 1] = '学号格式错误，仅支持阿拉伯数字';
+//                $this->cacheData[] = $row;
+//                $this->errorFlag = 1;
+//                continue;
+//            }
 
             if (mb_strlen($studentCode) > 32) {
                 $row[1] = "\t" . $row[1];
-                $row[count($row) + 1] = '学号最多可填32个数字';
+                $row[count($row) + 1] = '学号字符长度不应超过32位！';
                 $this->cacheData[] = $row;
                 $this->errorFlag = 1;
                 continue;
@@ -327,12 +327,13 @@ class StudentImport implements ToCollection
 
                 if ($studentInfo['student_code'] != $studentCode) {
                     $exCode = Student::where([
-                        'student_code' => $studentCode
+                        'student_code' => $studentCode,
+                        'class_data_id' => auth()->user()->class_data_id
                     ])->first();
 
                     if ($exCode) {
                         $row[1] = "\t" . $row[1];
-                        $row[count($row) + 1] = '学号不能重复。';
+                        $row[count($row) + 1] = '学号在此校重复！';
                         $this->cacheData[] = $row;
                         $this->errorFlag = 1;
                         continue;
@@ -348,12 +349,13 @@ class StudentImport implements ToCollection
                 }
             } else {
                 $exCode = Student::where([
-                    'student_code' => $studentCode
+                    'student_code' => $studentCode,
+                    'class_data_id' => auth()->user()->class_data_id
                 ])->first();
 
                 if ($exCode) {
                     $row[1] = "\t" . $row[1];
-                    $row[count($row) + 1] = '学号不能重复。';
+                    $row[count($row) + 1] = '学号在此校重复！';
                     $this->cacheData[] = $row;
                     $this->errorFlag = 1;
                     continue;
