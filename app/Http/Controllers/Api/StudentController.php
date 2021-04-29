@@ -182,6 +182,7 @@ class StudentController extends ApiController
         $data['is_glasses_name'] = Common::isArr()[$data['is_glasses']];
         $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
         $data['PD'] = $data['pd'];
+        $data['age'] = Common::transYearOld($data['birthday']);
 
         return $this->successResponse($data);
     }
