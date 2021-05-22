@@ -290,7 +290,7 @@ class PlanController extends ApiController
             $infoArr[] = [
                 'id' => $s['id'],
                 'name' => $s['name'],
-                'status' => $s['plan_status'] == 2 ? '待验光' : '已验光' ,
+                'status' => $s['plan_status'] == 2 ? '已验光' : '待验光' ,
                 'image' => Common::transPhoto($s['sex'])
             ];
         }
