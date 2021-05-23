@@ -124,12 +124,21 @@ class HomeController extends ApiController
             '1000' => 0,
         ];
         $schoolGroup = [];
+        $newCount = 0;
+        $oldCount = 0;
+
+        foreach ($studentOldList as $item) {
+            if ($item['is_myopia'] == Common::NO) { // 先以此判断是否近视
+                $oldCount++;
+            }
+        }
 
         foreach ($studentList as $item) {
             if ($item['is_myopia'] == Common::NO) { // 先以此判断是否近视
                 $sexGroup[$item['sex']][] = $item;
                 $gradeGroup[$item['grade_id']][] = $item;
                 $yearGroup[Common::transYearOld($item['birthday'])][] = $item;
+                $newCount++;
             }
 
             $schoolGroup[$item['year_class_id']][] = $item;
@@ -152,6 +161,8 @@ class HomeController extends ApiController
                 $randArr['1000']++;
             }
         }
+        // 公式：（今年数-上年数）÷上年数×100%即可算出
+        $rate = $oldCount ? ($newCount - $oldCount) / $oldCount * 100 : 100;
 
         $yearGroupArr = [];
 
@@ -209,7 +220,7 @@ class HomeController extends ApiController
 
             $schoolGroupArr[] = [
                 'name' => $s,
-                'ratio' => $count <= 0 ? 0 : $isM / $count,
+                'ratio' => $count <= 0 ? 0 : $isM / $count * 100,
                 'isM'   =>  $isM
             ];
         }
@@ -230,12 +241,19 @@ class HomeController extends ApiController
             $schoolRatioArr[] = $v;
         }
 
+        $isMRateArr = [
+            'now' => $newCount,
+            'old' => $oldCount,
+            'rate'=> $rate
+        ];
+
         return $this->successResponse([
             'yearGroupArr'  => $yearGroupArr,
             'sexGroupArr'   => $sexGroupArr,
             'gradeGroupArr' => $gradeGroupArr,
             'randArr'       => $randArr,
-            'schoolRatioArr'    => $schoolRatioArr
+            'schoolRatioArr'    => $schoolRatioArr,
+            'isMRateArr'       => $isMRateArr
         ]);
     }
 }
