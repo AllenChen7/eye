@@ -163,7 +163,7 @@ class PlanController extends ApiController
             ])->count();
             $row['status_name'] = Common::planStatusArr()[$row['status']];
 
-            if (strtotime($row['plan_date']) < time()) {
+            if ($type == 1 && strtotime($row['plan_date']) < time()) {
                 $row['status_name'] = '超时未执行';
             }
         }
