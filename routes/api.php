@@ -218,8 +218,8 @@ $api->version('v1', function ($api) {
         'middleware' => 'jwt.auth',
         'prefix'     => 'home'
     ], function ($api) {
-        // 检测是否有更新
         $api->get('index', 'HomeController@index');
+        $api->get('home', 'HomeController@home');
     });
 
     $api->group([

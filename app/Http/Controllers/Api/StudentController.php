@@ -168,9 +168,18 @@ class StudentController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $data = Student::where([
-            'id' => $request->input('id')
-        ])->first();
+        $planId = $request->input('plan_id', 0);
+
+        if ($planId) {
+            $data = StudentLog::where([
+                'student_id' => $request->input('id'),
+                'plan_id'   => $planId
+            ])->orderByDesc('id')->first();
+        } else {
+            $data = Student::where([
+                'id' => $request->input('id')
+            ])->first();
+        }
 
         $data['image'] = Common::transPhoto($data['sex']);
         $data['grade'] = Grade::where([
@@ -273,19 +282,64 @@ class StudentController extends ApiController
             'right' => 'required'
         ]);
 
-        Log::info('request', [
-            'res' => $request->input()
-        ]);
-
         if ($validator->fails()) {
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
+        Log::alert('input', $request->input());
         $left = $request->input('left');
         $right = $request->input('right');
         $student = Student::whereId([
             'id' => $request->input('id')
         ])->first();
+
+        $studentLogModel = StudentLog::where([
+            'student_id' => $request->input('id'),
+            'plan_id'   => $student->plan_id
+        ])->first();
+
+        if (!$studentLogModel) {
+            $studentLogModel = new StudentLog();
+            $studentLogModel->student_id = $request->input('id');
+            $studentLogModel->name = $student['name'];
+            $studentLogModel->sex = $student->sex;
+            $studentLogModel->student_code = $student->student_code;
+            $studentLogModel->id_card = $student->id_card;
+            $studentLogModel->birthday = $student->birthday;
+            $studentLogModel->class_data_id = $student->class_data_id;
+            $studentLogModel->grade_id = $student->grade_id;
+            $studentLogModel->year_class_id = $student->year_class_id;
+            $studentLogModel->create_user_id = auth()->id();
+            $studentLogModel->is_myopia = $student->is_myopia;
+            $studentLogModel->is_glasses = $student->is_glasses;
+            $studentLogModel->glasses_type = $student->glasses_type;
+            $studentLogModel->status = $student->status;
+            $studentLogModel->join_school_date = $student->join_school_date;
+            $studentLogModel->is_del = $student->is_del;
+            $studentLogModel->plan_id = $student->plan_id;
+        }
+
+        $studentLogModel->l_degree = $left['sph'] ?? 0;
+        $studentLogModel->l_sph = $left['sph'] ?? 0;
+        $studentLogModel->l_cyl = $left['cyl'] ?? 0;
+        $studentLogModel->l_axi = $left['axi'] ?? 0;
+        $studentLogModel->l_roc1 = $left['roc1'] ?? 0;
+        $studentLogModel->l_roc2 = $left['roc2'] ?? 0;
+        $studentLogModel->l_axis = $left['axis'] ?? 0;
+        $studentLogModel->r_degree = $right['sph'] ?? 0;
+        $studentLogModel->r_sph = $right['sph'] ?? 0;
+        $studentLogModel->r_cyl = $right['cyl'] ?? 0;
+        $studentLogModel->r_axi = $right['axi'] ?? 0;
+        $studentLogModel->r_roc1 = $right['roc1'] ?? 0;
+        $studentLogModel->r_roc2 = $right['roc2'] ?? 0;
+        $studentLogModel->r_axis = $right['axis'] ?? 0;
+        $studentLogModel->pd = $left['PD'] ?? 0;
+        $studentLogModel->plan_date = date('Y');
+
+        if (!$studentLogModel->save()) {
+            Log::error('save error', $studentLogModel);
+            return $this->errorResponse();
+        }
 
         $res = Student::where([
             'id' => $request->input('id')
@@ -305,49 +359,12 @@ class StudentController extends ApiController
             'r_roc2' => $right['roc2'] ?? 0,
             'r_axis' => $right['axis'] ?? 0,
             'plan_status'   => 2,
-            'pd'    => $left['PD'] ?? 0
+            'pd'    => $left['PD'] ?? 0,
+            'plan_date' =>  date('Y')
         ]);
 
         if ($res) {
-            // 快照数据
-            $studentLogModel = new StudentLog();
-            $studentLogModel->student_id = $request->input('id');
-            $studentLogModel->name = $student['name'];
-            $studentLogModel->sex = $student->sex;
-            $studentLogModel->student_code = $student->student_code;
-            $studentLogModel->id_card = $student->id_card;
-            $studentLogModel->birthday = $student->birthday;
-            $studentLogModel->class_data_id = $student->class_data_id;
-            $studentLogModel->grade_id = $student->grade_id;
-            $studentLogModel->year_class_id = $student->year_class_id;
-            $studentLogModel->create_user_id = auth()->id();
-            $studentLogModel->is_myopia = $student->is_myopia;
-            $studentLogModel->is_glasses = $student->is_glasses;
-            $studentLogModel->glasses_type = $student->glasses_type;
-            $studentLogModel->status = $student->status;
-            $studentLogModel->join_school_date = $student->join_school_date;
-            $studentLogModel->is_del = $student->is_del;
-            $studentLogModel->l_degree = $student->l_degree;
-            $studentLogModel->l_sph = $student->l_sph;
-            $studentLogModel->l_cyl = $student->l_cyl;
-            $studentLogModel->l_axi = $student->l_axi;
-            $studentLogModel->l_roc1 = $student->l_roc1;
-            $studentLogModel->l_roc2 = $student->l_roc2;
-            $studentLogModel->l_axis = $student->l_axis;
-            $studentLogModel->r_degree = $student->r_degree;
-            $studentLogModel->r_sph = $student->r_sph;
-            $studentLogModel->r_cyl = $student->r_cyl;
-            $studentLogModel->r_axi = $student->r_axi;
-            $studentLogModel->r_roc1 = $student->r_roc1;
-            $studentLogModel->r_roc2 = $student->r_roc2;
-            $studentLogModel->r_axis = $student->r_axis;
-            $studentLogModel->plan_id = $student->plan_id;
-            $studentLogModel->pd = $student->pd;
-
-            if ($studentLogModel->save()) {
-                return $this->successResponse();
-            }
-
+            return $this->successResponse();
         }
 
         return $this->errorResponse();

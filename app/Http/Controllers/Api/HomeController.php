@@ -8,6 +8,7 @@ use App\Models\Common;
 use App\Models\Grade;
 use App\Models\Plan;
 use App\Models\Student;
+use App\Models\StudentLog;
 use App\Models\YearClass;
 use Illuminate\Http\Request;
 
@@ -93,6 +94,148 @@ class HomeController extends ApiController
             'myopia_count' => $myopiaNum + $notMyopiaNum + $unknownNums,
             'is_plan_edit' => $type == Common::TYPE_SCH ? 1 : 0,
             'rows'   => $rows
+        ]);
+    }
+
+    public function home(Request $request)
+    {
+        $year = $request->input('year', date('Y'));
+        $schoolIdArr = $request->input('school_id_arr');
+        $studentList = Student::where([
+            'plan_date' => $year,
+            'year_class_id' => $schoolIdArr
+        ])->get()->toArray();
+        $studentOldList = StudentLog::where([
+            'plan_date' => $year - 1,
+            'year_class_id' => $schoolIdArr
+        ])->get()->toArray();
+
+        $yearGroup = [];
+        $sexGroup = [];
+        $gradeGroup = [];
+        $randArr = [
+            '0~25' => 0,
+            '25~100' => 0,
+            '100~200' => 0,
+            '200~300' => 0,
+            '300~500' => 0,
+            '500~800' => 0,
+            '800~1000' => 0,
+            '1000' => 0,
+        ];
+        $schoolGroup = [];
+
+        foreach ($studentList as $item) {
+            if ($item['is_myopia'] == Common::NO) { // 先以此判断是否近视
+                $sexGroup[$item['sex']][] = $item;
+                $gradeGroup[$item['grade_id']][] = $item;
+                $yearGroup[Common::transYearOld($item['birthday'])][] = $item;
+            }
+
+            $schoolGroup[$item['year_class_id']][] = $item;
+
+            if ($item['l_degree'] < 25 || $item['r_degree'] < 25) {
+                $randArr['0~25']++;
+            } elseif ($item['l_degree'] < 100 || $item['r_degree'] < 100) {
+                $randArr['25~100']++;
+            } elseif ($item['l_degree'] < 200 || $item['r_degree'] < 200) {
+                $randArr['100~200']++;
+            } elseif ($item['l_degree'] < 300 || $item['r_degree'] < 300) {
+                $randArr['200~300']++;
+            } elseif ($item['l_degree'] < 500 || $item['r_degree'] < 500) {
+                $randArr['300~500']++;
+            } elseif ($item['l_degree'] < 800 || $item['r_degree'] < 800) {
+                $randArr['500~800']++;
+            } elseif ($item['l_degree'] < 1000 || $item['r_degree'] < 1000) {
+                $randArr['800~1000']++;
+            } else {
+                $randArr['1000']++;
+            }
+        }
+
+        $yearGroupArr = [];
+
+        foreach ($yearGroup as $key => $item) {
+            $yearGroupArr['keys'][] = $key;
+            $yearGroupArr['values'][] = [
+                'key' => $key,
+                'value' => count($item)
+            ];
+        }
+
+        $sexGroupArr = [];
+        foreach ($sexGroup as $key => $item) {
+            $sexGroupArr['values'][] = [
+                'key' => $key,
+                'value' => count($item)
+            ];
+        }
+
+        $gradeGroupArr = [];
+
+        foreach ($gradeGroup as $key => $item) {
+            $gradeGroupArr['keys'][] = $key;
+            $gradeGroupArr['values'][] = [
+                'key' => $key,
+                'value' => count($item)
+            ];
+        }
+
+        if (isset($gradeGroupArr['keys']) && $gradeGroupArr['keys']) {
+            $gradeArr = Grade::where([
+                'id' => $gradeGroupArr['keys']
+            ])->get()->pluck('name', 'id');
+
+            foreach ($gradeGroupArr['keys'] as &$item) {
+                $item = $gradeArr[$item] ?? $item;
+            }
+
+            foreach ($gradeGroupArr['values'] as &$value) {
+                $value['key'] = $gradeArr[$value['key']] ?? $value['key'];
+            }
+        }
+
+        $schoolGroupArr = [];
+
+        foreach ($schoolGroup as $s => $school) {
+            $count = count($school);
+            $isM = 0;
+
+            foreach ($school as $sch) {
+                if ($sch['is_myopia'] == Common::NO) {
+                    $isM++;
+                }
+            }
+
+            $schoolGroupArr[] = [
+                'name' => $s,
+                'ratio' => $count <= 0 ? 0 : $isM / $count,
+                'isM'   =>  $isM
+            ];
+        }
+
+        $schoolGroupArr = array_reverse(\Arr::sort($schoolGroupArr, function ($val) {
+            return $val['ratio'];
+        }));
+
+        $schoolRatioArr = [];
+
+        foreach ($schoolGroupArr as $k => $v) {
+            if ($k > 2) {
+                break;
+            }
+
+            $school = ClassData::whereId($v['name'])->select('name')->first();
+            $v['name'] = $school['name'] ?? $v['name'];
+            $schoolRatioArr[] = $v;
+        }
+
+        return $this->successResponse([
+            'yearGroupArr'  => $yearGroupArr,
+            'sexGroupArr'   => $sexGroupArr,
+            'gradeGroupArr' => $gradeGroupArr,
+            'randArr'       => $randArr,
+            'schoolRatioArr'    => $schoolRatioArr
         ]);
     }
 }
