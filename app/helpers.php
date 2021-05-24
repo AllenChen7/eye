@@ -79,6 +79,11 @@ function excelTime($date, $time = false) {
 }
 
 function transDate($t0) {
+
+    if (!$t0) {
+        return $t0;
+    }
+
     $t1 = intval(($t0 - 25569) * 3600 * 24); //转换成1970年以来的秒数
 
     return gmdate('Y-m-d',$t1);//格式化时间

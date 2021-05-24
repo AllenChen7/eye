@@ -64,6 +64,7 @@ class StudentImport implements ToCollection
             //  11 => 500
             //  12 => 600
             //]
+            $row[3] = transDate($row[3]);
             $studentName = trim($row[0]);
             $idCard = trim($row[1]);
             $sex = trim($row[2]);
@@ -222,16 +223,11 @@ class StudentImport implements ToCollection
             }
 
             if (!isDate($birthday)) {
-
-                $birthday = transDate($birthday);
-
-                if (!isDate($birthday)) {
-                    $row[1] = "\t" . $row[1];
-                    $row[count($row) + 1] = '出生年月日格式不对，正确格式为：“yyyy-mm-dd”';
-                    $this->cacheData[] = $row;
-                    $this->errorFlag = 1;
-                    continue;
-                }
+                $row[1] = "\t" . $row[1];
+                $row[count($row) + 1] = '出生年月日格式不对，正确格式为：“yyyy-mm-dd”';
+                $this->cacheData[] = $row;
+                $this->errorFlag = 1;
+                continue;
             }
 
             if (!isDate($joinSchoolDay . '-01-01')) {
