@@ -286,8 +286,7 @@ class PlanController extends ApiController
         }
 
         $data = Plan::where([
-            'id' => $request->input('id'),
-//            'is_del'    => Common::NO
+            'id' => $request->input('id')
         ])->first();
 
         $data['grade'] = Grade::where([
@@ -296,18 +295,27 @@ class PlanController extends ApiController
         $data['class'] = YearClass::where([
             'id' => $data['year_class_id']
         ])->first()->name;
-        $student = Student::where([
-            'year_class_id' => $data['year_class_id'],
-            'plan_id'       => $request->input('id')
-        ])->get();
+
+        if ($data['status'] == Common::PLAN_STATUS_DONE) {
+            $student = StudentLog::where([
+                'year_class_id' => $data['year_class_id'],
+                'plan_id'       => $request->input('id')
+            ])->get();
+            $data['studentIdArr'] = $student->pluck('student_id');
+        } else {
+            $student = Student::where([
+                'year_class_id' => $data['year_class_id'],
+                'plan_id'       => $request->input('id')
+            ])->get();
+            $data['studentIdArr'] = $student->pluck('id');
+        }
 
         $data['count'] = $student->count();
-        $data['studentIdArr'] = $student->pluck('id');
         $infoArr = [];
 
         foreach ($student as $s) {
             $infoArr[] = [
-                'id' => $s['id'],
+                'id' => $s['student_id'] ?? $s['id'],
                 'name' => $s['name'],
                 'status' => $s['plan_status'] == 2 ? '已验光' : '待验光' ,
                 'image' => Common::transPhoto($s['sex'])
@@ -323,7 +331,7 @@ class PlanController extends ApiController
 
         $data['next_id'] = $student['id'] ?? ($data['studentIdArr'][0] ?? 0);
 
-        if (strtotime($data['plan_date']) < time()) {
+        if ($data['status'] == Common::PLAN_STATUS_ACTIVE && strtotime($data['plan_date']) < time()) {
             $data['status_name'] = '超时未验光';
         }
 

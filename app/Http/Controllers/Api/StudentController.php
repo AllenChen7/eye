@@ -286,7 +286,6 @@ class StudentController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        Log::alert('input', $request->input());
         $left = $request->input('left');
         $right = $request->input('right');
         $student = Student::whereId([
@@ -335,6 +334,7 @@ class StudentController extends ApiController
         $studentLogModel->r_axis = $right['axis'] ?? 0;
         $studentLogModel->pd = $left['PD'] ?? 0;
         $studentLogModel->plan_date = date('Y');
+        $studentLogModel->plan_status   = 2;
 
         if (!$studentLogModel->save()) {
             Log::error('save error', $studentLogModel);
