@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Common;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,61 @@ class DownloadController extends Controller
         $isM = $request->input('is_m');
 
         $student = Student::where([
-            ''
+            'is_del'    => Common::STATUS_DISABLED
         ]);
+
+        if ($schoolIdArr) {
+            $student->where([
+                'class_data_id' => $schoolIdArr
+            ]);
+        }
+
+        if ($joinSchoolDate) {
+            $student->where([
+                'join_school_date'  => $joinSchoolDate
+            ]);
+        }
+
+        if ($idCard) {
+            $student->where('id_card', 'like', '%' . $idCard . '%');
+        }
+
+        if ($gradeId) {
+            $student->where([
+                'grade_id'  => $gradeId
+            ]);
+        }
+
+        if ($classId) {
+            $student->where([
+                'year_class_id' => $classId
+            ]);
+        }
+
+        if ($name) {
+            $student->where('name', 'like', '%' . $name . '%');
+        }
+
+        if ($sex) {
+            $student->where([
+                'set'   =>  $sex
+            ]);
+        }
+
+        if ($code) {
+            $student->where([
+                'student_code'  => $code
+            ]);
+        }
+
+        if ($isM) {
+            $student->where([
+                'is_myopia' => $isM
+            ]);
+        }
+
+        $list = $student->get();
+
+        dda($list);
     }
 }
