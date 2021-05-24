@@ -167,17 +167,16 @@ class HomeController extends ApiController
         $yearGroupArr = [];
 
         foreach ($yearGroup as $key => $item) {
-            $yearGroupArr['keys'][] = $key;
-            $yearGroupArr['values'][] = [
-                'name' => $key,
+            $yearGroupArr[] = [
+                'name' => $key . '岁',
                 'value' => count($item)
             ];
         }
 
         $sexGroupArr = [];
         foreach ($sexGroup as $key => $item) {
-            $sexGroupArr['values'][] = [
-                'name' => $key,
+            $sexGroupArr[] = [
+                'name' => Common::sexArr()[$key],
                 'value' => count($item)
             ];
         }
@@ -258,7 +257,7 @@ class HomeController extends ApiController
         return $this->successResponse([
             'yearGroupArr'  => $yearGroupArr,
             'sexGroupArr'   => $sexGroupArr,
-            'gradeGroupArr' => $gradeGroupArr,
+            'gradeGroupArr' => $gradeGroupArr['values'] ?? [],
             'randArr'       => $randLabelArr,
             'schoolRatioArr'    => $schoolRatioArr,
             'isMRateArr'       => $isMRateArr
