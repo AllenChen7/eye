@@ -42,7 +42,7 @@ class DownloadController extends ApiController
 //            'students.class_data_id' => $schoolIdArr
         ])->leftJoin('grades', 'grades.id', 'students.grade_id')->select([
             'students.*',
-            'gradeName' => 'grades.name'
+            'grades.name as gName'
         ]);
 
         if ($joinSchoolDate) {
