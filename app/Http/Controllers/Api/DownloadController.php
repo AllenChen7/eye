@@ -40,9 +40,13 @@ class DownloadController extends ApiController
         $student = Student::where([
             'students.is_del'    => Common::STATUS_DISABLED,
 //            'students.class_data_id' => $schoolIdArr
-        ])->leftJoin('grades', 'grades.id', 'students.grade_id')->select([
+        ])
+            ->leftJoin('grades', 'grades.id', 'students.grade_id')
+            ->leftJoin('year_classes', 'year_classes.id', 'students.year_class_id')
+            ->select([
             'students.*',
-            'grades.name as gName'
+            'grades.name as gName',
+                'year_classes.name as yName'
         ]);
 
         if ($joinSchoolDate) {
@@ -92,8 +96,6 @@ class DownloadController extends ApiController
         $list = $student->get();
         $data = [];
 
-        dda($list);
-
         foreach ($list as $l) {
             $data[] = [
                 $l['name'],
@@ -102,8 +104,8 @@ class DownloadController extends ApiController
                 $l['birthday'],
                 $l['join_school_date'],
                 "\t" . $l['student_code'],
-                $l['grade_id'],
-                $l['year_class_id'],
+                $l['gName'],
+                $l['yName'],
                 Common::isMyopiaArr()[$l['is_myopia']],
                 $l['is_myopia'] == Common::YES ? '' : Common::isArr()[$l['is_glasses']],
                 $l['is_myopia'] == Common::YES ? '' : Common::glaType()[$l['glasses_type']],
