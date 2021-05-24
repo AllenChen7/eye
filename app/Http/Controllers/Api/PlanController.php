@@ -163,13 +163,6 @@ class PlanController extends ApiController
                 'plan_id'       => $row['id']
             ])->count();
 
-            $row['countLog'] = StudentLog::where([
-                'year_class_id' => $row['year_class_id'],
-                'plan_id'       => $row['id']
-            ])->count();
-
-            $row['count']   = $row['count'] > $row['countLog'] ? $row['count'] : $row['countLog'];
-
             $row['status_name'] = Common::planStatusArr()[$row['status']];
 
             if ($type == 1 && strtotime($row['plan_date']) < time()) {
@@ -291,15 +284,9 @@ class PlanController extends ApiController
             'year_class_id' => $data['year_class_id'],
             'plan_id'       => $request->input('id')
         ])->get();
-        $studentLog = StudentLog::where([
-            'year_class_id' => $data['year_class_id'],
-            'plan_id'       => $request->input('id')
-        ])->get();
 
-        $student = $student->count() > $studentLog->count() ? $student : $studentLog;
         $data['count'] = $student->count();
         $data['studentIdArr'] = $student->pluck('id');
-
         $infoArr = [];
 
         foreach ($student as $s) {
