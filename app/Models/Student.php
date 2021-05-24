@@ -119,6 +119,6 @@ class Student extends Model
      */
     public function grade()
     {
-        return $this->hasOne(Grade::class);
+        return $this->hasOne('App\Models\Grade');
     }
 }
