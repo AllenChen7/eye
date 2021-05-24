@@ -40,7 +40,7 @@ class DownloadController extends ApiController
         $student = Student::where([
             'is_del'    => Common::STATUS_DISABLED,
             'class_data_id' => $schoolIdArr
-        ])->grade;
+        ]);
 
         if ($joinSchoolDate) {
             $student->where([
@@ -87,11 +87,10 @@ class DownloadController extends ApiController
         }
 
         $list = $student->get();
-
-        dda($list);
         $data = [];
 
         foreach ($list as $l) {
+            dd($l->grade);
             $data[] = [
                 $l['name'],
                 "\t" . $l['id_card'],
