@@ -30,15 +30,6 @@ class PlanController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $model = new Plan();
-        $model->name = $request->input('name');
-        $model->plan_date = $request->input('plan_date') . ' 23:59:59';
-        $model->plan_user = $request->input('plan_user');
-        $model->remark = $request->input('remark');
-        $model->grade_id = $request->input('grade_id');
-        $model->year_class_id = $request->input('class_id');
-        $model->create_user_id = auth()->id();
-
         $classInfo = YearClass::where([
             'id' => $request->input('class_id')
         ])->first();
@@ -51,8 +42,6 @@ class PlanController extends ApiController
             ], 422);
         }
 
-        $model->class_data_id = $classInfo['class_data_id'];
-
         $stuEx = Student::where([
             'year_class_id' => $request->input('class_id')
         ])->first();
@@ -60,6 +49,25 @@ class PlanController extends ApiController
         if (!$stuEx) {
             return $this->errorResponse('该年级下没有学生，请先创建学生信息');
         }
+
+        $planEx = Student::where([
+            'year_class_id' => $request->input('class_id'),
+            'plan_status'   => Common::STU_STATUS_ACTIVE
+        ])->first();
+
+        if ($planEx) {
+            return $this->errorResponse('当前班级下有学生尚未验光完毕');
+        }
+
+        $model = new Plan();
+        $model->name = $request->input('name');
+        $model->plan_date = $request->input('plan_date') . ' 23:59:59';
+        $model->plan_user = $request->input('plan_user');
+        $model->remark = $request->input('remark');
+        $model->grade_id = $request->input('grade_id');
+        $model->year_class_id = $request->input('class_id');
+        $model->create_user_id = auth()->id();
+        $model->class_data_id = $classInfo['class_data_id'];
 
         if ($model->save()) {
             // 将学生列入验光计划
