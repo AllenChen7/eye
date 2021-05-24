@@ -279,7 +279,8 @@ class PlanController extends ApiController
             'id' => $data['year_class_id']
         ])->first()->name;
         $student = Student::where([
-            'year_class_id' => $data['year_class_id']
+            'year_class_id' => $data['year_class_id'],
+            'plan_id'       => $request->input('id')
         ])->get();
         $data['count'] = $student->count();
         $data['studentIdArr'] = $student->pluck('id');
