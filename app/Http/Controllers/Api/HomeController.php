@@ -202,7 +202,7 @@ class HomeController extends ApiController
             }
 
             foreach ($gradeGroupArr['values'] as &$value) {
-                $value['key'] = $gradeArr[$value['name']] ?? $value['name'];
+                $value['name'] = $gradeArr[$value['name']] ?? $value['name'];
             }
         }
 
