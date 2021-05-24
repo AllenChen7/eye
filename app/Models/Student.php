@@ -113,4 +113,12 @@ class Student extends Model
     {
         $this->attributes['r_degree'] = (int)$value;
     }
+
+    /**
+     * 获取与用户相关的电话记录。
+     */
+    public function grade()
+    {
+        return $this->hasOne(Grade::class);
+    }
 }

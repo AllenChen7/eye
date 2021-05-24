@@ -38,14 +38,9 @@ class DownloadController extends ApiController
         $isM = $request->input('is_m');
 
         $student = Student::where([
-            'is_del'    => Common::STATUS_DISABLED
-        ]);
-
-        if ($schoolIdArr) {
-            $student->where([
-                'class_data_id' => $schoolIdArr
-            ]);
-        } // todo
+            'is_del'    => Common::STATUS_DISABLED,
+            'class_data_id' => $schoolIdArr
+        ])->grade;
 
         if ($joinSchoolDate) {
             $student->where([
@@ -92,8 +87,8 @@ class DownloadController extends ApiController
         }
 
         $list = $student->get();
-// cache data [["小小","\t110101199003073431","男","1993-01-28",2009,131360238,"一年级","1班","正常","是","普通眼镜",100,200],
-//["小小","\t110101199003075613","男","1993-01-28",2009,131360237,"一年级","1班","正常","是","普通眼镜",100,200]]
+
+        dda($list);
         $data = [];
 
         foreach ($list as $l) {
@@ -107,8 +102,8 @@ class DownloadController extends ApiController
                 $l['grade_id'],
                 $l['year_class_id'],
                 Common::isMyopiaArr()[$l['is_myopia']],
-                Common::isArr()[$l['is_glasses']],
-                Common::glaType()[$l['glasses_type']],
+                $l['is_myopia'] == Common::YES ? '' : Common::isArr()[$l['is_glasses']],
+                $l['is_myopia'] == Common::YES ? '' : Common::glaType()[$l['glasses_type']],
                 $l['l_degree'],
                 $l['r_degree'],
             ];
