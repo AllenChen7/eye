@@ -195,7 +195,7 @@ class StudentController extends ApiController
             $data = Student::where([
                 'id' => $request->input('id')
             ])->first();
-            $data['plan_status'] = $data['plan_data'] ? 2 : $data['plan_status'];
+            $data['plan_status'] = $data['plan_data'] > 0 ? 2 : $data['plan_status'];
         }
 
         $data['image'] = Common::transPhoto($data['sex']);
