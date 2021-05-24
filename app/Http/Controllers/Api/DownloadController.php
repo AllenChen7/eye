@@ -108,6 +108,8 @@ class DownloadController extends ApiController
             ];
         }
 
+        die();
+
         $data = array_merge([StudentData::excelTitle()], $data);
         $columnArr = [
             'B' => NumberFormat::FORMAT_TEXT
