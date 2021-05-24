@@ -13,9 +13,16 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class DownloadController extends ApiController
 {
-    public function list()
+    public function index(Request $request)
     {
+        $limit = $request->input('limit', 20);
+        $page = $request->input('page', 1);
+        $offset = $page <= 1 ? 0 : ($page - 1) * $limit;
+        $list = Download::where([
+            'user_id' => auth()->id()
+        ])->limit($limit)->offset($offset)->get();
 
+        return $this->successResponse($list);
     }
 
     public function search(Request $request)
