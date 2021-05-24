@@ -8,6 +8,7 @@ use App\Imports\StudentImport;
 use App\Models\ClassData;
 use App\Models\Common;
 use App\Models\Grade;
+use App\Models\Plan;
 use App\Models\Student;
 use App\Models\StudentLog;
 use App\Models\YearClass;
@@ -171,10 +172,25 @@ class StudentController extends ApiController
         $planId = $request->input('plan_id', 0);
 
         if ($planId) {
-            $data = StudentLog::where([
-                'student_id' => $request->input('id'),
-                'plan_id'   => $planId
-            ])->orderByDesc('id')->first();
+            $planData = Plan::whereId($planId)->first();
+
+            if (!$planData) {
+                $data = Student::where([
+                    'id' => $request->input('id')
+                ])->first();
+            } else {
+                if ($planData['status'] == Common::PLAN_STATUS_DONE) {
+                    $data = StudentLog::where([
+                        'student_id' => $request->input('id'),
+                        'plan_id'   => $planId
+                    ])->orderByDesc('id')->first();
+                } else {
+                    $data = Student::where([
+                        'id' => $request->input('id')
+                    ])->first();
+                }
+            }
+
         } else {
             $data = Student::where([
                 'id' => $request->input('id')
