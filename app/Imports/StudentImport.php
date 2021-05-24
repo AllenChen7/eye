@@ -293,13 +293,13 @@ class StudentImport implements ToCollection
                 continue;
             }
 
-            if (!in_array($isGlasses, Common::isArr())) {
-                $row[1] = "\t" . $row[1];
-                $row[count($row) + 1] = '是否佩眼镜的格式填写错误，仅支持填写“是”或“否”。';
-                $this->cacheData[] = $row;
-                $this->errorFlag = 1;
-                continue;
-            }
+//            if (!in_array($isGlasses, Common::isArr())) {
+//                $row[1] = "\t" . $row[1];
+//                $row[count($row) + 1] = '是否佩眼镜的格式填写错误，仅支持填写“是”或“否”。';
+//                $this->cacheData[] = $row;
+//                $this->errorFlag = 1;
+//                continue;
+//            }
 
             if ($isGlasses == '是') {
                 if (!$glassesType) {
@@ -374,7 +374,8 @@ class StudentImport implements ToCollection
             $studentInfo->year_class_id = $classInfo['id'];
             $studentInfo->create_user_id = auth()->id();
             $studentInfo->is_myopia = array_flip(Common::isMyopiaArr())[$isMyopia] ?? Common::UNKNOWN;
-            $studentInfo->is_glasses = $isGlasses == '是' ? 1 : 2;
+//            $studentInfo->is_glasses = $isGlasses == '是' ? 1 : 2;
+            $studentInfo->is_glasses = array_flip(Common::isArr())[$isGlasses] ?? Common::UNKNOWN;
             $studentInfo->glasses_type = $glassesType == '隐形眼镜' ? 1 : 0;
             $studentInfo->l_degree = intval($lDegree);
             $studentInfo->r_degree = intval($rDegree);
