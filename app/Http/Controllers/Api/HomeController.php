@@ -263,4 +263,52 @@ class HomeController extends ApiController
             'isMRateArr'       => $isMRateArr
         ]);
     }
+
+    public function schoolRatioArr(Request $request)
+    {
+        $year = $request->input('year', date('Y'));
+        $schoolIdArr = $request->input('school_id_arr');
+        $studentList = Student::where([
+            'plan_date' => $year,
+            'class_data_id' => $schoolIdArr
+        ])->get()->toArray();
+        $schoolGroup = [];
+
+        foreach ($studentList as $item) {
+            $schoolGroup[$item['year_class_id']][] = $item;
+        }
+
+        $schoolGroupArr = [];
+
+        foreach ($schoolGroup as $s => $school) {
+            $count = count($school);
+            $isM = 0;
+
+            foreach ($school as $sch) {
+                if ($sch['is_myopia'] == Common::NO) {
+                    $isM++;
+                }
+            }
+
+            $schoolGroupArr[] = [
+                'name' => $s,
+                'ratio' => round($count <= 0 ? 0 : $isM / $count * 100, 2),
+                'isM'   =>  $isM
+            ];
+        }
+
+        $schoolGroupArr = array_reverse(\Arr::sort($schoolGroupArr, function ($val) {
+            return $val['ratio'];
+        }));
+
+        $schoolRatioArr = [];
+
+        foreach ($schoolGroupArr as $k => $v) {
+            $school = ClassData::whereId($v['name'])->select('name')->first();
+            $v['name'] = $school['name'] ?? $v['name'];
+            $schoolRatioArr[] = $v;
+        }
+
+        return $this->successResponse($schoolRatioArr);
+    }
 }

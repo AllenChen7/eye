@@ -220,6 +220,7 @@ $api->version('v1', function ($api) {
     ], function ($api) {
         $api->get('index', 'HomeController@index');
         $api->get('home', 'HomeController@home');
+        $api->get('school-ratio-arr', 'HomeController@schoolRatioArr');
     });
 
     $api->group([
