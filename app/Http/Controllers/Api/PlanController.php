@@ -166,10 +166,18 @@ class PlanController extends ApiController
             $row['grade'] = Grade::where([
                 'id' => $row['grade_id']
             ])->first()->name ?? '-';
-            $row['count'] = Student::where([
-                'year_class_id' => $row['year_class_id'],
-                'plan_id'       => $row['id']
-            ])->count();
+
+            if ($row['status'] == Common::PLAN_STATUS_DONE) {
+                $row['count'] = StudentLog::where([
+                    'year_class_id' => $row['year_class_id'],
+                    'plan_id'       => $row['id']
+                ])->count();
+            } else {
+                $row['count'] = Student::where([
+                    'year_class_id' => $row['year_class_id'],
+                    'plan_id'       => $row['id']
+                ])->count();
+            }
 
             $row['status_name'] = Common::planStatusArr()[$row['status']];
 
