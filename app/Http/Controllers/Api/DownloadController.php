@@ -92,11 +92,11 @@ class DownloadController extends ApiController
         foreach ($list as $l) {
             $data[] = [
                 $l['name'],
-                $l['id_card'],
+                "\t" . $l['id_card'],
                 Common::sexArr()[$l['sex']],
                 $l['birthday'],
                 $l['join_school_date'],
-                $l['student_code'],
+                "\t" . $l['student_code'],
                 $l['grade_id'],
                 $l['year_class_id'],
                 Common::isMyopiaArr()[$l['is_myopia']],
