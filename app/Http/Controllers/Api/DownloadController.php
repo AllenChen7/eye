@@ -38,8 +38,11 @@ class DownloadController extends ApiController
         $isM = $request->input('is_m');
 
         $student = Student::where([
-            'is_del'    => Common::STATUS_DISABLED,
-            'class_data_id' => $schoolIdArr
+            'students.is_del'    => Common::STATUS_DISABLED,
+            'students.class_data_id' => $schoolIdArr
+        ])->leftJoin('grades', 'grades.id', 'students.grade_id')->select([
+            'students.*',
+            'gradeName' => 'grades.name'
         ]);
 
         if ($joinSchoolDate) {
@@ -65,12 +68,12 @@ class DownloadController extends ApiController
         }
 
         if ($name) {
-            $student->where('name', 'like', '%' . $name . '%');
+            $student->where('students.name', 'like', '%' . $name . '%');
         }
 
         if ($sex) {
             $student->where([
-                'set'   =>  $sex
+                'sex'   =>  $sex
             ]);
         }
 
@@ -89,8 +92,9 @@ class DownloadController extends ApiController
         $list = $student->get();
         $data = [];
 
+        dda($list);
+
         foreach ($list as $l) {
-            dd($l->grade);
             $data[] = [
                 $l['name'],
                 "\t" . $l['id_card'],
@@ -107,8 +111,6 @@ class DownloadController extends ApiController
                 $l['r_degree'],
             ];
         }
-
-        die();
 
         $data = array_merge([StudentData::excelTitle()], $data);
         $columnArr = [
