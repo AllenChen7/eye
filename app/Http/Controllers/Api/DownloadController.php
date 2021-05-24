@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Exports\StudentExport;
+use App\Http\Controllers\ApiController;
 use App\Models\Common;
+use App\Models\Download;
 use App\Models\Student;
+use App\ModelsData\StudentData;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class DownloadController extends Controller
+class DownloadController extends ApiController
 {
     public function list()
     {
@@ -34,7 +38,7 @@ class DownloadController extends Controller
             $student->where([
                 'class_data_id' => $schoolIdArr
             ]);
-        }
+        } // todo
 
         if ($joinSchoolDate) {
             $student->where([
@@ -81,7 +85,49 @@ class DownloadController extends Controller
         }
 
         $list = $student->get();
+// cache data [["小小","\t110101199003073431","男","1993-01-28",2009,131360238,"一年级","1班","正常","是","普通眼镜",100,200],
+//["小小","\t110101199003075613","男","1993-01-28",2009,131360237,"一年级","1班","正常","是","普通眼镜",100,200]]
+        $data = [];
 
-        dda($list);
+        foreach ($list as $l) {
+            $data[] = [
+                $l['name'],
+                $l['id_card'],
+                Common::sexArr()[$l['sex']],
+                $l['birthday'],
+                $l['join_school_date'],
+                $l['student_code'],
+                $l['grade_id'],
+                $l['year_class_id'],
+                Common::isMyopiaArr()[$l['is_myopia']],
+                Common::isArr()[$l['is_glasses']],
+                Common::glaType()[$l['glasses_type']],
+                $l['l_degree'],
+                $l['r_degree'],
+            ];
+        }
+
+        $data = array_merge([StudentData::excelTitle()], $data);
+        $columnArr = [
+            'B' => NumberFormat::FORMAT_TEXT
+        ];
+        $fileName = '学生信息' . date('Y-m-d-H-i-s') . rand(100, 999) . '.xlsx';
+        $sRes = (new StudentExport($data, $columnArr))->store($fileName, 'public');
+
+        if ($sRes) {
+            $url = asset('storage/' . $fileName);
+            $model = new Download();
+            $model->name = $fileName;
+            $model->url = $url;
+            $model->user_id = auth()->id();
+
+            if ($model->save()) {
+                return $this->successResponse($model);
+            } else {
+                return $this->errorResponse();
+            }
+        } else {
+            return $this->errorResponse();
+        }
     }
 }
