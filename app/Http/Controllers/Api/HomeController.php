@@ -103,11 +103,11 @@ class HomeController extends ApiController
         $schoolIdArr = $request->input('school_id_arr');
         $studentList = Student::where([
             'plan_date' => $year,
-            'year_class_id' => $schoolIdArr
+            'class_data_id' => $schoolIdArr
         ])->get()->toArray();
         $studentOldList = StudentLog::where([
             'plan_date' => $year - 1,
-            'year_class_id' => $schoolIdArr
+            'class_data_id' => $schoolIdArr
         ])->get()->toArray();
 
         $yearGroup = [];
@@ -219,7 +219,7 @@ class HomeController extends ApiController
 
             $schoolGroupArr[] = [
                 'name' => $s,
-                'ratio' => $count <= 0 ? 0 : $isM / $count * 100,
+                'ratio' => round($count <= 0 ? 0 : $isM / $count * 100, 2),
                 'isM'   =>  $isM
             ];
         }
