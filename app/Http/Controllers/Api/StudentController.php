@@ -395,6 +395,7 @@ class StudentController extends ApiController
         }
 
         if ($studentImport->successFlag) {
+            Log::info('cache data', $studentImport->successCacheData);
             $data = array_merge([StudentData::excelTitle()], $studentImport->successCacheData);
             $columnArr = [
                 'B' => NumberFormat::FORMAT_TEXT
