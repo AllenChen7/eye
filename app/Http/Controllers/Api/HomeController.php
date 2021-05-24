@@ -169,7 +169,7 @@ class HomeController extends ApiController
         foreach ($yearGroup as $key => $item) {
             $yearGroupArr['keys'][] = $key;
             $yearGroupArr['values'][] = [
-                'key' => $key,
+                'name' => $key,
                 'value' => count($item)
             ];
         }
@@ -177,7 +177,7 @@ class HomeController extends ApiController
         $sexGroupArr = [];
         foreach ($sexGroup as $key => $item) {
             $sexGroupArr['values'][] = [
-                'key' => $key,
+                'name' => $key,
                 'value' => count($item)
             ];
         }
@@ -187,7 +187,7 @@ class HomeController extends ApiController
         foreach ($gradeGroup as $key => $item) {
             $gradeGroupArr['keys'][] = $key;
             $gradeGroupArr['values'][] = [
-                'key' => $key,
+                'name' => $key,
                 'value' => count($item)
             ];
         }
@@ -202,7 +202,7 @@ class HomeController extends ApiController
             }
 
             foreach ($gradeGroupArr['values'] as &$value) {
-                $value['key'] = $gradeArr[$value['key']] ?? $value['key'];
+                $value['key'] = $gradeArr[$value['name']] ?? $value['name'];
             }
         }
 
@@ -247,11 +247,19 @@ class HomeController extends ApiController
             'rate'=> $rate
         ];
 
+        $randLabelArr = [];
+        foreach ($randArr as $r => $rand) {
+            $randLabelArr[] = [
+                'value' => $rand,
+                'name'  => $r
+            ];
+        }
+
         return $this->successResponse([
             'yearGroupArr'  => $yearGroupArr,
             'sexGroupArr'   => $sexGroupArr,
             'gradeGroupArr' => $gradeGroupArr,
-            'randArr'       => $randArr,
+            'randArr'       => $randLabelArr,
             'schoolRatioArr'    => $schoolRatioArr,
             'isMRateArr'       => $isMRateArr
         ]);
