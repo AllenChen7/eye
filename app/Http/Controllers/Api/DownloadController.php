@@ -39,7 +39,7 @@ class DownloadController extends ApiController
 
         $student = Student::where([
             'students.is_del'    => Common::STATUS_DISABLED,
-            'students.class_data_id' => $schoolIdArr
+//            'students.class_data_id' => $schoolIdArr
         ])->leftJoin('grades', 'grades.id', 'students.grade_id')->select([
             'students.*',
             'gradeName' => 'grades.name'
