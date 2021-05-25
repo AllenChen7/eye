@@ -258,7 +258,7 @@ class PlanController extends ApiController
         }
 
         // 检查是否已绑定学生
-        $se = Student::wherePlanId($request->input('id'))->exists();
+        $se = StudentLog::wherePlanId($request->input('id'))->exists();
 
         if ($se) {
             return $this->errorResponse('已有数据，不能被删除');
@@ -269,6 +269,13 @@ class PlanController extends ApiController
         ])->delete();
 
         if ($res) {
+            $stuRes = Student::where([
+                'plan_id' => $request->input('id')
+            ])->update([
+                'plan_id' => 0,
+                'plan_status' => 0
+            ]);
+
             return $this->successResponse();
         }
 
