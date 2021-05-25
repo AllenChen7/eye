@@ -211,6 +211,7 @@ class StudentController extends ApiController
         $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
         $data['PD'] = $data['pd'];
         $data['age'] = Common::transYearOld($data['birthday']);
+        $data['schoolName'] = ClassData::whereId($data['class_data_id'])->first()->name ?? '';
 
         return $this->successResponse($data);
     }
