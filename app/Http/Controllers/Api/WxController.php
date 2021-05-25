@@ -234,7 +234,7 @@ class WxController extends ApiController
         ])->first();
 
         $data['old_l_degree'] = $old['l_degree'] ?? $data['l_degree'];
-        $data['old_r_degree'] = $old['r_degree'] ?? $old['r_degree'];
+        $data['old_r_degree'] = $old['r_degree'] ?? $data['r_degree'];
         $data['school_name'] = ClassData::whereId($data['class_data_id'])->first()->name ?? '--';
         $data['age'] = Common::transYearOld($data['birthday']);
 

@@ -203,7 +203,7 @@ class StudentController extends ApiController
         ])->first();
 
         $data['old_l_degree'] = $old['l_degree'] ?? $data['l_degree'];
-        $data['old_r_degree'] = $old['r_degree'] ?? $old['r_degree'];
+        $data['old_r_degree'] = $old['r_degree'] ?? $data['r_degree'];
         $data['image'] = Common::transPhoto($data['sex']);
         $data['grade'] = Grade::where([
             'id' => $data['grade_id']
