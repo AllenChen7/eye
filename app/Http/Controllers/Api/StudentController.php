@@ -198,6 +198,12 @@ class StudentController extends ApiController
             $data['plan_status'] = $data['plan_date'] ? 2 : $data['plan_status'];
         }
 
+        $old = StudentLog::where([
+            'student_id' => $data['id']
+        ])->first();
+
+        $data['old_l_degree'] = $old['l_degree'] ?? $data['l_degree'];
+        $data['old_r_degree'] = $old['r_degree'] ?? $old['r_degree'];
         $data['image'] = Common::transPhoto($data['sex']);
         $data['grade'] = Grade::where([
             'id' => $data['grade_id']
