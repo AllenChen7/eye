@@ -225,10 +225,20 @@ class WxController extends ApiController
             ])->first()->name ?? '--';
         $data['sex_name'] = Common::sexArr()[$data['sex']];
         $data['is_myopia_name'] = Common::isArr()[$data['is_myopia']];
-        $data['is_glasses_name'] = Common::isArr()[$data['is_glasses']];
-        $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
-        $data['PD'] = $data['pd'];
 
+        if ($data['is_myopia'] == Common::YES) {
+            $data['is_glasses_name'] = '';
+            $data['glasses_type_name'] = '';
+            $data['l_degree']   = '';
+            $data['r_degree']   = '';
+            $data['is_glasses'] = '';
+            $data['glasses_type'] = '';
+        } else {
+            $data['is_glasses_name'] = Common::isArr()[$data['is_glasses']];
+            $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
+        }
+
+        $data['PD'] = $data['pd'];
         $old = StudentLog::where([
             'student_id' => $data['id']
         ])->first();
