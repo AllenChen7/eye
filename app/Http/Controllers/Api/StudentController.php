@@ -224,8 +224,6 @@ class StudentController extends ApiController
         if ($data['is_myopia'] == Common::YES) {
             $data['is_glasses_name'] = '';
             $data['glasses_type_name'] = '';
-            $data['l_degree']   = '';
-            $data['r_degree']   = '';
             $data['is_glasses'] = '';
             $data['glasses_type'] = '';
         } else {
