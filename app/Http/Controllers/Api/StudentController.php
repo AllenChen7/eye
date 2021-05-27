@@ -178,15 +178,24 @@ class StudentController extends ApiController
                 $data = Student::where([
                     'id' => $request->input('id')
                 ])->first();
+                $old = StudentLog::where([
+                    'student_id' => $data['id']
+                ])->first();
             } else {
                 if ($planData['status'] == Common::PLAN_STATUS_DONE) {
                     $data = StudentLog::where([
                         'student_id' => $request->input('id'),
                         'plan_id'   => $planId
                     ])->orderByDesc('id')->first();
+                    $old = StudentLog::where([
+                        'student_id' => $data['student_id']
+                    ])->first();
                 } else {
                     $data = Student::where([
                         'id' => $request->input('id')
+                    ])->first();
+                    $old = StudentLog::where([
+                        'student_id' => $data['id']
                     ])->first();
                 }
             }
@@ -196,13 +205,6 @@ class StudentController extends ApiController
                 'id' => $request->input('id')
             ])->first();
             $data['plan_status'] = $data['plan_date'] ? 2 : $data['plan_status'];
-        }
-
-        if ($planId) {
-            $old = StudentLog::where([
-                'student_id' => $data['student_id']
-            ])->first();
-        } else {
             $old = StudentLog::where([
                 'student_id' => $data['id']
             ])->first();
