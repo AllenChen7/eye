@@ -220,7 +220,7 @@ class StudentController extends ApiController
             'id' => $data['year_class_id']
         ])->first()->name ?? '--';
         $data['sex_name'] = Common::sexArr()[$data['sex']];
-        $data['is_myopia_name'] = Common::isArr()[$data['is_myopia']];
+        $data['is_myopia_name'] = Common::isMyopiaArr()[$data['is_myopia']];
         $data['is_glasses_name'] = Common::isArr()[$data['is_glasses']];
         $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
         $data['PD'] = $data['pd'];
