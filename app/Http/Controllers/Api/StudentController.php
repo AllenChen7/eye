@@ -221,8 +221,18 @@ class StudentController extends ApiController
         ])->first()->name ?? '--';
         $data['sex_name'] = Common::sexArr()[$data['sex']];
         $data['is_myopia_name'] = Common::isMyopiaArr()[$data['is_myopia']];
-        $data['is_glasses_name'] = Common::isArr()[$data['is_glasses']];
-        $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
+        if ($data['is_myopia'] == Common::YES) {
+            $data['is_glasses_name'] = '';
+            $data['glasses_type_name'] = '';
+            $data['l_degree']   = '';
+            $data['r_degree']   = '';
+            $data['is_glasses'] = '';
+            $data['glasses_type'] = '';
+        } else {
+            $data['is_glasses_name'] = Common::isArr()[$data['is_glasses']];
+            $data['glasses_type_name'] = Common::glaType()[$data['glasses_type']];
+        }
+
         $data['PD'] = $data['pd'];
         $data['age'] = Common::transYearOld($data['birthday']);
         $data['schoolName'] = ClassData::whereId($data['class_data_id'])->first()->name ?? '';
