@@ -201,15 +201,17 @@ class WxController extends ApiController
             return $this->errorResponse('验证错误', $validator->errors(), 422);
         }
 
-        $idCardCheck = IdentityCard::make($request->input('id_card'));
+        $idCard = trim($request->input('id_card'));
+        $idCardCheck = IdentityCard::make($idCard);
 
         if (!$idCardCheck) {
             return $this->errorResponse('请输入正确的身份证！');
         }
 
+        $name = trim($request->input('name'));
         $data = Student::where([
-            'name' => $request->input('name'),
-            'id_card' => $request->input('id_card')
+            'name' => $name,
+            'id_card' => $idCard
         ])->first();
 
         if (!$data) {
