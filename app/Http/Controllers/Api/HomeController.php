@@ -176,7 +176,7 @@ class HomeController extends ApiController
             }
         }
         // 公式：（今年数-上年数）÷上年数×100%即可算出
-        $rate = $oldCount ? ($newCount - $oldCount) / $oldCount * 100 : 100;
+        $rate = $oldCount ? ($newCount - $oldCount) / $oldCount * 100 : ($newCount ? 100 : 0);
 
         $yearGroupArr = [];
 
