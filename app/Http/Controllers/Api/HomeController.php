@@ -128,13 +128,25 @@ class HomeController extends ApiController
         $oldCount = 0;
 
         foreach ($studentOldList as $item) {
-            if ($item['is_myopia'] == Common::NO) { // 先以此判断是否近视
+            // 负数为近视、正数为远视 数值需要乘以 100
+//            if ($item['is_myopia'] == Common::NO) { // 先以此判断是否近视
+//                $oldCount++;
+//            }
+
+            if ($item['l_degree'] < 0 || $item['r_degree'] < 0) { // 先以此判断是否近视
                 $oldCount++;
             }
         }
 
         foreach ($studentList as $item) {
-            if ($item['is_myopia'] == Common::NO) { // 先以此判断是否近视
+//            if ($item['is_myopia'] == Common::NO) { // 先以此判断是否近视
+//                $sexGroup[$item['sex']][] = $item;
+//                $gradeGroup[$item['grade_id']][] = $item;
+//                $yearGroup[Common::transYearOld($item['birthday'])][] = $item;
+//                $newCount++;
+//            }
+
+            if ($item['l_degree'] < 0 || $item['r_degree'] < 0) { // 先以此判断是否近视
                 $sexGroup[$item['sex']][] = $item;
                 $gradeGroup[$item['grade_id']][] = $item;
                 $yearGroup[Common::transYearOld($item['birthday'])][] = $item;
@@ -142,6 +154,8 @@ class HomeController extends ApiController
             }
 
             $schoolGroup[$item['year_class_id']][] = $item;
+            $item['l_degree'] = abs($item['l_degree']) * 100;
+            $item['r_degree'] = abs($item['r_degree']) * 100;
 
             if ($item['l_degree'] < 25 || $item['r_degree'] < 25) {
                 $randArr['0~25']++;
