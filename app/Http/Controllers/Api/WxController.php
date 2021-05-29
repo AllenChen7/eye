@@ -226,7 +226,7 @@ class WxController extends ApiController
                 'id' => $data['year_class_id']
             ])->first()->name ?? '--';
         $data['sex_name'] = Common::sexArr()[$data['sex']];
-        $data['is_myopia_name'] = Common::isArr()[$data['is_myopia']];
+        $data['is_myopia_name'] = Common::isMyopiaArr()[$data['is_myopia']];
 
         if ($data['is_myopia'] == Common::YES) {
             $data['is_glasses_name'] = '';
