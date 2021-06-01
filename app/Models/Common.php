@@ -351,22 +351,22 @@ class Common
                     ],
                 ]
             ],
-            [
-                'id' => 'wx-*',
-                'name' => '家长管理',
-                'child' => [
-                    [
-                        'id' => 'wx-view',
-                        'name' => '查看',
-                        'child' => []
-                    ],
-                    [
-                        'id' => 'wx-update',
-                        'name' => '更新',
-                        'child' => []
-                    ],
-                ]
-            ],
+//            [
+//                'id' => 'wx-*',
+//                'name' => '家长管理',
+//                'child' => [
+//                    [
+//                        'id' => 'wx-view',
+//                        'name' => '查看',
+//                        'child' => []
+//                    ],
+//                    [
+//                        'id' => 'wx-update',
+//                        'name' => '更新',
+//                        'child' => []
+//                    ],
+//                ]
+//            ],
             [
                 'id' => 'big-*',
                 'name' => '大数据统计',
