@@ -202,11 +202,11 @@ class WxController extends ApiController
         }
 
         $idCard = trim($request->input('id_card'));
-        $idCardCheck = IdentityCard::make($idCard);
-
-        if (!$idCardCheck) {
-            return $this->errorResponse('请输入正确的身份证！');
-        }
+//        $idCardCheck = IdentityCard::make($idCard);
+//
+//        if (!$idCardCheck) {
+//            return $this->errorResponse('请输入正确的身份证！');
+//        }
 
         $name = trim($request->input('name'));
         $data = Student::where([

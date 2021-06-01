@@ -204,15 +204,15 @@ class StudentImport implements ToCollection
                 continue;
             }
 
-            $idCardInfo = IdentityCard::make($idCard);
-
-            if ($idCardInfo === false) {
-                $row[1] = "\t" . $row[1];
-                $row[count($row) + 1] = '身份证格式不正确';
-                $this->cacheData[] = $row;
-                $this->errorFlag = 1;
-                continue;
-            }
+//            $idCardInfo = IdentityCard::make($idCard);
+//
+//            if ($idCardInfo === false) {
+//                $row[1] = "\t" . $row[1];
+//                $row[count($row) + 1] = '身份证格式不正确';
+//                $this->cacheData[] = $row;
+//                $this->errorFlag = 1;
+//                continue;
+//            }
 
             if (!in_array($sex, Common::sexArr())) {
                 $row[1] = "\t" . $row[1];
